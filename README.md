@@ -8,27 +8,28 @@ The main objective of this summer project is to investigate the relationship bet
 
 The initial stage will focus on collecting a diverse dataset of images containing repeating patterns with different symmetries. We will use sources like public image repositories or image generation services to obtain images with controlled textures. Emphasis will be placed on selecting images with various symmetries, such as rotational, translational, or reflectional symmetries. Additionally, we will generate images of fractals using known algorithms with controlled parameters. These fractal images will be valuable for later investigations into entropy.
 
-### Stage 2: Developing Entropy Calculation Algorithms
+### Stage 2: Developing Entropy Calculation Algorithms and Image Preprocessing
 
-In this stage, our focus will be on developing algorithms to calculate various entropy measures for the images with symmetries. We will explore and implement methods to compute entropy of the greyscale representation, entropy of the color histogram, and entropy based on different image transformations. The goal is to have a set of functional and efficient algorithms that can calculate entropy values for the images with symmetries accurately.
-By the end of this stage, we will have a toolbox of entropy calculation algorithms, ready to be utilized in the subsequent stages of the project.
+In this stage, our focus will be twofold: developing algorithms to calculate various entropy measures for the images with symmetries and creating any necessary image preprocessing algorithms. We will explore and implement methods to compute entropy of the greyscale representation, entropy of the color histogram, and entropy based on different image transformations. The goal is to have a set of functional and efficient algorithms that can calculate entropy values for the images with symmetries accurately.
+Additionally, we will design and implement image preprocessing algorithms to ensure that the images are in a suitable format and quality for entropy analysis. Image preprocessing may involve tasks such as resizing, normalization, noise reduction, or contrast enhancement.
+By the end of this stage, we will have a toolbox of entropy calculation algorithms, along with any necessary image preprocessing algorithms, all ready to be utilized in the subsequent stages of the project.
 
 ### Stage 3: Texture Analysis and Classification - Images with Symmetries
 
 In Stage 3, we will utilize the entropy calculation algorithms developed in the previous stage to analyze the images with symmetries. Using the calculated entropy values, we will order and classify the images based on their complexity and structure. By assigning semantic meaning to different entropy measures, we aim to understand their significance in describing image complexities.
 This texture analysis and classification will provide valuable insights into the potential applications of entropy measures in image analysis tasks. We will evaluate the classification accuracy and examine how different entropy measures contribute to distinguishing various symmetries in the images, paving the way for practical use of entropy in image classification scenarios.
 
-### Stage 4: Investigating Videos - Temporal Analysis of Entropy
+### Stage 4: Subimage Analysis - Examining Entropy Patterns
+
+In this crucial stage, we will investigate the entropy of subimages within a larger image. We will divide the images into smaller, overlapping, or non-overlapping subimages and compute the entropy for each subimage using different entropy measures. By analyzing patterns of entropy at different scales, we will gain a deeper understanding of how image structure and complexity vary within the larger context. This analysis will provide valuable insights into the role of entropy in capturing localized image features and will be essential for the subsequent analysis.
+
+### Stage 5: Investigating Videos - Temporal Analysis of Entropy
 
 In this stage, we will expand the project to video data and investigate the temporal evolution of entropy in moving images. We will analyze a collection of video clips and compute various entropy measures over time, exploring how the information content and complexity of images change dynamically. This stage will provide insights into the role of entropy in video analysis and its potential applications.
 
-### Stage 5: Analysis of Real-World Satellite Images
+### Stage 6: Analysis of Real-World Satellite Images
 
 Having gained proficiency in texture analysis and classification, we will proceed to the final stage of the project. We will apply our knowledge and algorithms to analyze real-world satellite images of Earth. The focus will be on studying the textures and patterns present in the satellite images and calculating their entropy using different entropy measures. Additionally, we will investigate the dependencies of entropy on the geographical location, time of acquisition, and zoom levels of the images. This comprehensive analysis will offer valuable insights into the information content of satellite imagery and its spatial and spectral characteristics.
-
-### Stage 6: Subimage Analysis - Examining Entropy Patterns
-
-As an extension of the project, we will investigate the entropy of subimages within a larger image. We will divide the images into smaller, overlapping, or non-overlapping subimages and compute the entropy for each subimage using different entropy measures. By analyzing patterns of entropy at different scales, we will gain a deeper understanding of how image structure and complexity vary within the larger context. This analysis will provide insights into the role of entropy in capturing localized image features.
 
 ## Throughout the Project
 
