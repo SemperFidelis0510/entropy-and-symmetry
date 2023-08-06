@@ -6,15 +6,17 @@ The main objective of this summer project is to investigate the relationship bet
 
 ### Stage 1: Data Collection - Repeating Patterns
 
-The initial stage will focus on collecting a dataset of images containing repeating patterns with different symmetries. We will use sources like public image repositories or image generation libraries to obtain images with controlled textures. Emphasis will be placed on selecting images with various symmetries, such as rotational, translational, or reflectional symmetries.
+The initial stage will focus on collecting a diverse dataset of images containing repeating patterns with different symmetries. We will use sources like public image repositories or image generation services to obtain images with controlled textures. Emphasis will be placed on selecting images with various symmetries, such as rotational, translational, or reflectional symmetries. Additionally, we will generate images of fractals using known algorithms with controlled parameters. These fractal images will be valuable for later investigations into entropy.
 
-### Stage 2: Calculating Image Entropy - Repeating Patterns
+### Stage 2: Developing Entropy Calculation Algorithms
 
-In this stage, we will learn about entropy measures and their relevance in the context of repeating patterns. We will explore various entropy calculation methods, such as entropy of the greyscale representation, entropy of the color histogram, and entropy based on different image transformations. The analysis will enable us to investigate how different entropy measures relate to the structured textures present in the repeating patterns.
+In this stage, our focus will be on developing algorithms to calculate various entropy measures for the images with symmetries. We will explore and implement methods to compute entropy of the greyscale representation, entropy of the color histogram, and entropy based on different image transformations. The goal is to have a set of functional and efficient algorithms that can calculate entropy values for the images with symmetries accurately.
+By the end of this stage, we will have a toolbox of entropy calculation algorithms, ready to be utilized in the subsequent stages of the project.
 
-### Stage 3: Texture Analysis and Classification - Repeating Patterns
+### Stage 3: Texture Analysis and Classification - Images with Symmetries
 
-Building on the insights gained from the entropy analysis, we will design a texture classification algorithm specific to images with repeating patterns. By setting appropriate entropy thresholds, the algorithm will classify the images based on their structured textures. We will evaluate the classification accuracy and examine how different entropy measures contribute to distinguishing different symmetries and repeating patterns.
+In Stage 3, we will utilize the entropy calculation algorithms developed in the previous stage to analyze the images with symmetries. Using the calculated entropy values, we will order and classify the images based on their complexity and structure. By assigning semantic meaning to different entropy measures, we aim to understand their significance in describing image complexities.
+This texture analysis and classification will provide valuable insights into the potential applications of entropy measures in image analysis tasks. We will evaluate the classification accuracy and examine how different entropy measures contribute to distinguishing various symmetries in the images, paving the way for practical use of entropy in image classification scenarios.
 
 ### Stage 4: Investigating Videos - Temporal Analysis of Entropy
 
