@@ -34,3 +34,29 @@ Having gained proficiency in texture analysis and classification, we will procee
 ## Throughout the Project
 
 We will be encouraged to document our progress, insights, and results. Regular meetings will be scheduled to provide guidance, support, and foster collaboration among the students. By investigating repeating patterns, real-world satellite images, temporal video analysis, and subimage entropy patterns using various entropy measures, this project will offer a comprehensive exploration of entropy's role in texture analysis and its application in practical image classification and video analysis scenarios.
+
+
+## Using the Repository
+
+To ensure smooth collaboration and organization within the project, we have established some guidelines on how to use this repository effectively.
+
+### Resources and Images
+
+For adding resources, datasets, or images related to the project, you can directly push the files to the `main` branch. This allows easy access to shared resources for all project members.
+
+### Scripts and Code Development
+
+When working on scripts or any code development for the project, we encourage the following approaches:
+
+1. **Working on the `main` Branch**: For small changes or quick additions, you can create or modify files directly on the `main` branch. This is suitable for minor adjustments or small code snippets.
+
+2. **Branching Out**: If you are working on a more substantial script or feature, it is advisable to create a new branch from the `main` branch. Name the branch with a descriptive title related to the work you will be doing. This allows you to work on your task independently without affecting the `main` branch.
+
+### Personal Walkthroughs
+
+For individual walk-throughs or experiments that you wish to perform separately, each student should create their own branch. This helps in isolating individual work and avoids potential conflicts when working in parallel.
+
+When you are satisfied with the changes and additions made in your branch, you can create a pull request to merge it back into the `main` branch. This way, we can review the changes as a team before incorporating them into the main project.
+
+By adhering to these guidelines, we can ensure a well-organized and collaborative environment for our project. It also helps in tracking and managing the progress of various tasks efficiently.
+
