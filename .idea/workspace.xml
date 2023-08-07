@@ -4,35 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2796d265-6e95-4a91-95c6-40ee6ddaf670" name="Changes" comment="fixes">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="2796d265-6e95-4a91-95c6-40ee6ddaf670" name="Changes" comment="x">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/18.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/19.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/20.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/21.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/22.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/23.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/24.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/25.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/9.gif" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,7 +26,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Merging main"
+    "git-widget-placeholder": "main"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -65,6 +38,35 @@
       <option name="presentableId" value="Default" />
       <updated>1691399100293</updated>
     </task>
+    <task id="LOCAL-00001" summary="fixes">
+      <created>1691400724883</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1691400724883</updated>
+    </task>
+    <task id="LOCAL-00002" summary="x">
+      <created>1691400993996</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1691400993996</updated>
+    </task>
+    <task id="LOCAL-00003" summary="x">
+      <created>1691401095780</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1691401095780</updated>
+    </task>
+    <task id="LOCAL-00004" summary="x">
+      <created>1691401364416</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1691401364416</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -80,6 +82,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixes" />
+    <MESSAGE value="x" />
+    <option name="LAST_COMMIT_MESSAGE" value="x" />
   </component>
 </project>
