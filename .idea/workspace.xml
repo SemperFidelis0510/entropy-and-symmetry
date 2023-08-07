@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="2796d265-6e95-4a91-95c6-40ee6ddaf670" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/10.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/11.png" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/pattern_images/11.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/12.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/13.png" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/pattern_images/13.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/14.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/15.png" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/pattern_images/15.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/16.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/17.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/18.webp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/19.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/20.png" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/pattern_images/20.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/21.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/22.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/23.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/24.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/25.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/26.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/27.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/28.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/29.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/3.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/30.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/31.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/6.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/pattern_images/8.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/rename_image.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2TeMTKboA5V6rfJjPeFbp8E0rCk" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="2796d265-6e95-4a91-95c6-40ee6ddaf670" name="Changes" comment="" />
+      <created>1691399100293</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1691399100293</updated>
+    </task>
+    <servers />
+  </component>
+</project>
