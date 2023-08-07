@@ -2,6 +2,10 @@ import os
 import sys
 from PIL import Image
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+os.chdir(parent_dir)
+
 
 def convert_and_number_files_in_folder(path):
     # Convert .jpg, .jpeg, and .webp files to .png
