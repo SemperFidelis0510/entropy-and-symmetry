@@ -2,9 +2,8 @@ import os
 import sys
 from PIL import Image
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(script_dir)
-os.chdir(parent_dir)
+# Chane working folder to parent folder "entropy-and-symmetry"
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 def convert_and_number_files_in_folder(path):
