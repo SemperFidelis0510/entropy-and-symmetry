@@ -1,7 +1,6 @@
 import numpy as np
 import cv2
 from scipy.stats import entropy
-from PIL import Image
 
 
 def calc_ent(img_arr, method):
@@ -21,8 +20,17 @@ def save_img(path, arr):
 
 
 def load_images(path):
-    pass
+    imgs_path = []
+    for filename in os.listdir(path):
+        img_path = os.path.join(path, filename)
+        imgs_path.append(img_path)
+    return imgs_path
 
 
-def preprocess(path):
-    pass
+def preprocess(path, crop_size=None):
+    img = Image.open(path)
+    if crop_size == None:
+        crop_size = min(img.size)
+    cropped = img.crop((0,0,crop_size,crop_size))
+    img_arr = np.array(cropped)
+    return img_arr
