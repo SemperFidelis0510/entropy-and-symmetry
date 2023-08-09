@@ -1,5 +1,4 @@
 import numpy as np
-import cv2
 from scipy.stats import entropy
 from PIL import Image
 import os
@@ -17,8 +16,7 @@ def calc_ent(img_arr, method):
 
 
 def save_img(path, arr):
-    img = Image.fromarray(arr)
-    img.save(path)
+    Image.fromarray(arr).convert('RGB').save(path)
 
 
 def load_images(path):

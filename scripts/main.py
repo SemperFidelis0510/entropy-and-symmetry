@@ -21,7 +21,7 @@ def main():
         os.makedirs(dst_folder)
     i = 0
     for obj in sorted_list:
-        save_img(os.path.join(dst_folder, f'{i}.bmp'), obj[0])
+        save_img(os.path.join(dst_folder, f'{i}.bmp'), obj)
         i += 1
 
 
