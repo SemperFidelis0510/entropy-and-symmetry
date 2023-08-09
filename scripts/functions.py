@@ -62,7 +62,17 @@ def uniform_noise(im_arr, noise_level):
 
 def custom_permute(matrix, permutation_matrix=None):
     size = matrix.shape[0] * matrix.shape[1]
+    """
+        Permutes the elements of a matrix based on a permutation matrix.
 
+        Args:
+            matrix (numpy.ndarray): The matrix to be permuted.
+            permutation_matrix (numpy.ndarray, optional): A matrix specifying the new positions
+                of elements after permutation. If not provided, a random permutation will be used.
+
+        Returns:
+            numpy.ndarray: The permuted matrix.
+    """
     if permutation_matrix is None:
         permutation_matrix = np.random.permutation(size) + 1
     flat_matrix = matrix.flatten()
