@@ -58,3 +58,16 @@ def uniform_noise(im_arr, noise_level):
             noise_arr[i][j] = np.random.uniform(-noise_level, noise_level)
     noise_arr = (im_arr + noise_arr) % 255
     return noise_arr
+
+
+def custom_permute(matrix, permutation_matrix=None):
+    size = matrix.shape[0] * matrix.shape[1]
+
+    if permutation_matrix is None:
+        permutation_matrix = np.random.permutation(size) + 1
+    flat_matrix = matrix.flatten()
+    flat_permutation = permutation_matrix.flatten()
+    permuted_matrix = np.array([flat_matrix[flat_permutation[i] - 1] for i in range(size)])
+    reshaped_matrix = permuted_matrix.reshape(matrix.shape)
+
+    return reshaped_matrix
