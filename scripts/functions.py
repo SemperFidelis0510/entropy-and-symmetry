@@ -4,6 +4,7 @@ from scipy.stats import entropy
 from PIL import Image
 import os
 
+
 def calc_ent(img_arr, method):
     img_entropy = 0
     match method:
@@ -30,11 +31,12 @@ def load_images(path):
 
 def preprocess(path, crop_size=None):
     img = Image.open(path)
-    if crop_size == None:
+    if crop_size is None:
         crop_size = min(img.size)
-    cropped = img.crop((0,0,crop_size,crop_size))
+    cropped = img.crop((0, 0, crop_size, crop_size))
     img_arr = np.array(cropped)
     return img_arr
+
 
 def uniform_noise(im_arr, noise_level):
     """
@@ -48,11 +50,11 @@ def uniform_noise(im_arr, noise_level):
     if noise_level < 0 or noise_level > 1:
         print('error: noise function receive invalid parameter: noise_level should be in [0, 1]')
         return
-    noise_level = int(128*noise_level)
+    noise_level = int(128 * noise_level)
     height, width = im_arr.shape[:2]
-    noise_arr = np.zeros((height,width), dtype=np.float64)
+    noise_arr = np.zeros((height, width), dtype=np.float64)
     for i in range(height):
         for j in range(width):
-            noise_arr[i][j] = np.random.uniform(-noise_level,noise_level)
-    noise_arr = (im_arr + noise_arr)%255
+            noise_arr[i][j] = np.random.uniform(-noise_level, noise_level)
+    noise_arr = (im_arr + noise_arr) % 255
     return noise_arr
