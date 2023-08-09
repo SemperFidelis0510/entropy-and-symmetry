@@ -3,10 +3,6 @@ import os
 from datetime import datetime
 
 
-def transform(img):
-    return img
-
-
 def main():
     folder_path = ''
     method = 'hist'
@@ -17,7 +13,6 @@ def main():
 
     for img_path in list_of_paths:
         img = preprocess(img_path)
-        img = transform(img)
         s = calc_ent(img, method)
         img_list.append([img, s])
 
@@ -29,8 +24,6 @@ def main():
     for obj in sorted_list:
         save_img(os.path.join(dst_folder, f'{i}.bmp'), obj[0])
         i += 1
-
-
 
 
 if __name__ == '__main__':
