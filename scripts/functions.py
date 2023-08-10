@@ -22,8 +22,12 @@ def calc_ent(img_arr, method):
     return img_entropy
 
 
-def save_img(path, arr):
-    Image.fromarray(arr).convert('RGB').save(path)
+def save_img(path, img):
+    if isinstance(img, np.ndarray):
+        img = [img]
+
+    for arr in img:
+        Image.fromarray(arr).save(path)
 
 
 def load_images(path):
@@ -34,23 +38,34 @@ def load_images(path):
     return imgs_path
 
 
-def preprocess(path, crop_size=None, colors='rgb'):
-    img = Image.open(path)
-    if colors == 'greyscale':
-        img = img.convert('L')
-
+def preprocess(paths, crop_size=None, colors='rgb'):
+    if isinstance(paths, str):
+        paths = [paths]
     if crop_size is None:
-        crop_size = min(img.size)
-    cropped = img.crop((0, 0, crop_size, crop_size))
-    img_arr = np.array(cropped)
+        vary_crop = True
+    else:
+        vary_crop = False
 
-    if colors == 'rgb':
-        if img_arr.ndim == 4:
-            img_arr = img_arr[:, :, :-1]
-        elif img_arr.ndim == 2:
-            img_arr = np.stack([img_arr] * 3, axis=-1)
+    imgs_arr = []
+    for path in paths:
+        img = Image.open(path)
+        if colors == 'greyscale':
+            img = img.convert('L')
 
-    return img_arr
+        if vary_crop:
+            crop_size = min(img.size)
+        cropped = img.crop((0, 0, crop_size, crop_size))
+        img_arr = np.array(cropped)
+
+        if colors == 'rgb':
+            if img_arr.ndim == 4:
+                img_arr = img_arr[:, :, :-1]
+            elif img_arr.ndim == 2:
+                img_arr = np.stack([img_arr] * 3, axis=-1)
+
+        imgs_arr.append(img_arr)
+
+    return imgs_arr
 
 
 def uniform_noise(im_arr, noise_level):

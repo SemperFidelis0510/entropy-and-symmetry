@@ -1,4 +1,3 @@
-import os
 from datetime import datetime
 
 from functions import *
@@ -10,10 +9,7 @@ def main():
     dst_folder = f'../processed/{datetime.now().strftime("%Y%m%d_%H%M%S")}'
 
     list_of_paths = load_images(folder_path)
-    img_list = []
-
-    for img_path in list_of_paths:
-        img_list.append(preprocess(img_path))
+    img_list = preprocess(list_of_paths)
 
     sorted_list = sorted(img_list, key=lambda x: calc_ent(x, method))
 
