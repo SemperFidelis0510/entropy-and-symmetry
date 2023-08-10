@@ -68,8 +68,7 @@ def calc_ent(im_arr):
         for y in range(width):
             for i in range(3):
                 data = normalize_arr[x][y][i]
-                if data != 0:
-                    ent -= data*math.log(data)
+                ent -= data*math.log(data+np.finfo(float).eps)
     return ent
 
 img_path = load_images('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images')
