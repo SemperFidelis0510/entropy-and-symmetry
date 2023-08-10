@@ -36,16 +36,19 @@ def load_images(path):
 
 def preprocess(path, crop_size=None, colors='rgb'):
     img = Image.open(path)
+    if colors == 'greyscale':
+        img = img.convert('L')
 
     if crop_size is None:
         crop_size = min(img.size)
     cropped = img.crop((0, 0, crop_size, crop_size))
     img_arr = np.array(cropped)
 
-    if img_arr.ndim == 4:
-        img_arr = img_arr[:, :, :-1]
-    if (img_arr.ndim == 2) and (colors == 'rgb'):
-        img_arr = np.stack([img_arr] * 3)
+    if colors == 'rgb':
+        if img_arr.ndim == 4:
+            img_arr = img_arr[:, :, :-1]
+        elif img_arr.ndim == 2:
+            img_arr = np.stack([img_arr] * 3, axis=-1)
 
     return img_arr
 
