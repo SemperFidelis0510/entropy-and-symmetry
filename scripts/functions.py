@@ -45,7 +45,7 @@ def preprocess(path, crop_size=None, colors='rgb'):
     if img_arr.ndim == 4:
         img_arr = img_arr[:, :, :-1]
     if (img_arr.ndim == 2) and (colors == 'rgb'):
-        img_arr = np.array([img_arr, img_arr, img_arr])
+        img_arr = np.stack([img_arr] * 3)
 
     return img_arr
 
