@@ -3,6 +3,7 @@ import cv2
 from scipy.stats import entropy
 from PIL import Image
 import os
+import math
 
 def calc_ent(img_arr, method):
     img_entropy = 0
@@ -56,3 +57,22 @@ def uniform_noise(im_arr, noise_level):
             noise_arr[i][j] = np.random.uniform(-noise_level,noise_level)
     noise_arr = (im_arr + noise_arr)%255
     return noise_arr
+
+def calc_ent(im_arr):
+    total_sum = np.sum(im_arr[:,:,:2])
+    normalize_arr = im_arr/total_sum
+    height, width = normalize_arr.shape[:2]
+    print(normalize_arr.shape)
+    ent = 0
+    for x in range(height):
+        for y in range(width):
+            for i in range(3):
+                data = normalize_arr[x][y][i]
+                if data != 0:
+                    ent -= data*math.log(data)
+    return ent
+
+img_path = load_images('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images')
+img = preprocess(img_path[0])
+print(img_path[0])
+print(calc_ent(img))
