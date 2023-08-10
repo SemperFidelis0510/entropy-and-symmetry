@@ -15,13 +15,10 @@ def calc_ent(img_arr, method):
             img_entropy = entropy(hists_done)
         case 'hist':
             bins_ = 256 ** 3
-            r = img_arr[:, :, 0]
-            g = img_arr[:, :, 1]
-            b = img_arr[:, :, 2]
-            total = np.concatenate((r, g, b))
-            hists_RGB, bins = np.histogram(total, bins=bins_, range=(0, bins_))
-            hists_RGB_done = hists_RGB / hists_RGB.sum()
-            img_entropy = entropy(hists_RGB_done)
+            flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
+            hist, _ = np.hisogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+            hist_done = hist / np.sum(hist)
+            img_entropy = -np.sum(hist_done * np.log(hist_done + np.finfo(float).eps))
     return img_entropy
 
 
