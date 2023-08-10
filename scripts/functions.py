@@ -30,9 +30,11 @@ def save_img(folder_path, img):
 
     i = 0
     for arr in img:
-        path = os.path.join(folder_path, f'{i}.bmp')
-        Image.fromarray(arr).save(path)
+        path = os.path.join(folder_path, f'{i}_s-{arr[1]:.3f}.bmp')
+        Image.fromarray(arr[0]).save(path)
         i += 1
+
+    print(f'All pictures saved to folder {folder_path}.')
 
 
 def load_images(path):
@@ -43,16 +45,20 @@ def load_images(path):
     return imgs_path
 
 
-def preprocess(paths, crop_size=None, colors='rgb'):
-    if isinstance(paths, str):
-        paths = [paths]
+def preprocess(folder_path, crop_size=None, colors='rgb'):
     if crop_size is None:
         vary_crop = True
     else:
         vary_crop = False
 
+    paths = load_images(folder_path)
+    n = len(paths)
+    i = 0
+
     imgs_arr = []
     for path in paths:
+        i += 1
+
         img = Image.open(path)
         if colors == 'greyscale':
             img = img.convert('L')
@@ -69,8 +75,23 @@ def preprocess(paths, crop_size=None, colors='rgb'):
                 img_arr = np.stack([img_arr] * 3, axis=-1)
 
         imgs_arr.append(img_arr)
+        print(f'Processed {i}/{n} images.')
+
+    print(f'All the images from "{folder_path}" were loaded, and preprocessed.')
 
     return imgs_arr
+
+
+def label_ent(imgs, method):
+    img_ent = []
+    n = len(imgs)
+    i = 0
+    for img in imgs:
+        i += 1
+        img_ent.append([img, calc_ent(img, method)])
+        print(f'Entropy calculated for {i}/{n} images.')
+
+    return img_ent
 
 
 def uniform_noise(im_arr, noise_level):

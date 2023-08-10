@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from functions import *
 
 
@@ -5,10 +7,11 @@ def sort_folder(path):
     method = 'hist'
     dst_folder = f'../processed/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
-    list_of_paths = load_images(path)
-    img_list = preprocess(list_of_paths)
+    img_arrays = preprocess(path)
+    img_arrays = label_ent(img_arrays, method)
 
-    sorted_list = sorted(img_list, key=lambda x: calc_ent(x, method))
+    sorted_list = sorted(img_arrays, key=lambda x: x[1])
+    print('The images are sorted by entropy.')
 
     save_img(dst_folder, sorted_list)
 
