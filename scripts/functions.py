@@ -16,7 +16,7 @@ def calc_ent(img_arr, method):
         case 'hist':
             bins_ = 256 ** 3
             flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
-            hist, _ = np.hisogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+            hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
             hist_done = hist / np.sum(hist)
             img_entropy = -np.sum(hist_done * np.log(hist_done + np.finfo(float).eps))
     return img_entropy
@@ -34,12 +34,22 @@ def load_images(path):
     return imgs_path
 
 
-def preprocess(path, crop_size=None):
+def preprocess(path, crop_size=None, colors='rgb'):
     img = Image.open(path)
+    if colors == 'greyscale':
+        img = img.convert('L')
+
     if crop_size is None:
         crop_size = min(img.size)
     cropped = img.crop((0, 0, crop_size, crop_size))
     img_arr = np.array(cropped)
+
+    if colors == 'rgb':
+        if img_arr.ndim == 4:
+            img_arr = img_arr[:, :, :-1]
+        elif img_arr.ndim == 2:
+            img_arr = np.stack([img_arr] * 3, axis=-1)
+
     return img_arr
 
 
