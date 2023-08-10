@@ -1,11 +1,12 @@
-from functions import *
 import os
 from datetime import datetime
 
+from functions import *
+
 
 def main():
-    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
     method = 'hist'
+    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
     dst_folder = f'../processed/{datetime.now().strftime("%Y%m%d_%H%M%S")}'
 
     list_of_paths = load_images(folder_path)
@@ -15,7 +16,6 @@ def main():
         img_list.append(preprocess(img_path))
 
     sorted_list = sorted(img_list, key=lambda x: calc_ent(x, method))
-    # sorted_list = img_list
 
     if not os.path.exists(dst_folder):
         os.makedirs(dst_folder)
