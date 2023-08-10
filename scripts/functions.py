@@ -22,12 +22,17 @@ def calc_ent(img_arr, method):
     return img_entropy
 
 
-def save_img(path, img):
+def save_img(folder_path, img):
     if isinstance(img, np.ndarray):
         img = [img]
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
 
+    i = 0
     for arr in img:
+        path = os.path.join(folder_path, f'{i}.bmp')
         Image.fromarray(arr).save(path)
+        i += 1
 
 
 def load_images(path):
