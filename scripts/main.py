@@ -1,28 +1,27 @@
-from functions import *
 import os
 from datetime import datetime
 
+from functions import *
+
 
 def main():
-    folder_path = ''
     method = 'hist'
-    dst_folder = f'processed/{datetime.now().strftime("%Y%m%d_%H%M%S")}'
+    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
+    dst_folder = f'../processed/{datetime.now().strftime("%Y%m%d_%H%M%S")}'
 
     list_of_paths = load_images(folder_path)
     img_list = []
 
     for img_path in list_of_paths:
-        img = preprocess(img_path)
-        s = calc_ent(img, method)
-        img_list.append([img, s])
+        img_list.append(preprocess(img_path))
 
-    sorted_list = sorted(img_list, key=lambda x: x[1])
+    sorted_list = sorted(img_list, key=lambda x: calc_ent(x, method))
 
     if not os.path.exists(dst_folder):
         os.makedirs(dst_folder)
     i = 0
     for obj in sorted_list:
-        save_img(os.path.join(dst_folder, f'{i}.bmp'), obj[0])
+        save_img(os.path.join(dst_folder, f'{i}.bmp'), obj)
         i += 1
 
 

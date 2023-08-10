@@ -1,14 +1,15 @@
-import numpy as np
-import cv2
-from scipy.stats import entropy
-from PIL import Image
 import os
 import math
+
+import numpy as np
+from PIL import Image
+from scipy.stats import entropy
+
 
 def calc_ent(img_arr, method):
     img_entropy = 0
     match method:
-        case 'hist':
+        case 'hist_greyscale':
             bins_ = 256
             hists, bins = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
             hists_done = hists / hists.sum()
@@ -16,12 +17,17 @@ def calc_ent(img_arr, method):
         case 'naive':
             for i in range(3):
                 img_entropy += S(img_arr[:,:,i])
+        case 'hist':
+            bins_ = 256 ** 3
+            flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
+            hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+            hist_done = hist / np.sum(hist)
+            img_entropy = -np.sum(hist_done * np.log(hist_done + np.finfo(float).eps))
     return img_entropy
 
 
 def save_img(path, arr):
-    img = Image.fromarray(arr)
-    img.save(path)
+    Image.fromarray(arr).convert('RGB').save(path)
 
 
 def load_images(path):
@@ -32,13 +38,24 @@ def load_images(path):
     return imgs_path
 
 
-def preprocess(path, crop_size=None):
+def preprocess(path, crop_size=None, colors='rgb'):
     img = Image.open(path)
-    if crop_size == None:
+    if colors == 'greyscale':
+        img = img.convert('L')
+
+    if crop_size is None:
         crop_size = min(img.size)
-    cropped = img.crop((0,0,crop_size,crop_size))
+    cropped = img.crop((0, 0, crop_size, crop_size))
     img_arr = np.array(cropped)
+
+    if colors == 'rgb':
+        if img_arr.ndim == 4:
+            img_arr = img_arr[:, :, :-1]
+        elif img_arr.ndim == 2:
+            img_arr = np.stack([img_arr] * 3, axis=-1)
+
     return img_arr
+
 
 def uniform_noise(im_arr, noise_level):
     """
@@ -52,9 +69,9 @@ def uniform_noise(im_arr, noise_level):
     if noise_level < 0 or noise_level > 1:
         print('error: noise function receive invalid parameter: noise_level should be in [0, 1]')
         return
-    noise_level = int(128*noise_level)
+    noise_level = int(128 * noise_level)
     height, width = im_arr.shape[:2]
-    noise_arr = np.zeros((height,width), dtype=np.float64)
+    noise_arr = np.zeros((height, width), dtype=np.float64)
     for i in range(height):
         for j in range(width):
             noise_arr[i][j] = np.random.uniform(-noise_level,noise_level)
@@ -72,6 +89,24 @@ def S(arr_2d):
                 data = normalize_arr[x][y][0]
                 ent -= data * math.log(data + np.finfo(float).eps)
     return ent
+def custom_permute(matrix, permutation_matrix=None):
+    size = matrix.shape[0] * matrix.shape[1]
+    """
+        Permutes the elements of a matrix based on a permutation matrix.
 
-img_path = load_images('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images')
-img = preprocess(img_path[0])
+        Args:
+            matrix (numpy.ndarray): The matrix to be permuted.
+            permutation_matrix (numpy.ndarray, optional): A matrix specifying the new positions
+                of elements after permutation. If not provided, a random permutation will be used.
+
+        Returns:
+            numpy.ndarray: The permuted matrix.
+    """
+    if permutation_matrix is None:
+        permutation_matrix = np.random.permutation(size) + 1
+    flat_matrix = matrix.flatten()
+    flat_permutation = permutation_matrix.flatten()
+    permuted_matrix = np.array([flat_matrix[flat_permutation[i] - 1] for i in range(size)])
+    reshaped_matrix = permuted_matrix.reshape(matrix.shape)
+
+    return reshaped_matrix
