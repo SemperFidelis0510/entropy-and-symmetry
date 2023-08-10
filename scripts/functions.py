@@ -13,6 +13,9 @@ def calc_ent(img_arr, method):
             hists, bins = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
             hists_done = hists / hists.sum()
             img_entropy = entropy(hists_done)
+        case 'naive':
+            for i in range(3):
+                img_entropy += S(img_arr[:,:,i])
     return img_entropy
 
 
@@ -58,20 +61,17 @@ def uniform_noise(im_arr, noise_level):
     noise_arr = (im_arr + noise_arr)%255
     return noise_arr
 
-def calc_ent(im_arr):
-    total_sum = np.sum(im_arr[:,:,:2])
-    normalize_arr = im_arr/total_sum
+def S(arr_2d):
+    total_sum = np.sum(arr_2d)
+    normalize_arr = arr_2d/total_sum
     height, width = normalize_arr.shape[:2]
     print(normalize_arr.shape)
     ent = 0
     for x in range(height):
         for y in range(width):
-            for i in range(3):
-                data = normalize_arr[x][y][i]
-                ent -= data*math.log(data+np.finfo(float).eps)
+                data = normalize_arr[x][y][0]
+                ent -= data * math.log(data + np.finfo(float).eps)
     return ent
 
 img_path = load_images('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images')
 img = preprocess(img_path[0])
-print(img_path[0])
-print(calc_ent(img))
