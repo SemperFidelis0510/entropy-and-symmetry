@@ -1,5 +1,5 @@
-import os
 import math
+import os
 
 import numpy as np
 from PIL import Image
@@ -16,7 +16,7 @@ def calc_ent(img_arr, method):
             img_entropy = entropy(hists_done)
         case 'naive':
             for i in range(3):
-                img_entropy += S(img_arr[:,:,i])
+                img_entropy += S(img_arr[:, :, i])
         case 'hist':
             bins_ = 256 ** 3
             flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
@@ -34,7 +34,7 @@ def save_img(folder_path, img):
 
     i = 0
     for arr in img:
-        path = os.path.join(folder_path, f'{i}_s-{arr[1]:.3f}.bmp')
+        path = os.path.join(folder_path, f'{i}_s={arr[1]:.3f}.bmp')
         Image.fromarray(arr[0]).save(path)
         i += 1
 
@@ -115,21 +115,24 @@ def uniform_noise(im_arr, noise_level):
     noise_arr = np.zeros((height, width), dtype=np.float64)
     for i in range(height):
         for j in range(width):
-            noise_arr[i][j] = np.random.uniform(-noise_level,noise_level)
-    noise_arr = (im_arr + noise_arr)%255
+            noise_arr[i][j] = np.random.uniform(-noise_level, noise_level)
+    noise_arr = (im_arr + noise_arr) % 255
     return noise_arr
+
 
 def S(arr_2d):
     total_sum = np.sum(arr_2d)
-    normalize_arr = arr_2d/total_sum
+    normalize_arr = arr_2d / total_sum
     height, width = normalize_arr.shape[:2]
     print(normalize_arr.shape)
     ent = 0
     for x in range(height):
         for y in range(width):
-                data = normalize_arr[x][y][0]
-                ent -= data * math.log(data + np.finfo(float).eps)
+            data = normalize_arr[x, y]
+            ent -= data * math.log(data + np.finfo(float).eps)
     return ent
+
+
 def custom_permute(matrix, permutation_matrix=None):
     size = matrix.shape[0] * matrix.shape[1]
     """

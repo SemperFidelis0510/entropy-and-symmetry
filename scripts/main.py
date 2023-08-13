@@ -4,10 +4,12 @@ from functions import *
 
 
 def sort_folder(path):
-    method = 'hist'
+    # colors = 'greyscale'
+    colors = 'rgb'
+    method = 'naive'
     dst_folder = f'../processed/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
-    img_arrays = preprocess(path)
+    img_arrays = preprocess(path, colors=colors)
     img_arrays = label_ent(img_arrays, method)
 
     sorted_list = sorted(img_arrays, key=lambda x: x[1])
@@ -17,7 +19,8 @@ def sort_folder(path):
 
 
 def main():
-    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
+    # folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
+    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\Fractals with controlled parameter\Line-Replacement Fractals'
     sort_folder(folder_path)
 
 
