@@ -25,7 +25,9 @@ def normalize_path(path_str):
 
 def main():
     # folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
-    folder_path = normalize_path(r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/Snowflake')
+    # folder_path = normalize_path(r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/Snowflake')
+    folder_path = normalize_path(r'../datasets/pattern_images')
+
     sort_folder(folder_path)
 
 
