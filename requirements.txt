@@ -5,3 +5,4 @@ opencv-python
 matplotlib
 scipy
 discord
+PyWavelets
