@@ -4,7 +4,7 @@ import os
 import numpy as np
 from PIL import Image
 from scipy.stats import entropy
-
+import matplotlib.pyplot as plt
 
 def calc_ent(img_arr, method):
     img_entropy = 0
@@ -154,3 +154,17 @@ def custom_permute(matrix, permutation_matrix=None):
     reshaped_matrix = permuted_matrix.reshape(matrix.shape)
 
     return reshaped_matrix
+
+def compute_dft(image, visualize=False):
+    # Compute the 2D Fourier Transform of the image
+    f_transform = np.fft.fft2(image)
+    # Shift zero frequency component to the center
+    f_transform_centered = np.fft.fftshift(f_transform)
+    if visualize == True:
+        # Compute magnitude spectrum (for visualization purposes)
+        magnitude_spectrum = np.log(np.abs(f_transform_centered) + 1)
+        plt.imshow(magnitude_spectrum, cmap='gray')
+        plt.title('Magnitude Spectrum')
+        plt.colorbar()
+        plt.show()
+    return f_transform
