@@ -197,3 +197,23 @@ def compute_and_save_wavelet_transform(image, wavelet='db1', level=None, save_pa
     coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
 
     return coeffs
+
+
+def grayScale_laplace_like_transform_entropy(x):
+    rows, cols = x.shape
+    result = np.zeros((rows, cols))
+
+    for i in range(rows):
+        for j in range(cols):
+            result[i, j] = 4 * x[i, j]
+            if i > 0:
+                result[i, j] -= x[i - 1, j]
+            if i < rows - 1:
+                result[i, j] -= x[i + 1, j]
+            if j > 0:
+                result[i, j] -= x[i, j - 1]
+            if j < cols - 1:
+                result[i, j] -= x[i, j + 1]
+
+    return S(result)
+
