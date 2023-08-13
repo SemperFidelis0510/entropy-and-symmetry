@@ -5,6 +5,7 @@ import numpy as np
 from PIL import Image
 from scipy.stats import entropy
 import matplotlib.pyplot as plt
+import pywt
 
 def calc_ent(img_arr, method):
     img_entropy = 0
@@ -26,6 +27,8 @@ def calc_ent(img_arr, method):
         case 'dft':
             for i in range(3):
                 img_entropy += S(compute_dft(img_arr[:,:,i]))
+        case 'dwt':
+            img_entropy += S())
         case _:
             print('No entropy method matched!!')
     return img_entropy
@@ -129,7 +132,6 @@ def S(arr_2d):
     total_sum = np.sum(arr_2d)
     normalize_arr = arr_2d / total_sum
     height, width = normalize_arr.shape[:2]
-    print(normalize_arr.shape)
     ent = 0
     for x in range(height):
         for y in range(width):
@@ -172,3 +174,25 @@ def compute_dft(image, visualize=False):
         plt.colorbar()
         plt.show()
     return np.abs(f_transform)
+
+
+def compute_wavelet_transform(image, wavelet='db1', level=None):
+    """
+    Compute wavelet transform of an image.
+
+    Parameters:
+        - image: 2D numpy array representing the image.
+        - wavelet: Type of wavelet to be used. Default is 'db1' (Daubechies wavelet).
+        - level: Level of decomposition. If None, max possible level is used.
+
+    Returns:
+        - coeffs: Wavelet coefficients.
+    """
+
+    # Decompose the image using discrete wavelet transform
+    coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
+    print(coeffs)
+    return coeffs
+
+image = Image.open('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images/0.png')
+compute_wavelet_transform(np.array(image))

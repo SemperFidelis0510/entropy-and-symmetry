@@ -6,7 +6,7 @@ from functions import *
 def sort_folder(path):
     # colors = 'greyscale'
     colors = 'rgb'
-    method = 'naive'
+    method = 'dft'
     dst_folder = f'../processed/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays = preprocess(path, colors=colors)
@@ -20,7 +20,9 @@ def sort_folder(path):
 
 def main():
     # folder_path = r'C:\scripts\entropy-and-symmetry\datasets\pattern_images'
-    folder_path = r'C:\scripts\entropy-and-symmetry\datasets\Fractals with controlled parameter\Line-Replacement Fractals'
+    #folder_path = r'..\datasets\Fractals with controlled parameter\Line-Replacement Fractals'
+    folder_path = r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/Snowflake'
+
     sort_folder(folder_path)
 
 
