@@ -1,4 +1,9 @@
 import random
+from datetime import datetime
+
+from functions import *
+
+
 def apply_noise(img_arr):
     new_imgs = []
     dst_folder = f'../processed/{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
