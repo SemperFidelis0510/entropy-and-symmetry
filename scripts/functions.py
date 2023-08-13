@@ -1,11 +1,12 @@
 import math
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
+import pywt
 from PIL import Image
 from scipy.stats import entropy
-import matplotlib.pyplot as plt
-import pywt
+
 
 def calc_ent(img_arr, method):
     img_entropy = 0
@@ -26,7 +27,7 @@ def calc_ent(img_arr, method):
             img_entropy = -np.sum(hist_done * np.log(hist_done + np.finfo(float).eps))
         case 'dft':
             for i in range(3):
-                img_entropy += S(compute_dft(img_arr[:,:,i]))
+                img_entropy += S(compute_dft(img_arr[:, :, i]))
         case _:
             print('No entropy method matched!!')
     return img_entropy
@@ -160,6 +161,7 @@ def custom_permute(matrix, permutation_matrix=None):
 
     return reshaped_matrix
 
+
 def compute_dft(image, visualize=False):
     # Compute the 2D Fourier Transform of the image
     f_transform = np.fft.fft2(image)
@@ -191,4 +193,3 @@ def compute_wavelet_transform(image, wavelet='db1', level=None):
     coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
     print(coeffs)
     return coeffs
-
