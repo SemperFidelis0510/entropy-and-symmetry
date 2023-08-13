@@ -43,11 +43,12 @@ def save_img(folder_path, img):
 
     i = 0
     for arr in img:
-        path = os.path.join(folder_path, f'{i}_s={arr[1]:.3f}.bmp')
+        path = os.path.join(folder_path, f'i={i}_s={arr[1]:.3f}.bmp')
         Image.fromarray(arr[0]).save(path)
         i += 1
 
     print(f'All pictures saved to folder {folder_path}.')
+    os.startfile(os.path.join(os.getcwd(), folder_path))
 
 
 def load_images(path):
@@ -88,9 +89,9 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
                 img_arr = np.stack([img_arr] * 3, axis=-1)
 
         imgs_arr.append(img_arr)
-        print(f'Processed {i}/{n} images.')
+        print(f'\rProcessed {i}/{n} images.', end='', flush=True)
 
-    print(f'All the images from "{folder_path}" were loaded, and preprocessed.')
+    print(f'\nAll the images from "{folder_path}" were loaded, and preprocessed.')
 
     return imgs_arr
 
@@ -102,7 +103,7 @@ def label_ent(imgs, method):
     for img in imgs:
         i += 1
         img_ent.append([img, calc_ent(img, method)])
-        print(f'Entropy calculated for {i}/{n} images.')
+        print(f'\rEntropy calculated for {i}/{n} images.', end='', flush=True)
 
     return img_ent
 
