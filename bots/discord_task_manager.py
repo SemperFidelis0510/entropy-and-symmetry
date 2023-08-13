@@ -132,7 +132,7 @@ def main():
 
     load_task_lists()
 
-    token = 'MTE0MDIyMDEwMzE5MTk3NDAwMA.GY3xSf.U8fPa1nXSnfqhxP6cljMmRd5fzjhRJtT3GLt80'
+    token = ''
     bot.run(token)
 
 

@@ -28,8 +28,8 @@ def calc_ent(img_arr, method):
         case 'dft':
             for i in range(3):
                 img_entropy += S(compute_dft(img_arr[:, :, i]))
-        case 'dwt': #Haven't finish
-            img_entropy +=0
+        case 'dwt':  # Haven't finish
+            img_entropy += 0
         case _:
             print('No entropy method matched!!')
     return img_entropy
@@ -47,7 +47,7 @@ def save_img(folder_path, img):
         Image.fromarray(arr[0]).save(path)
         i += 1
 
-    print(f'All pictures saved to folder {folder_path}.')
+    print(f'Sorted images saved to: {os.path.abspath(folder_path)}')
     os.startfile(os.path.join(os.getcwd(), folder_path))
 
 
@@ -89,9 +89,9 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
                 img_arr = np.stack([img_arr] * 3, axis=-1)
 
         imgs_arr.append(img_arr)
-        print(f'\rProcessed {i}/{n} images.', end='', flush=True)
+        print(f'\rPreprocessed: {print_progress_bar(i, n)} {i}/{n} images.', end='', flush=True)
 
-    print(f'\nAll the images from "{folder_path}" were loaded, and preprocessed.')
+    print(f'\nPreprocessing done.')
 
     return imgs_arr
 
@@ -103,7 +103,8 @@ def label_ent(imgs, method):
     for img in imgs:
         i += 1
         img_ent.append([img, calc_ent(img, method)])
-        print(f'\rEntropy calculated for {i}/{n} images.', end='', flush=True)
+        print(f'\rEntropy calculated: {print_progress_bar(i, n)} {i}/{n} images.', end='', flush=True)
+    print('\nEntropy calculation done.')
 
     return img_ent
 
@@ -197,6 +198,19 @@ def compute_and_save_wavelet_transform(image, wavelet='db1', level=None, save_pa
     coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
 
     return coeffs
+
+
+def normalize_path(path_str):
+    # Split by both UNIX and Windows separators
+    parts = path_str.replace('\\', '/').split('/')
+    # Join with the appropriate OS separator
+    return os.path.join(*parts)
+
+
+def print_progress_bar(iteration, total, length=50):
+    percent = ("{0:.1f}").format(100 * (iteration / float(total)))
+    filled_length = int(length * iteration // total)
+    return "█" * filled_length + '-' * (length - filled_length)
 
 
 def grayScale_laplace_like_transform_entropy(x):
