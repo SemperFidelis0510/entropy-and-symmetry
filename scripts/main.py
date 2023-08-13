@@ -17,17 +17,13 @@ def sort_folder(path):
 
     save_img(dst_folder, sorted_list)
 
-def normalize_path(path_str):
-    # Split by both UNIX and Windows separators
-    parts = path_str.replace('\\', '/').split('/')
-    # Join with the appropriate OS separator
-    return os.path.join(*parts)
 
 def main():
     # folder_path = r'../datasets/pattern_images'
     folder_path = r'../datasets/web_symmetries/rotation'
     # folder_path = r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/snowflake'
     folder_path = normalize_path(folder_path)
+    print(f'Dataset path: {os.path.abspath(folder_path)}')
     sort_folder(folder_path)
 
 
