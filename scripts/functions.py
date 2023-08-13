@@ -27,6 +27,8 @@ def calc_ent(img_arr, method):
         case 'dft':
             for i in range(3):
                 img_entropy += S(compute_dft(img_arr[:,:,i]))
+        case 'dwt':
+            img_entropy +=0
         case _:
             print('No entropy method matched!!')
     return img_entropy
@@ -174,14 +176,15 @@ def compute_dft(image, visualize=False):
     return np.abs(f_transform)
 
 
-def compute_wavelet_transform(image, wavelet='db1', level=None):
+def compute_and_save_wavelet_transform(image, wavelet='db1', level=None, save_path='./'):
     """
-    Compute wavelet transform of an image.
+    Compute wavelet transform of an image and save the approximation.
 
     Parameters:
         - image: 2D numpy array representing the image.
         - wavelet: Type of wavelet to be used. Default is 'db1' (Daubechies wavelet).
         - level: Level of decomposition. If None, max possible level is used.
+        - save_path: Directory to save the approximation image.
 
     Returns:
         - coeffs: Wavelet coefficients.
@@ -189,6 +192,5 @@ def compute_wavelet_transform(image, wavelet='db1', level=None):
 
     # Decompose the image using discrete wavelet transform
     coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
-    print(coeffs)
-    return coeffs
 
+    return coeffs
