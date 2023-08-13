@@ -151,3 +151,8 @@ def custom_permute(matrix, permutation_matrix=None):
     reshaped_matrix = permuted_matrix.reshape(matrix.shape)
 
     return reshaped_matrix
+
+def compute_dft(image):
+    # Compute the 2D Fourier Transform of the image
+    f_transform = np.fft.fft2(image)
+    return f_transform
