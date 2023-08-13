@@ -27,8 +27,6 @@ def calc_ent(img_arr, method):
         case 'dft':
             for i in range(3):
                 img_entropy += S(compute_dft(img_arr[:,:,i]))
-        case 'dwt':
-            img_entropy += S())
         case _:
             print('No entropy method matched!!')
     return img_entropy
@@ -194,5 +192,3 @@ def compute_wavelet_transform(image, wavelet='db1', level=None):
     print(coeffs)
     return coeffs
 
-image = Image.open('/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/pattern_images/0.png')
-compute_wavelet_transform(np.array(image))
