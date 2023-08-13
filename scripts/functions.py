@@ -23,6 +23,11 @@ def calc_ent(img_arr, method):
             hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
             hist_done = hist / np.sum(hist)
             img_entropy = -np.sum(hist_done * np.log(hist_done + np.finfo(float).eps))
+        case 'dft':
+            for i in range(3):
+                img_entropy += S(compute_dft(img_arr[:,:,i]))
+        case _:
+            print('No entropy method matched!!')
     return img_entropy
 
 
@@ -158,13 +163,12 @@ def custom_permute(matrix, permutation_matrix=None):
 def compute_dft(image, visualize=False):
     # Compute the 2D Fourier Transform of the image
     f_transform = np.fft.fft2(image)
-    # Shift zero frequency component to the center
-    f_transform_centered = np.fft.fftshift(f_transform)
     if visualize == True:
+        f_transform_centered = np.fft.fftshift(f_transform)
         # Compute magnitude spectrum (for visualization purposes)
         magnitude_spectrum = np.log(np.abs(f_transform_centered) + 1)
         plt.imshow(magnitude_spectrum, cmap='gray')
         plt.title('Magnitude Spectrum')
         plt.colorbar()
         plt.show()
-    return f_transform
+    return np.abs(f_transform)
