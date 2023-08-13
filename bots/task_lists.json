@@ -1,0 +1,9 @@
+{
+  "todo": [
+    {
+      "description": "add entropy calculation by co-occurrence matrix",
+      "index": 0,
+      "users": []
+    }
+  ]
+}
