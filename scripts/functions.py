@@ -1,4 +1,7 @@
 import os
+from io import BytesIO
+
+import requests
 
 from scripts.entropy import *
 from scripts.img_utils import *
@@ -118,3 +121,26 @@ def print_progress_bar(iteration, total, length=50):
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
     return "█" * filled_length + '-' * (length - filled_length)
+
+
+def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500, save=False):
+    url = "https://maps.googleapis.com/maps/api/staticmap"
+    api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+    params = {
+        "center": f"{latitude},{longitude}",
+        "zoom": zoom_level,
+        "size": f"{width}x{height}",
+        "maptype": "satellite",
+        "key": api_key
+    }
+    response = requests.get(url, params=params)
+
+    if response.status_code == 200:
+        image = Image.open(BytesIO(response.content))
+        image = image.crop((0, 0, image.width, image.height - 22))
+        if save:
+            image.save("../datasets/satellite/map_image.png")
+        image = np.array(image)
+        return image
+    else:
+        raise Exception(f"Error retrieving image: {response.text}")
