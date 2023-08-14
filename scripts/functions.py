@@ -18,6 +18,16 @@ def calc_ent(img_arr, method):
             pass
         case 'laplace':
             return laplace_ent(img_arr)
+        case 'joint_red_green':
+            return calculate_joint_entropy_red_green(img_arr)
+        case 'joint_all':
+            return calculate_joint_RGB_entropy(img_arr)
+        case 'lbp':
+            return calculate_texture_entropy(img_arr)
+        case 'lbp_gabor':
+            return calculate_texture_gabor_entropy(img_arr)
+        case 'cube':
+            return calculate_rgb_color_cube_entropy(img_arr)
         case _:
             print('No entropy method matched!!')
             return
