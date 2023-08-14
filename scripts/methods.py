@@ -1,8 +1,8 @@
 import numpy as np
-from skimage.feature import local_binary_pattern
-from skimage import color
-from skimage.filters import gabor
 from skimage.color import rgb2gray
+from skimage.feature import local_binary_pattern
+from skimage.filters import gabor
+
 
 def calculate_joint_entropy_red_green(img_arr):
     red_channel = img_arr[:, :, 0]
@@ -14,6 +14,7 @@ def calculate_joint_entropy_red_green(img_arr):
 
     joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
     return joint_entropy
+
 
 def calculate_joint_RGB_entropy(rgb_image):
     # Calculate histograms for each color channel
@@ -37,6 +38,7 @@ def calculate_joint_RGB_entropy(rgb_image):
 
     return joint_entropy
 
+
 def calculate_texture_entropy(img_arr):
     # Convert the image to grayscale
     if len(image.shape) == 3:
@@ -56,6 +58,7 @@ def calculate_texture_entropy(img_arr):
     texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
 
     return texture_entropy
+
 
 def calculate_texture_gabor_entropy(img_arr):
     # Convert the image to grayscale if it's not already
@@ -91,6 +94,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     return entropy
 
+
 def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     # Ensure the number of bins is a power of 2 for simplicity
     if not (num_bins > 0 and (num_bins & (num_bins - 1)) == 0):
@@ -100,7 +104,8 @@ def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     normalized_rgb = (rgb_image * num_bins / 256).astype(int)
 
     # Calculate the histogram of normalized RGB values
-    hist = np.histogramdd(normalized_rgb.reshape(-1, 3), bins=(num_bins, num_bins, num_bins), range=((0, num_bins), (0, num_bins), (0, num_bins)))[0]
+    hist = np.histogramdd(normalized_rgb.reshape(-1, 3), bins=(num_bins, num_bins, num_bins),
+                          range=((0, num_bins), (0, num_bins), (0, num_bins)))[0]
 
     # Normalize the histogram to obtain a probability distribution
     p = hist / np.sum(hist)
@@ -109,4 +114,3 @@ def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     entropy = -np.sum(p * np.log2(p + np.finfo(float).eps))
 
     return entropy
-
