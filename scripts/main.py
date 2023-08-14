@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from functions import *
+from scripts.functions import *
 
 
 def sort_folder(path):
