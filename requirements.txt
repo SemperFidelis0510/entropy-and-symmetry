@@ -7,4 +7,3 @@ scipy
 discord
 PyWavelets
 tkinter
-os
