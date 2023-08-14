@@ -1,7 +1,7 @@
 import os
 
 from scripts.entropy import *
-from scripts.image_utils import *
+from scripts.img_utils import *
 
 
 def calc_ent(img_arr, method):
