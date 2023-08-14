@@ -116,7 +116,7 @@ def laplacian(x):
         raise ValueError("Array must be 1D, 2D, or 3D")
 
 
-def compute_and_save_wavelet_transform(image, wavelet='db1', level=None, save_path='./'):
+def dwt(image, wavelet='db1', level=None):
     """
     Compute wavelet transform of an image and save the approximation.
 
@@ -124,7 +124,6 @@ def compute_and_save_wavelet_transform(image, wavelet='db1', level=None, save_pa
         - image: 2D numpy array representing the image.
         - wavelet: Type of wavelet to be used. Default is 'db1' (Daubechies wavelet).
         - level: Level of decomposition. If None, max possible level is used.
-        - save_path: Directory to save the approximation image.
 
     Returns:
         - coeffs: Wavelet coefficients.
