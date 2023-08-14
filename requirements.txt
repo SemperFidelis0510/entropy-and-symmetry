@@ -6,4 +6,5 @@ matplotlib
 scipy
 discord
 PyWavelets
+requests
 tkinter
