@@ -7,7 +7,7 @@ import requests
 
 from entropy import *
 from img_utils import *
-
+import time
 
 def calc_ent(img_arr, method):
     match method:
@@ -84,6 +84,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     i = 0
 
     images_arr = []
+    start_time = time.time()
     for path in paths:
         i += 1
 
@@ -103,7 +104,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
                 img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
-        print(f'\rPreprocessed: {print_progress_bar(i, n)} {i}/{n} images.', end='', flush=True)
+        print(f'\rPreprocessed: {print_progress_bar(i, n, start_time=start_time)}', end='', flush=True)
 
     print(f'\nPreprocessing done.')
 
@@ -132,10 +133,18 @@ def normalize_path(path_str):
     return os.path.join(*parts)
 
 
-def print_progress_bar(iteration, total, length=50):
+def print_progress_bar(iteration, total, start_time=None, length=50):
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
-    return "█" * filled_length + '-' * (length - filled_length)
+    bar = "█" * filled_length + '-' * (length - filled_length)
+
+    if start_time is not None:
+        elapsed_time = time.time() - start_time
+        mins, secs = divmod(int(elapsed_time), 60)
+        timer = f"{mins:02d}:{secs:02d}"
+        return f"{bar} | {percent}% Complete {iteration}/{total} images | Time: {timer}"
+    else:
+        return f"{bar} | {percent}% Complete {iteration}/{total} images."
 
 
 def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500, save=False):
