@@ -95,7 +95,7 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
 
     elif scheme == 'to_gray':
         # Convert the RGB image to grayscale and calculate entropy
-        gray_image = color.rgb2gray(image)
+        gray_image = rgb2gray(image)
         gray_image = (gray_image * 255).astype(np.uint8)
         glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
