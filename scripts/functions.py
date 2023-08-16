@@ -31,6 +31,8 @@ def calc_ent(img_arr, method):
             return calculate_texture_entropy(img_arr)
         case 'lbp_gabor':
             return calculate_texture_gabor_entropy(img_arr)
+        case 'adapt':
+            return adaptive_entropy_estimation(img_arr)
         case 'GLCM':
             return calculate_GLCM_entropy(img_arr)
         case 'RGBCM_each_channel':
