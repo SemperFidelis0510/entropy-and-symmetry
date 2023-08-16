@@ -1,29 +1,3 @@
-# Image Viewer Program: 
-# - Built with tkinter for GUI
-# - Supports image preview with zoom in/out capability
-# - Allows scrolling through thumbnail gallery of image directory
-# - Provides navigation controls through tkinter menu and buttons
-# - Lazy loads images and thumbnails to improve performance
-# - Supports fullscreen mode
-# - Displays image information in status bar
-# - Displays error messages when image loading fails
-# - Supports loading of images from directory
-# - Supports keyboard shortcuts
-# - Supports resizing of window
-# - Supports resizing of images
-# - Supports resizing of thumbnails
-# - Supports scrolling of thumbnails
-# - Supports loading of visible thumbnails
-# - Supports loading of thumbnails on mouse hover
-# - Supports loading of thumbnails on mouse scroll
-# - Supports loading of thumbnails on window resize
-# - Supports loading of thumbnails on window maximize
-# - Supports loading of thumbnails on window minimize
-# - Supports loading of thumbnails on window fullscreen
-# - Supports loading of thumbnails on window exit fullscreen
-# - Supports loading of thumbnails on window close
-
-
 import os
 from tkinter import *
 from tkinter import filedialog, messagebox
@@ -48,7 +22,7 @@ class ImageViewer:
         self.img_no = 0
         self.zoom_percent = 100
         self.is_fullscreen = False
-        self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # 灰色占位符
+        self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
 
@@ -321,42 +295,3 @@ root.title("Main Menu")
 choose_button = Button(root, text="Choose Directory", command=choose_directory)
 choose_button.pack()
 root.mainloop()
-
-# Need to do in the future:
-# - Add support for more image formats
-# - Add support for more keyboard shortcuts
-# - Add support for more image information
-# - Add support for more image editing features
-# - Add support for more image viewing features
-# - Add support for more image manipulation features
-# - Add support for more image processing features
-# - Add support for more image analysis features
-# - Add support for more image enhancement features
-# - Add support for more image compression features
-# - Add support for more image conversion features
-# - Add support for more image transformation features
-# - Add support for more image augmentation features
-# - Add support for more image generation features
-# - Add support for more image rendering features
-# - Add support for more image recognition features
-# - Add support for more image classification features
-# - Add support for more image segmentation features
-# - Add support for more image detection features
-# - Add support for more image localization features
-# - Add support for more image registration features
-# - Add support for more image restoration features
-# - Add support for more image reconstruction features
-# - Add support for more image denoising features
-# - Add support for more image deblurring features
-# - Add support for more image inpainting features
-# - Add support for more image super-resolution features
-# - Add support for more image style transfer features
-# - Add support for more image colorization features
-# - Add support for more image synthesis features
-# - Add support for more image completion features
-# - Add support for more image retargeting features
-# - Add support for more image matting features
-# - Add support for more image morphing features
-# - Add support for more image warping features
-# - Add support for more image stitching features
-# - Add support for more image blending features
