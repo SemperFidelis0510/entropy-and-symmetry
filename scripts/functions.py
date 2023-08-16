@@ -107,7 +107,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
 
     print(f'\nPreprocessing done.')
 
-    return images_arr
+    return images_arr, paths
 
 
 def label_ent(images, method):

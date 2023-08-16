@@ -46,6 +46,7 @@ def histogram(img_arr, color='rgb'):
             hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
             return entropy(hist)
 
+
 def calculate_GLCM_entropy(image):
     distances = [1]  # Distance between pixels for co-occurrence
     angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
@@ -62,6 +63,7 @@ def calculate_GLCM_entropy(image):
         total_entropy += entropy
 
     return total_entropy
+
 
 def calculate_RGBCM_entropy(image, scheme='each_channel'):
     distances = [1]  # Distance between pixels for co-occurrence
@@ -80,7 +82,8 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
         for channel in range(3):  # Iterate over R, G, and B channels
             channel_image = image[:, :, channel]
             gray_image = (channel_image * 255).astype(np.uint8)
-            glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+            glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
+                                normed=True)
 
             channel_entropy = 0
             for angle_idx in range(len(angles)):
@@ -103,6 +106,7 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
 
     return total_entropy
 
+
 def calc_dft(image, visualize=False):
     # Compute the 2D Fourier Transform of the image
     f_transform = dft(image)
@@ -116,6 +120,7 @@ def calc_dft(image, visualize=False):
         plt.show()
     return entropy(f_transform)
 
+
 def calculate_joint_entropy_red_green(img_arr):
     red_channel = img_arr[:, :, 0]
     green_channel = img_arr[:, :, 1]
@@ -126,6 +131,7 @@ def calculate_joint_entropy_red_green(img_arr):
 
     joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
     return joint_entropy
+
 
 def calculate_joint_RGB_entropy(rgb_image):
     # Calculate histograms for each color channel
@@ -149,6 +155,7 @@ def calculate_joint_RGB_entropy(rgb_image):
 
     return joint_entropy
 
+
 def calculate_texture_entropy(img_arr):
     # Convert the image to grayscale
     if len(img_arr.shape) == 3:
@@ -168,6 +175,7 @@ def calculate_texture_entropy(img_arr):
     texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
 
     return texture_entropy
+
 
 def calculate_texture_gabor_entropy(img_arr):
     # Convert the image to grayscale if it's not already
@@ -203,6 +211,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     return entropy
 
+
 def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     # Ensure the number of bins is a power of 2 for simplicity
     if not (num_bins > 0 and (num_bins & (num_bins - 1)) == 0):
@@ -212,7 +221,8 @@ def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     normalized_rgb = (rgb_image * num_bins / 256).astype(int)
 
     # Calculate the histogram of normalized RGB values
-    hist = np.histogramdd(normalized_rgb.reshape(-1, 3), bins=(num_bins, num_bins, num_bins), range=((0, num_bins), (0, num_bins), (0, num_bins)))[0]
+    hist = np.histogramdd(normalized_rgb.reshape(-1, 3), bins=(num_bins, num_bins, num_bins),
+                          range=((0, num_bins), (0, num_bins), (0, num_bins)))[0]
 
     # Normalize the histogram to obtain a probability distribution
     p = hist / np.sum(hist)
@@ -221,6 +231,7 @@ def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
     entropy = -np.sum(p * np.log2(p + np.finfo(float).eps))
 
     return entropy
+
 
 def laplace_ent(image):
     return entropy(laplacian(image))
