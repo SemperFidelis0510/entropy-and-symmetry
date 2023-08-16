@@ -63,6 +63,46 @@ def calculate_GLCM_entropy(image):
 
     return total_entropy
 
+def calculate_RGBCM_entropy(image, scheme='each_channel'):
+    distances = [1]  # Distance between pixels for co-occurrence
+    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
+    levels = 256  # Number of intensity levels in the image
+
+    total_entropy = 0
+
+    def calculate_entropy(matrix):
+        matrix = matrix / np.sum(matrix)  # Normalize matrix to probabilities
+        entropy = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))  # Avoid log(0)
+        return entropy
+
+    if scheme == 'each_channel':
+        # Calculate entropy for each color channel separately
+        for channel in range(3):  # Iterate over R, G, and B channels
+            channel_image = image[:, :, channel]
+            gray_image = (channel_image * 255).astype(np.uint8)
+            glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+
+            channel_entropy = 0
+            for angle_idx in range(len(angles)):
+                matrix = glcm[:, :, 0, angle_idx]
+                entropy = calculate_entropy(matrix)
+                channel_entropy += entropy
+
+            total_entropy += channel_entropy
+
+    elif scheme == 'to_gray':
+        # Convert the RGB image to grayscale and calculate entropy
+        gray_image = color.rgb2gray(image)
+        gray_image = (gray_image * 255).astype(np.uint8)
+        glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+
+        for angle_idx in range(len(angles)):
+            matrix = glcm[:, :, 0, angle_idx]
+            entropy = calculate_entropy(matrix)
+            total_entropy += entropy
+
+    return total_entropy
+
 def calc_dft(image, visualize=False):
     # Compute the 2D Fourier Transform of the image
     f_transform = dft(image)
