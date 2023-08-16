@@ -33,15 +33,17 @@ def test_dwt(image, flag=0):
 
 from PIL import Image
 from functions import *
-Image.MAX_IMAGE_PIXELS = 200000000
-img_paths = '/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/Fractals with controlled parameter/Shape-Replacement Fractals'
+img_paths = '/home/yanglin/Study/2023B/Technion_Summer/entropy-and-symmetry/datasets/Fractals with controlled parameter/Shape-Replacement Fractals/low'
 imgs_arr, paths = preprocess(img_paths)
+paths = [file.split('/')[len(file.split('/')) - 1] for file in paths] #get short file name
 result = []
 n = len(imgs_arr)
 start_time = time.time()
 print(f'\rComputing dwt: {print_progress_bar(0, n, start_time=start_time)}', end='', flush=True)
 for i, img in enumerate(imgs_arr):
-    result.append(test_dwt(img, 1))
+    d = test_dwt(img, 1)
+    d['file'] = paths[i]
+    result.append(d)
     print(f'\rComputing dwt: {print_progress_bar(i+1, n, start_time=start_time)}', end='', flush=True)
 print()
 sorted_a = sorted(result, key=lambda d: d[0])
