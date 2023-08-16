@@ -3,8 +3,8 @@ from io import BytesIO
 
 import requests
 
-from scripts.entropy import *
-from scripts.img_utils import *
+from entropy import *
+from img_utils import *
 
 
 def calc_ent(img_arr, method):
