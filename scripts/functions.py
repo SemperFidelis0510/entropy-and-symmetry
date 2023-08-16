@@ -110,7 +110,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     return images_arr, paths
 
 
-def sort_ent(images, method, sort=True):
+def label_ent(images, method, sort=True):
     img_ent = []
     n = len(images)
     i = 0
