@@ -11,8 +11,7 @@ def sort_folder(path):
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     img_arrays, _ = preprocess(path, colors=colors)
 
-    img_arrays = label_ent(img_arrays, method)
-    sorted_list = sorted(img_arrays, key=lambda x: x[1])
+    img_arrays = label_ent(img_arrays, method, sort=True)
 
     print('\nThe images are sorted by entropy.')
 

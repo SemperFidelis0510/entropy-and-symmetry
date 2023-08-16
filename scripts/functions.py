@@ -44,14 +44,14 @@ def calc_ent(img_arr, method):
             return
 
 
-def save_img(folder_path, img):
-    if isinstance(img, np.ndarray):
-        img = [img]
+def save_img(folder_path, images_arr):
+    if isinstance(images_arr, np.ndarray):
+        images_arr = [images_arr]
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
     i = 0
-    for arr in img:
+    for arr in images_arr:
         path = os.path.join(folder_path, f'i={i}_s={arr[1]:.3f}.bmp')
         Image.fromarray(arr[0]).save(path)
         i += 1
