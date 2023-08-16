@@ -1,7 +1,9 @@
 import math
+import numpy as np
 from skimage.feature import local_binary_pattern
 from skimage.filters import gabor
 from skimage.color import rgb2gray
+from skimage.feature import graycomatrix
 import matplotlib.pyplot as plt
 
 from scripts.transforms import *
@@ -43,6 +45,22 @@ def histogram(img_arr, color='rgb'):
             hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
             return entropy(hist)
 
+def calculate_total_entropy(image):
+    distances = [1]  # Distance between pixels for co-occurrence
+    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
+    levels = 256  # Number of intensity levels in the image
+
+    gray_image = (image * 255).astype(np.uint8)
+    glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+
+    total_entropy = 0
+    for angle_idx in range(len(angles)):
+        matrix = glcm[:, :, 0, angle_idx]
+        matrix = matrix / np.sum(matrix)  # Normalize matrix to probabilities
+        entropy = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
+        total_entropy += entropy
+
+    return total_entropy
 
 def calc_dft(image, visualize=False):
     # Compute the 2D Fourier Transform of the image
