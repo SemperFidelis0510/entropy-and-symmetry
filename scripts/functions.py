@@ -110,7 +110,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     return images_arr, paths
 
 
-def label_ent(images, method):
+def sort_ent(images, method, sort=True):
     img_ent = []
     n = len(images)
     i = 0
@@ -120,6 +120,8 @@ def label_ent(images, method):
         print(f'\rEntropy calculated: {print_progress_bar(i, n)} {i}/{n} images.', end='', flush=True)
     print('\nEntropy calculation done.')
 
+    if sort:
+        img_ent = sorted(img_ent, key=lambda x: x[1])
     return img_ent
 
 
