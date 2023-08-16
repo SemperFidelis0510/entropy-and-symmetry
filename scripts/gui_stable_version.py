@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import filedialog, messagebox
 
 from PIL import ImageTk, Image
+from functions import *
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
