@@ -5,7 +5,7 @@ from skimage.color import rgb2gray
 from skimage.feature import graycomatrix
 from skimage.feature import local_binary_pattern
 from skimage.filters import gabor
-
+from scipy.signal import convolve2d
 from transforms import *
 
 
@@ -178,59 +178,29 @@ def calculate_texture_entropy(img_arr):
 
 
 def calculate_texture_gabor_entropy(img_arr):
-    # Convert the image to grayscale if it's not already
-    if len(img_arr.shape) == 3:
-        gray_img_arr = rgb2gray(img_arr)
-    else:
-        gray_img_arr = img_arr
+    # Convert the image to grayscale
+    gray_image = np.mean(img_arr, axis=2)
 
-    # Apply Gabor filters to extract texture features
-    frequency = 0.6
-    theta = np.arange(0, np.pi, np.pi / 4)  # Orientations: 0, 45, 90, 135 degrees
-    gabor_responses = []
-    for angle in theta:
-        kernel = np.real(gabor(gray_img_arr, frequency, theta=angle)[0])  # Take the real part of the Gabor kernel
-        response = np.abs(np.convolve(gray_img_arr.ravel(), kernel.ravel(), mode='same').reshape(gray_img_arr.shape))
-        gabor_responses.append(response)
-    gabor_responses = np.array(gabor_responses)
+    # Define parameters for Gabor filter
+    wavelength = 5.0
+    orientation = np.pi / 4
+    frequency = 1 / wavelength
+    sigma = 1.0
 
-    # Calculate LBP of the Gabor filter responses
-    lbp_responses = []
-    for response in gabor_responses:
-        lbp_image = local_binary_pattern(response, 8, 1, method='uniform')
-        lbp_responses.append(lbp_image)
-    lbp_responses = np.array(lbp_responses)
+    # Create Gabor filter
+    x, y = np.meshgrid(np.arange(-15, 16), np.arange(-15, 16))
+    gabor_real = np.exp(-0.5 * (x ** 2 + y ** 2) / (sigma ** 2)) * np.cos(
+        2 * np.pi * frequency * (x * np.cos(orientation) + y * np.sin(orientation)))
 
-    # Calculate histogram of LBP values
-    hist, _ = np.histogram(lbp_responses.ravel(), bins=np.arange(0, 256))
-    hist = hist.astype("float")
-    hist /= (hist.sum() + np.finfo(float).eps)
+    # Apply Gabor filter
+    gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
 
-    # Calculate entropy of LBP histogram
-    entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
+    # Calculate image entropy
+    flat_gabor_response = gabor_response.flatten()
+    hist, _ = np.histogram(flat_gabor_response, bins=256, range=(-255, 255), density=True)
+    entropy_value = entropy(hist)
 
-    return entropy
-
-
-def calculate_rgb_color_cube_entropy(rgb_image, num_bins=8):
-    # Ensure the number of bins is a power of 2 for simplicity
-    if not (num_bins > 0 and (num_bins & (num_bins - 1)) == 0):
-        raise ValueError("Number of bins must be a power of 2")
-
-    # Normalize the RGB values to the range [0, num_bins)
-    normalized_rgb = (rgb_image * num_bins / 256).astype(int)
-
-    # Calculate the histogram of normalized RGB values
-    hist = np.histogramdd(normalized_rgb.reshape(-1, 3), bins=(num_bins, num_bins, num_bins),
-                          range=((0, num_bins), (0, num_bins), (0, num_bins)))[0]
-
-    # Normalize the histogram to obtain a probability distribution
-    p = hist / np.sum(hist)
-
-    # Calculate entropy using the definition of entropy
-    entropy = -np.sum(p * np.log2(p + np.finfo(float).eps))
-
-    return entropy
+    return entropy_value
 
 
 def laplace_ent(image):
