@@ -1,4 +1,6 @@
 import os
+import platform
+import subprocess
 from io import BytesIO
 
 import requests
@@ -51,7 +53,12 @@ def save_img(folder_path, img):
         i += 1
 
     print(f'Sorted images saved to: {os.path.abspath(folder_path)}')
-    os.system(f'open {os.path.join(os.getcwd(), folder_path)}')
+    if platform.system() == 'Windows':
+        os.startfile(os.path.join(os.getcwd(), folder_path))
+    elif platform.system() == 'Darwin':
+        subprocess.run(['open', os.path.join(os.getcwd(), folder_path)])
+    else:
+        print("Unsupported OS")
 
 
 def load_images(path):
