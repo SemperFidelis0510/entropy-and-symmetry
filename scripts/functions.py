@@ -35,6 +35,10 @@ def calc_ent(img_arr, method):
             return calculate_rgb_color_cube_entropy(img_arr)
         case 'GLCM':
             return calculate_GLCM_entropy(img_arr)
+        case 'RGBCM_each_channel':
+            return calculate_RGBCM_entropy(img_arr, scheme='each_channel')
+        case 'RGBCM_to_gray':
+            return calculate_RGBCM_entropy(img_arr, scheme='to_gray')
         case _:
             print('No entropy method matched!!')
             return
