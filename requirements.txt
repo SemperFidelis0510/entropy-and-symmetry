@@ -7,4 +7,4 @@ scipy
 discord
 PyWavelets
 requests
-tkinter
+tk

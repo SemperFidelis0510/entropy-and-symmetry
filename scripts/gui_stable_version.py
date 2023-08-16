@@ -24,13 +24,14 @@
 # - Supports loading of thumbnails on window close
 
 
-
 import os
 from tkinter import *
 from tkinter import filedialog, messagebox
+
 from PIL import ImageTk, Image
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
+
 
 class ImageViewer:
     def __init__(self, directory):
@@ -50,15 +51,14 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # 灰色占位符
         self.loaded_thumbnails = set()
         self.status_bar = None
-        
-        
+
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
         if self.img_no > 0:
             self.load_image_at_index(self.img_no - 1)
         if self.img_no < len(self.image_files) - 1:
             self.load_image_at_index(self.img_no + 1)
-        
+
         self.init_window()
 
     def init_window(self):
@@ -67,15 +67,15 @@ class ImageViewer:
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
-        #self.create_zoom_controls()
-        #self.create_navigation_buttons()
+        # self.create_zoom_controls()
+        # self.create_navigation_buttons()
         self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
         self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
-        
+
         self.controls_frame = Frame(self.image_window)
         self.controls_frame.grid(row=1, column=1, columnspan=3, sticky='ew')
-    
+
         self.create_zoom_controls(self.controls_frame)
         self.create_navigation_buttons(self.controls_frame)
 
@@ -128,17 +128,17 @@ class ImageViewer:
         y_scrollbar = Scrollbar(frame_image, orient="vertical", command=self.canvas_image.yview)
         y_scrollbar.grid(row=0, column=1, sticky='ns')
         self.canvas_image.config(xscrollcommand=x_scrollbar.set, yscrollcommand=y_scrollbar.set)
-        self.image_on_canvas = self.canvas_image.create_image(0, 0, anchor='nw', image=self.List_photoimages[self.img_no])
+        self.image_on_canvas = self.canvas_image.create_image(0, 0, anchor='nw',
+                                                              image=self.List_photoimages[self.img_no])
 
         # Set weight for frame_image to adjust canvas size
         frame_image.grid_rowconfigure(0, weight=1)
         frame_image.grid_columnconfigure(0, weight=1)
 
-
     def create_thumbnail_frame(self):
-        frame_thumbnails_container = Frame(self.image_window, width=70) # Adjust width  
+        frame_thumbnails_container = Frame(self.image_window, width=70)  # Adjust width
         frame_thumbnails_container.grid(row=0, column=0, rowspan=3, sticky="ns")
-        frame_thumbnails_container.grid_propagate(False) # Forbid internal components to change size
+        frame_thumbnails_container.grid_propagate(False)  # Forbid internal components to change size
         self.canvas_thumbnails = Canvas(frame_thumbnails_container, width=70, height=600)
         self.canvas_thumbnails.pack(side=LEFT, fill=BOTH, expand=True)
         scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
@@ -146,27 +146,27 @@ class ImageViewer:
 
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
-        self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60, height=len(self.List_thumbnail_images) * 60) # Increase height
+        self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60,
+                                      height=len(self.List_thumbnail_images) * 60)  # Increase height
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
         for idx in range(len(self.image_files)):
-            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT, command=lambda i=idx: self.on_select(i))
+            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT,
+                                      command=lambda i=idx: self.on_select(i))
             thumbnail_button.pack(side=TOP)
 
-
-        self.canvas_thumbnails.config(scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 60)) # Resize the scrolling area
+        self.canvas_thumbnails.config(
+            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 60))  # Resize the scrolling area
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
 
     def on_scroll(self, *args):
         # Default scrolling behavior
         self.canvas_thumbnails.yview(*args)
-    
+
         # Load visible thumbnails after scrolling
         self.load_visible_thumbnails()
 
-
-    
     def load_visible_thumbnails(self, event=None):
         # Get the scroll position
         top = self.canvas_thumbnails.canvasy(0)
@@ -189,37 +189,33 @@ class ImageViewer:
             if self.List_images[idx] is None:
                 self.load_image_at_index(idx)
 
-
-
-
     def create_zoom_controls(self, frame):
         button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
         button_zoom_in.grid(row=0, column=0, sticky='w')
-    
+
         self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
         self.scale.set(100)
         self.scale.grid(row=0, column=1, sticky='ew')
         self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
-    
+
         button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
         button_zoom_out.grid(row=0, column=2, sticky='e')
-
 
     def create_navigation_buttons(self, frame):
         self.button_back = Button(frame, text="<<", command=self.back)
         self.button_back.grid(row=1, column=0, sticky='w')
-    
+
         spacer = Label(frame, text=" " * 20)
         spacer.grid(row=1, column=1, sticky='ew')
-    
+
         self.button_forward = Button(frame, text=">>", command=self.forward)
         self.button_forward.grid(row=1, column=2, sticky='e')
 
     def load_image_at_index(self, idx):
         """Load the image and thumbnail of the specified index."""
-    
+
         try:
-        # Load main image
+            # Load main image
             img = Image.open(os.path.join(self.directory, self.image_files[idx]))
             self.List_images[idx] = img
             self.List_photoimages[idx] = ImageTk.PhotoImage(img)
@@ -243,7 +239,6 @@ class ImageViewer:
             self.List_thumbnails = [None] * len(self.image_files)
             self.List_thumbnail_images = [None] * len(self.image_files)
 
-
     def forward(self, event=None):
         if self.img_no >= len(self.List_images) - 1:  # Return if it is the last image
             return
@@ -265,7 +260,7 @@ class ImageViewer:
         self.update_buttons()
         self.load_visible_thumbnails()  # load visible thumbnails
         self.update_status_bar()
-    
+
     def resize_image(self, percent):
         self.zoom_percent = percent
         img_resized = self.List_images[self.img_no].resize((int(self.List_images[self.img_no].width * percent / 100),
@@ -310,9 +305,6 @@ class ImageViewer:
         self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
 
 
-
-
-
 def choose_directory():
     try:
         directory = filedialog.askdirectory()
@@ -328,7 +320,7 @@ root = Tk()
 root.title("Main Menu")
 choose_button = Button(root, text="Choose Directory", command=choose_directory)
 choose_button.pack()
-root.mainloop() 
+root.mainloop()
 
 # Need to do in the future:
 # - Add support for more image formats
