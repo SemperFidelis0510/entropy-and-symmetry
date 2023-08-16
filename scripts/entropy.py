@@ -1,10 +1,10 @@
 import math
-import numpy as np
-from skimage.feature import local_binary_pattern
-from skimage.filters import gabor
+
+import matplotlib.pyplot as plt
 from skimage.color import rgb2gray
 from skimage.feature import graycomatrix
-import matplotlib.pyplot as plt
+from skimage.feature import local_binary_pattern
+from skimage.filters import gabor
 
 from scripts.transforms import *
 
@@ -12,6 +12,7 @@ from scripts.transforms import *
 def entropy(arr):
     # Check the rank of the array
     rank = arr.ndim
+    arr = np.abs(arr)
 
     # Handle 1D and 2D arrays
     if rank == 1 or rank == 2:
