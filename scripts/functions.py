@@ -31,6 +31,8 @@ def calc_ent(img_arr, method):
             return calculate_texture_gabor_entropy(img_arr)
         case 'cube':
             return calculate_rgb_color_cube_entropy(img_arr)
+        case 'GLCM':
+            return calculate_GLCM_entropy(img_arr)
         case _:
             print('No entropy method matched!!')
             return
