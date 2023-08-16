@@ -45,7 +45,7 @@ def histogram(img_arr, color='rgb'):
             hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
             return entropy(hist)
 
-def calculate_total_entropy(image):
+def calculate_GLCM_entropy(image):
     distances = [1]  # Distance between pixels for co-occurrence
     angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
     levels = 256  # Number of intensity levels in the image
