@@ -6,7 +6,7 @@ from skimage.feature import graycomatrix
 from skimage.feature import local_binary_pattern
 from skimage.filters import gabor
 
-from scripts.transforms import *
+from transforms import *
 
 
 def entropy(arr):
