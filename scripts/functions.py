@@ -4,47 +4,22 @@ from io import BytesIO
 
 import requests
 
-from entropy import *
 from img_utils import *
 from utils import *
 
 
-def calc_ent(img_arr, method):
-    match method:
-        case 'hist':
-            return histogram(img_arr, 'rgb')
-        case 'hist_greyscale':
-            return histogram(img_arr, 'greyscale')
-        case 'naive':
-            return entropy(img_arr)
-        case 'dft':
-            return calc_dft(img_arr)
-        case 'dwt':  # Haven't finish
-            pass
-        case 'laplace':
-            return laplace_ent(img_arr)
-        case 'joint_red_green':
-            return calculate_joint_entropy_red_green(img_arr)
-        case 'joint_all':
-            return calculate_joint_RGB_entropy(img_arr)
-        case 'lbp':
-            return calculate_texture_entropy(img_arr)
-        case 'lbp_gabor':
-            return calculate_texture_gabor_entropy(img_arr)
-        case 'adapt':
-            return adaptive_entropy_estimation(img_arr)
-        case 'GLCM':
-            return calculate_GLCM_entropy(img_arr)
-        case 'RGBCM_each_channel':
-            return calculate_RGBCM_entropy(img_arr, scheme='each_channel')
-        case 'RGBCM_to_gray':
-            return calculate_RGBCM_entropy(img_arr, scheme='to_gray')
-        case _:
-            print('No entropy method matched!!')
-            return
-
-
 def save_img(folder_path, images_arr):
+    """
+    Saves image arrays to the specified folder path as BMP files.
+
+    Args:
+        folder_path (str): Path to the folder where the images will be saved.
+        images_arr (list or np.ndarray): List or array of image arrays to be saved.
+
+    Note:
+        If the folder path does not exist, it will be created.
+        The function also attempts to open the folder using the default file explorer based on the OS.
+    """
     if isinstance(images_arr, np.ndarray):
         images_arr = [images_arr]
     if not os.path.exists(folder_path):
@@ -133,22 +108,24 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     return images_arr, paths
 
 
-def label_ent(images, method, sort=True):
-    img_ent = []
-    n = len(images)
-    i = 0
-    for img in images:
-        i += 1
-        img_ent.append([img, calc_ent(img, method)])
-        print_progress_bar('Entropy calculated', i, n)
-    print('\nEntropy calculation done.')
-
-    if sort:
-        img_ent = sorted(img_ent, key=lambda x: x[1])
-    return img_ent
-
-
 def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500, save=False):
+    """
+    Retrieves a satellite image from Google Maps for the specified location, zoom level, and dimensions.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        zoom_level (int): Zoom level for the map image.
+        width (int, optional): Width of the image in pixels. Default is 500.
+        height (int, optional): Height of the image in pixels. Default is 500.
+        save (bool, optional): Whether to save the image to a file. Default is False.
+
+    Returns:
+        image (np.ndarray): Array representing the retrieved image.
+
+    Raises:
+        Exception: If there is an error retrieving the image.
+    """
     url = "https://maps.googleapis.com/maps/api/staticmap"
     api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     params = {

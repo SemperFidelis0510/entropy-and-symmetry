@@ -11,7 +11,109 @@ from skimage.segmentation import slic
 from transforms import *
 
 
+def label_ent(images, method, sort=True):
+    """
+    Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
+
+    Args:
+        images (list): List of image arrays.
+        method (function): Function to calculate entropy for an image.
+        sort (bool, optional): Whether to sort the images by entropy. Default is True.
+
+    Returns:
+        img_ent (list): List of tuples containing the image array and its corresponding entropy.
+    """
+    img_ent = []
+    n = len(images)
+    i = 0
+    for img in images:
+        i += 1
+        img_ent.append([img, calc_ent(img, method)])
+        print_progress_bar('Entropy calculated', i, n)
+    print('\nEntropy calculation done.')
+
+    if sort:
+        img_ent = sorted(img_ent, key=lambda x: x[1])
+    return img_ent
+
+
+def calc_ent(img_arr, method):
+    """
+    Calculates the entropy of an image array using the specified method.
+
+    Args:
+        img_arr (np.ndarray): Image array for which to calculate entropy.
+        method (str): Method to use for entropy calculation. Supported methods include:
+            - 'hist': Histogram-based entropy for RGB images.
+            - 'hist_greyscale': Histogram-based entropy for greyscale images.
+            - 'naive': Naive entropy calculation.
+            - 'dft': Entropy calculation using Discrete Fourier Transform.
+            - 'laplace': Laplace entropy calculation.
+            - 'joint_red_green': Joint entropy calculation for red and green channels.
+            - 'joint_all': Joint entropy calculation for RGB channels.
+            - 'lbp': Local Binary Pattern-based texture entropy.
+            - 'lbp_gabor': Texture entropy using Local Binary Pattern and Gabor filter.
+            - 'adapt': Adaptive entropy estimation.
+            - 'GLCM': Entropy calculation using Gray-Level Co-occurrence Matrix.
+            - 'RGBCM_each_channel': Entropy calculation using Red-Green-Blue Co-occurrence Matrix for each channel.
+            - 'RGBCM_to_gray': Entropy calculation using Red-Green-Blue Co-occurrence Matrix converted to grayscale.
+
+    Returns:
+        float: Calculated entropy value, or None if the method is not recognized.
+
+    Note:
+        Some methods may require specific functions to be defined elsewhere in the code.
+    """
+    match method:
+        case 'hist':
+            return histogram(img_arr, 'rgb')
+        case 'hist_greyscale':
+            return histogram(img_arr, 'greyscale')
+        case 'naive':
+            return entropy(img_arr)
+        case 'dft':
+            return calc_dft(img_arr)
+        case 'dwt':  # Haven't finish
+            pass
+        case 'laplace':
+            return laplace_ent(img_arr)
+        case 'joint_red_green':
+            return calculate_joint_entropy_red_green(img_arr)
+        case 'joint_all':
+            return calculate_joint_RGB_entropy(img_arr)
+        case 'lbp':
+            return calculate_texture_entropy(img_arr)
+        case 'lbp_gabor':
+            return calculate_texture_gabor_entropy(img_arr)
+        case 'adapt':
+            return adaptive_entropy_estimation(img_arr)
+        case 'GLCM':
+            return calculate_GLCM_entropy(img_arr)
+        case 'RGBCM_each_channel':
+            return calculate_RGBCM_entropy(img_arr, scheme='each_channel')
+        case 'RGBCM_to_gray':
+            return calculate_RGBCM_entropy(img_arr, scheme='to_gray')
+        case _:
+            print('No entropy method matched!!')
+            return
+
+
 def entropy(arr):
+    """
+    Computes the entropy of a 1D, 2D, or 3D array.
+
+    Args:
+        arr (np.ndarray): Input array for which to compute the entropy. Can be 1D, 2D, or 3D.
+
+    Returns:
+        float: Calculated entropy value.
+
+    Raises:
+        ValueError: If the input array is not 1D, 2D, or 3D.
+
+    Note:
+        For 3D arrays, the entropy is computed for each 2D slice along the third dimension and summed.
+    """
     # Check the rank of the array
     rank = arr.ndim
     arr = np.abs(arr)
