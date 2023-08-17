@@ -1,11 +1,30 @@
 import os
 from tkinter import *
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
 
 from PIL import ImageTk, Image
 from functions import *
+import time
+from entropy import *
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
+
+ENTROPY_METHODS = [
+    'hist', 
+    'hist_greyscale', 
+    'naive', 
+    'dft', 
+    'dwt', 
+    'laplace', 
+    'joint_red_green', 
+    'joint_all', 
+    'lbp', 
+    'lbp_gabor', 
+    'adapt', 
+    'GLCM', 
+    'RGBCM_each_channel', 
+    'RGBCM_to_gray'
+]
 
 
 class ImageViewer:
@@ -53,6 +72,7 @@ class ImageViewer:
 
         self.create_zoom_controls(self.controls_frame)
         self.create_navigation_buttons(self.controls_frame)
+        self.create_calculation_buttons(self.controls_frame)
 
         self.update_buttons()
         self.update_listbox()
@@ -186,6 +206,70 @@ class ImageViewer:
         self.button_forward = Button(frame, text=">>", command=self.forward)
         self.button_forward.grid(row=1, column=2, sticky='e')
 
+    def create_calculation_buttons(self, frame):
+        # Create a Combobox and make it visible
+        self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
+
+
+        self.combo.grid(row=2, column=0)  # Set the position of the combobox
+
+        # Binding selection event
+        self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
+
+        # The save button is arranged on the right side of the combobox
+        self.button_save = Button(frame, text="Save", command=self.save)
+        self.button_save.grid(row=2, column=1, sticky='ew')
+
+    def on_combo_select(self, event=None):
+        selected_item = self.combo.get()
+        preprocessed_images, _ = preprocess(self.directory, colors='rgb')
+        sorted_images = label_ent(preprocessed_images, method=selected_item, sort=True)
+        images, _ = self.split_images_and_entropy(sorted_images)
+        self.refresh_all_images(images)
+
+
+    def update_images_from_array(self, np_array, index):
+        # Convert numpy array to PIL Image
+        img = Image.fromarray(np_array)
+    
+        # Update main image lists
+        self.List_images[index] = img
+        self.List_photoimages[index] = ImageTk.PhotoImage(img)
+    
+        # Create and update thumbnail
+        thumbnail_size = (50, 50)  # You can adjust the size as needed
+        thumbnail = img.copy()
+        thumbnail.thumbnail(thumbnail_size)
+        self.List_thumbnails[index] = thumbnail
+        self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
+
+    def refresh_all_images(self, np_arrays):
+        # Ensure the length of numpy arrays matches the length of image lists
+        if len(np_arrays) != len(self.List_images):
+            messagebox.showerror("Mismatch in number of images and numpy arrays!")
+            return
+
+        for idx, np_array in enumerate(np_arrays):
+            self.update_images_from_array(np_array, idx)
+
+        self.update_image()
+        self.update_buttons()
+        self.update_listbox()
+        self.load_visible_thumbnails()  # load visible thumbnails
+        self.update_status_bar()
+        self.update_thumbnails_UI()
+
+    def update_thumbnails_UI(self):
+        for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+
+    def split_images_and_entropy(self, img_ent):
+        images = [entry[0] for entry in img_ent]
+        entropies = [entry[1] for entry in img_ent]
+        return images, entropies
+
+    
     def load_image_at_index(self, idx):
         """Load the image and thumbnail of the specified index."""
 
@@ -278,6 +362,9 @@ class ImageViewer:
             widget.config(relief=FLAT)
         self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
         self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
+
+    def save(self):
+        pass
 
 
 def choose_directory():
