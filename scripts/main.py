@@ -7,8 +7,8 @@ def sort_folder(path):
     # colors = 'greyscale'
     colors = 'rgb'
     method = 'dft'
-
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
+
     img_arrays, _ = preprocess(path, colors=colors)
 
     sorted_list = label_ent(img_arrays, method, sort=True)

@@ -1,14 +1,15 @@
 import math
 
 import matplotlib.pyplot as plt
+from scipy.signal import convolve2d
 from skimage.color import rgb2gray
 from skimage.feature import graycomatrix
 from skimage.feature import local_binary_pattern
-from skimage.filters import gabor
-from scipy.signal import convolve2d
-from transforms import *
 from skimage.measure import shannon_entropy
 from skimage.segmentation import slic
+
+from transforms import *
+
 
 def entropy(arr):
     # Check the rank of the array
@@ -203,6 +204,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     return entropy_value
 
+
 def adaptive_entropy_estimation(image, num_segments=100):
     gray_image = rgb2gray(image)
     segments = slic(image, n_segments=num_segments, compactness=10, sigma=1)
@@ -218,5 +220,7 @@ def adaptive_entropy_estimation(image, num_segments=100):
     adaptive_entropy = total_entropy / num_segments
 
     return adaptive_entropy
+
+
 def laplace_ent(image):
     return entropy(laplacian(image))
