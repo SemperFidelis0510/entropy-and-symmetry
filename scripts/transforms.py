@@ -162,12 +162,9 @@ def dwt(image, wavelet='db1', level=None):
 
     # Handle 3D arrays
     elif rank == 3:
-        result = []
-        for i in range(image.shape[2]):
-            slice_2d = image[:, :, i]
-            f_transform = pywt.wavedec2(slice_2d, wavelet=wavelet, level=level)
-            result.append(np.abs(np.array(f_transform[level]).flatten()))
-        return np.stack(result)
+        result = [np.abs(pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)[level]).flatten()
+                  for i in range(image.shape[2])]
+        return np.vstack(result)
 
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
