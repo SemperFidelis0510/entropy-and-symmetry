@@ -1,6 +1,8 @@
 import numpy as np
 import pywt
 
+from utils import *
+
 
 def dft(image):
     rank = image.ndim
@@ -41,13 +43,9 @@ def uniform_noise(im_arr, noise_level):
         print('error: noise function receive invalid parameter: noise_level should be in [0, 1]')
         return
     noise_level = int(128 * noise_level)
-    height, width = im_arr.shape[:2]
-    noise_arr = np.zeros((height, width), dtype=np.float64)
-    for i in range(height):
-        for j in range(width):
-            noise_arr[i][j] = np.random.uniform(-noise_level, noise_level)
+    noise_arr = np.random.uniform(-noise_level, noise_level, im_arr.shape)
     noise_arr = (im_arr + noise_arr) % 255
-    return noise_arr
+    return noise_arr.astype(im_arr.dtype)
 
 
 def noise_by_increment(im_arr, num_images):
@@ -59,11 +57,13 @@ def noise_by_increment(im_arr, num_images):
     Returns:
         A list of noised images represented by arrays
     """
-    noised_images = []
-    for i in range(num_images):
+    noised_images = [im_arr.copy()]  # Start with the original clean image
+    for i in range(1, num_images):
         noise_level = i / (num_images - 1) if num_images > 1 else 0
         noised_image = uniform_noise(im_arr, noise_level)
         noised_images.append(noised_image)
+        print_progress_bar('Noised up images', i + 1, num_images)
+    print('\nNosing up images done.')
     return noised_images
 
 
