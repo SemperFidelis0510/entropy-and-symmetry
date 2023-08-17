@@ -72,9 +72,9 @@ def calc_ent(img_arr, method):
         case 'naive':
             return entropy(img_arr)
         case 'dft':
-            return calc_dft(img_arr)
-        case 'dwt':  # Haven't finish
-            pass
+            return calculate_dft_entropy(img_arr)
+        case 'dwt':
+            return calculate_dwt_entropy(img_arr)
         case 'laplace':
             return laplace_ent(img_arr)
         case 'joint_red_green':
