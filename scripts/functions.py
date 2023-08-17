@@ -1,13 +1,14 @@
 import os
 import platform
 import subprocess
+import time
 from io import BytesIO
 
 import requests
 
 from entropy import *
 from img_utils import *
-import time
+
 
 def calc_ent(img_arr, method):
     match method:

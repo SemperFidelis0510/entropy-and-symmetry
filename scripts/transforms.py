@@ -50,6 +50,23 @@ def uniform_noise(im_arr, noise_level):
     return noise_arr
 
 
+def noise_by_increment(im_arr, num_images):
+    """
+    This function generates a list of arrays of noised-up pictures with rising values of noise.
+    Args:
+        im_arr: image represented by an array
+        num_images: Number of images to generate in the list
+    Returns:
+        A list of noised images represented by arrays
+    """
+    noised_images = []
+    for i in range(num_images):
+        noise_level = i / (num_images - 1) if num_images > 1 else 0
+        noised_image = uniform_noise(im_arr, noise_level)
+        noised_images.append(noised_image)
+    return noised_images
+
+
 def custom_permute(matrix, permutation_matrix=None):
     size = matrix.shape[0] * matrix.shape[1]
     """
