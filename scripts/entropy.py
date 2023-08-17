@@ -99,21 +99,6 @@ def calc_ent(img_arr, method):
 
 
 def entropy(arr):
-    """
-    Computes the entropy of a 1D, 2D, or 3D array.
-
-    Args:
-        arr (np.ndarray): Input array for which to compute the entropy. Can be 1D, 2D, or 3D.
-
-    Returns:
-        float: Calculated entropy value.
-
-    Raises:
-        ValueError: If the input array is not 1D, 2D, or 3D.
-
-    Note:
-        For 3D arrays, the entropy is computed for each 2D slice along the third dimension and summed.
-    """
     # Check the rank of the array
     rank = arr.ndim
     arr = np.abs(arr)
