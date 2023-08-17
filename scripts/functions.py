@@ -34,10 +34,10 @@ def save_img(folder_path, images_arr):
     print(f'Sorted images saved to: {os.path.abspath(folder_path)}')
     if platform.system() == 'Windows':
         os.startfile(os.path.join(os.getcwd(), folder_path))
-    elif platform.system() == 'Darwin':
+    elif platform.system() == 'Darwin' or platform.system() == 'Linux':
         subprocess.run(['open', os.path.join(os.getcwd(), folder_path)])
     else:
-        print("Unsupported OS")
+        print(f"Unsupported OS: {platform.system()}")
 
 
 def load_images(path):
