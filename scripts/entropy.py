@@ -108,18 +108,12 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
     return total_entropy
 
 
-def calc_dft(image, visualize=False):
+def calc_dft(image):
     # Compute the 2D Fourier Transform of the image
-    f_transform = dft(image)
-    if visualize:
-        f_transform_centered = np.fft.fftshift(f_transform)
-        # Compute magnitude spectrum (for visualization purposes)
-        magnitude_spectrum = np.log(np.abs(f_transform_centered) + 1)
-        plt.imshow(magnitude_spectrum, cmap='gray')
-        plt.title('Magnitude Spectrum')
-        plt.colorbar()
-        plt.show()
-    return entropy(f_transform)
+    r_transform = dft(image[:, :, 0])
+    g_transform = dft(image[:, :, 1])
+    b_transform = dft(image[:, :, 2])
+    return entropy(r_transform) + entropy(g_transform) + entropy(b_transform)
 
 
 def calculate_joint_entropy_red_green(img_arr):
@@ -220,3 +214,17 @@ def adaptive_entropy_estimation(image, num_segments=100):
     return adaptive_entropy
 def laplace_ent(image):
     return entropy(laplacian(image))
+
+def calculate_dwt_entropy(image, wavelet='db1', level=1):
+    if level==0:
+        print('dwt level should not be 0')
+        return
+    r_dwt = dwt(image[:, :, 0])
+    g_dwt = dwt(image[:, :, 1])
+    b_dwt = dwt(image[:, :, 2])
+    transform = [r_dwt, g_dwt, b_dwt]
+    ent = 0
+    for r in transform:
+        arr = np.array(r[level]).flatten()
+        ent += entropy(arr)
+    return ent
