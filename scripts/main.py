@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from entropy import *
 from functions import *
 
 
