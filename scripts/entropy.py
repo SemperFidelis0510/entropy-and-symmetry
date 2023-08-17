@@ -26,10 +26,11 @@ def label_ent(images, method, sort=True):
     img_ent = []
     n = len(images)
     i = 0
+    start_time = time.time()
     for img in images:
         i += 1
         img_ent.append([img, calc_ent(img, method)])
-        print_progress_bar('Entropy calculated', i, n)
+        print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
     if sort:
