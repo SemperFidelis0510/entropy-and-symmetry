@@ -1,8 +1,25 @@
 import numpy as np
 import pywt
 
+from utils import *
+
 
 def dft(image):
+    """
+    Computes the Discrete Fourier Transform (DFT) of a 1D, 2D, or 3D array (image).
+
+    Args:
+        image (np.ndarray): Input array (image) for which to compute the DFT. Can be 1D, 2D, or 3D.
+
+    Returns:
+        np.ndarray: Absolute values of the Fourier Transform, with the same shape as the input array.
+
+    Raises:
+        ValueError: If the input array is not 1D, 2D, or 3D.
+
+    Note:
+        For 3D arrays, the DFT is computed for each 2D slice along the third dimension.
+    """
     rank = image.ndim
 
     # Handle 1D arrays
@@ -41,13 +58,28 @@ def uniform_noise(im_arr, noise_level):
         print('error: noise function receive invalid parameter: noise_level should be in [0, 1]')
         return
     noise_level = int(128 * noise_level)
-    height, width = im_arr.shape[:2]
-    noise_arr = np.zeros((height, width), dtype=np.float64)
-    for i in range(height):
-        for j in range(width):
-            noise_arr[i][j] = np.random.uniform(-noise_level, noise_level)
+    noise_arr = np.random.uniform(-noise_level, noise_level, im_arr.shape)
     noise_arr = (im_arr + noise_arr) % 255
-    return noise_arr
+    return noise_arr.astype(im_arr.dtype)
+
+
+def noise_by_increment(im_arr, num_images):
+    """
+    This function generates a list of arrays of noised-up pictures with rising values of noise.
+    Args:
+        im_arr: image represented by an array
+        num_images: Number of images to generate in the list
+    Returns:
+        A list of noised images represented by arrays
+    """
+    noised_images = [im_arr.copy()]  # Start with the original clean image
+    for i in range(1, num_images):
+        noise_level = i / (num_images - 1) if num_images > 1 else 0
+        noised_image = uniform_noise(im_arr, noise_level)
+        noised_images.append(noised_image)
+        print_progress_bar('Noised up images', i + 1, num_images)
+    print('\nNosing up images done.')
+    return noised_images
 
 
 def custom_permute(matrix, permutation_matrix=None):

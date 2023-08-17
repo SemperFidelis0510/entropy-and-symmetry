@@ -1,50 +1,25 @@
-import os
 import platform
 import subprocess
 from io import BytesIO
 
 import requests
 
-from entropy import *
 from img_utils import *
-import time
-
-def calc_ent(img_arr, method):
-    match method:
-        case 'hist':
-            return histogram(img_arr, 'rgb')
-        case 'hist_greyscale':
-            return histogram(img_arr, 'greyscale')
-        case 'naive':
-            return entropy(img_arr)
-        case 'dft':
-            return calculate_dft_entropy(img_arr)
-        case 'dwt':
-            return calculate_dwt_entropy(img_arr)
-        case 'laplace':
-            return laplace_ent(img_arr)
-        case 'joint_red_green':
-            return calculate_joint_entropy_red_green(img_arr)
-        case 'joint_all':
-            return calculate_joint_RGB_entropy(img_arr)
-        case 'lbp':
-            return calculate_texture_entropy(img_arr)
-        case 'lbp_gabor':
-            return calculate_texture_gabor_entropy(img_arr)
-        case 'adapt':
-            return adaptive_entropy_estimation(img_arr)
-        case 'GLCM':
-            return calculate_GLCM_entropy(img_arr)
-        case 'RGBCM_each_channel':
-            return calculate_RGBCM_entropy(img_arr, scheme='each_channel')
-        case 'RGBCM_to_gray':
-            return calculate_RGBCM_entropy(img_arr, scheme='to_gray')
-        case _:
-            print('No entropy method matched!!')
-            return
+from utils import *
 
 
 def save_img(folder_path, images_arr):
+    """
+    Saves image arrays to the specified folder path as BMP files.
+
+    Args:
+        folder_path (str): Path to the folder where the images will be saved.
+        images_arr (list or np.ndarray): List or array of image arrays to be saved.
+
+    Note:
+        If the folder path does not exist, it will be created.
+        The function also attempts to open the folder using the default file explorer based on the OS.
+    """
     if isinstance(images_arr, np.ndarray):
         images_arr = [images_arr]
     if not os.path.exists(folder_path):
@@ -66,20 +41,42 @@ def save_img(folder_path, images_arr):
 
 
 def load_images(path):
+    """
+    Loads image paths from a given directory, filtering for specific image file extensions.
+
+    Args:
+        path (str): Path to the directory containing the images.
+
+    Returns:
+        images_path (list): List of paths to the image files with extensions 'jpg', 'bmp', and 'png'.
+    """
     images_path = []
     for filename in os.listdir(path):
-        img_path = os.path.join(path, filename)
-        images_path.append(img_path)
+        if filename.lower().endswith(('.jpg', '.bmp', '.png')):
+            img_path = os.path.join(path, filename)
+            images_path.append(img_path)
     return images_path
 
 
 def preprocess(folder_path, crop_size=None, colors='rgb'):
+    """
+    Preprocesses images from a given folder path by cropping and converting to the specified color format.
+
+    Args:
+        folder_path (str): Path to the folder containing the images.
+        crop_size (int, optional): Size of the cropped square. If None, the crop size will vary based on the image size.
+        colors (str, optional): Color format, either 'rgb' or 'greyscale'. Default is 'rgb'.
+
+    Returns:
+        images_arr (list): List of preprocessed image arrays.
+        paths (list): List of paths to the processed images.
+    """
     if crop_size is None:
         vary_crop = True
     else:
         vary_crop = False
 
-    paths = load_images(folder_path)
+    paths = [p for p in load_images(folder_path) if p.lower().endswith(('.jpg', '.bmp', '.png'))]
     n = len(paths)
     i = 0
 
@@ -104,51 +101,31 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
                 img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
-        print(f'\rPreprocessed: {print_progress_bar(i, n, start_time=start_time)}', end='', flush=True)
+        print_progress_bar('Preprocessed', i, n, start_time=start_time)
 
     print(f'\nPreprocessing done.')
 
     return images_arr, paths
 
 
-def label_ent(images, method, sort=True):
-    img_ent = []
-    n = len(images)
-    i = 0
-    start_time = time.time()
-    for img in images:
-        i += 1
-        img_ent.append([img, calc_ent(img, method)])
-        print(f'\rEntropy calculated: {print_progress_bar(i, n, start_time=start_time)} | Method: {method}', end='', flush=True)
-    print('\nEntropy calculation done.')
-
-    if sort:
-        img_ent = sorted(img_ent, key=lambda x: x[1])
-    return img_ent
-
-
-def normalize_path(path_str):
-    # Split by both UNIX and Windows separators
-    parts = path_str.replace('\\', '/').split('/')
-    # Join with the appropriate OS separator
-    return os.path.join(*parts)
-
-
-def print_progress_bar(iteration, total, start_time=None, length=50):
-    percent = "{0:.1f}".format(100 * (iteration / float(total)))
-    filled_length = int(length * iteration // total)
-    bar = "█" * filled_length + '-' * (length - filled_length)
-
-    if start_time is not None:
-        elapsed_time = time.time() - start_time
-        mins, secs = divmod(int(elapsed_time), 60)
-        timer = f"{mins:02d}:{secs:02d}"
-        return f"{bar} | {percent}% Complete {iteration}/{total} images | Time: {timer}"
-    else:
-        return f"{bar} | {percent}% Complete {iteration}/{total} images."
-
-
 def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500, save=False):
+    """
+    Retrieves a satellite image from Google Maps for the specified location, zoom level, and dimensions.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+        zoom_level (int): Zoom level for the map image.
+        width (int, optional): Width of the image in pixels. Default is 500.
+        height (int, optional): Height of the image in pixels. Default is 500.
+        save (bool, optional): Whether to save the image to a file. Default is False.
+
+    Returns:
+        image (np.ndarray): Array representing the retrieved image.
+
+    Raises:
+        Exception: If there is an error retrieving the image.
+    """
     url = "https://maps.googleapis.com/maps/api/staticmap"
     api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     params = {
