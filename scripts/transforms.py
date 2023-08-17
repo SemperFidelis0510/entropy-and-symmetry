@@ -115,21 +115,27 @@ def laplacian(x):
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
 
-
 def dwt(image, wavelet='db1', level=None):
-    """
-    Compute wavelet transform of an image and save the approximation.
+    rank = image.ndim
 
-    Parameters:
-        - image: 2D numpy array representing the image.
-        - wavelet: Type of wavelet to be used. Default is 'db1' (Daubechies wavelet).
-        - level: Level of decomposition. If None, max possible level is used.
+    # Handle 1D arrays
+    if rank == 1:
+        w_transform = pywt.wavedec(image, wavelet=wavelet, level=level)
+        return np.abs(w_transform[level])
 
-    Returns:
-        - coeffs: Wavelet coefficients.
-    """
+    # Handle 2D arrays
+    elif rank == 2:
+        w_transform = pywt.wavedec2(image, wavelet=wavelet, level=level)
+        return np.abs(w_transform[level])
 
-    # Decompose the image using discrete wavelet transform
-    coeffs = pywt.wavedec2(image, wavelet=wavelet, level=level)
+    # Handle 3D arrays
+    elif rank == 3:
+        result = []
+        for i in range(image.shape[2]):
+            slice_2d = image[:, :, i]
+            f_transform = pywt.wavedec2(slice_2d, wavelet=wavelet, level=level)
+            result.append(np.abs(np.array(f_transform[level]).flatten()))
+        return np.stack(result)
 
-    return coeffs
+    else:
+        raise ValueError("Array must be 1D, 2D, or 3D")

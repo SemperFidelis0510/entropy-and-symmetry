@@ -108,12 +108,9 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
     return total_entropy
 
 
-def calc_dft(image):
-    # Compute the 2D Fourier Transform of the image
-    r_transform = dft(image[:, :, 0])
-    g_transform = dft(image[:, :, 1])
-    b_transform = dft(image[:, :, 2])
-    return entropy(r_transform) + entropy(g_transform) + entropy(b_transform)
+def calculate_dft_entropy(image):
+    dft_img = dft(image)
+    return entropy(dft_img)
 
 
 def calculate_joint_entropy_red_green(img_arr):
@@ -216,15 +213,5 @@ def laplace_ent(image):
     return entropy(laplacian(image))
 
 def calculate_dwt_entropy(image, wavelet='db1', level=1):
-    if level==0:
-        print('dwt level should not be 0')
-        return
-    r_dwt = dwt(image[:, :, 0])
-    g_dwt = dwt(image[:, :, 1])
-    b_dwt = dwt(image[:, :, 2])
-    transform = [r_dwt, g_dwt, b_dwt]
-    ent = 0
-    for r in transform:
-        arr = np.array(r[level]).flatten()
-        ent += entropy(arr)
-    return ent
+    w_transform_arr = dwt(image,wavelet,level)
+    return entropy(w_transform_arr)

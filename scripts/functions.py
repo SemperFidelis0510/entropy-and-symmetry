@@ -18,9 +18,9 @@ def calc_ent(img_arr, method):
         case 'naive':
             return entropy(img_arr)
         case 'dft':
-            return calc_dft(img_arr)
-        case 'dwt':  # Haven't finish
-            pass
+            return calculate_dft_entropy(img_arr)
+        case 'dwt':
+            return calculate_dwt_entropy(img_arr)
         case 'laplace':
             return laplace_ent(img_arr)
         case 'joint_red_green':
@@ -115,10 +115,11 @@ def label_ent(images, method, sort=True):
     img_ent = []
     n = len(images)
     i = 0
+    start_time = time.time()
     for img in images:
         i += 1
         img_ent.append([img, calc_ent(img, method)])
-        print(f'\rEntropy calculated: {print_progress_bar(i, n)} {i}/{n} images.', end='', flush=True)
+        print(f'\rEntropy calculated: {print_progress_bar(i, n, start_time=start_time)} | Method: {method}', end='', flush=True)
     print('\nEntropy calculation done.')
 
     if sort:

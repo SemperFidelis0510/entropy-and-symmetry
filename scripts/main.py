@@ -6,7 +6,7 @@ from functions import *
 def sort_folder(path):
     # colors = 'greyscale'
     colors = 'rgb'
-    method = 'dft'
+    method = 'dwt'
 
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     img_arrays, _ = preprocess(path, colors=colors)
@@ -15,13 +15,13 @@ def sort_folder(path):
 
     print('\nThe images are sorted by entropy.')
 
-    save_img(dst_folder, sorted_list)
+    save_img(dst_folder, img_arrays)
 
 
 def main():
     # folder_path = r'../datasets/pattern_images'
-    folder_path = r'../datasets/web_symmetries/rotation'
-    # folder_path = r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/snowflake'
+    #folder_path = r'../datasets/web_symmetries/rotation'
+    folder_path = r'../datasets/pattern_images'
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
     sort_folder(folder_path)
