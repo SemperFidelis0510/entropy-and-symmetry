@@ -4,7 +4,7 @@ from tkinter import filedialog, messagebox, ttk
 
 from PIL import ImageTk, Image
 from functions import *
-import time
+import sys
 from entropy import *
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
@@ -25,6 +25,17 @@ ENTROPY_METHODS = [
     'RGBCM_each_channel', 
     'RGBCM_to_gray'
 ]
+
+class IORedirector(object):
+    def __init__(self, text_area):
+        self.text_area = text_area
+
+    def write(self, str_):
+        self.text_area.insert(END, str_ + '\n')
+        self.text_area.see(END)
+
+    def flush(self):
+        pass
 
 
 class ImageViewer:
@@ -57,6 +68,8 @@ class ImageViewer:
             self.load_image_at_index(self.img_no + 1)
 
         self.init_window()
+        self.console = None
+
 
     def init_window(self):
         self.image_window = Toplevel()
@@ -69,6 +82,8 @@ class ImageViewer:
         self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
         self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
+        self.console = Text(self.image_window, height=10, width=50)
+        self.console.grid(row=3, column=0, columnspan=4, pady=20, padx=10, sticky='ew')
 
         self.controls_frame = Frame(self.image_window)
         self.controls_frame.grid(row=1, column=1, columnspan=3, sticky='ew')
@@ -88,6 +103,9 @@ class ImageViewer:
         # Set weight to adjust canvas with window resize
         self.image_window.grid_rowconfigure(1, weight=1)
         self.image_window.grid_columnconfigure(1, weight=1)
+
+        sys.stdout = IORedirector(self.console)
+
 
     def toggle_fullscreen(self, event=None):
         self.is_fullscreen = not self.is_fullscreen
