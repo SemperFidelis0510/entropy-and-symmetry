@@ -80,8 +80,7 @@ class ImageViewer:
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
-        # self.create_zoom_controls()
-        # self.create_navigation_buttons()
+        
         self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
         self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
