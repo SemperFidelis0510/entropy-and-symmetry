@@ -48,6 +48,7 @@ class ImageViewer:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
         
+        self.img_ent_data = None
         self.List_images = [None] * len(self.image_files)
         self.List_photoimages = [None] * len(self.image_files)
         self.List_thumbnails = [None] * len(self.image_files)
@@ -112,7 +113,7 @@ class ImageViewer:
     def thread_it(self, func, *args):
         """ Pack functions into threads """
         self.myThread = threading.Thread(target=func, args=args)
-        self.myThread .setDaemon(True)  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread.daemon = True # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
         self.myThread .start()
 
     def clos_window(self):
@@ -265,8 +266,11 @@ class ImageViewer:
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         selected_item = self.combo.get()
         preprocessed_images, _ = preprocess(self.directory, colors='rgb')
-        img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)  # 注意，这里我们设置sort=False
-
+        img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
+        # For save button
+        self.img_ent_data = img_ent
+        
+        # Split images and entropy
         images, entropies = self.split_images_and_entropy(img_ent)
     
         # Sort the entropy and get the sorted index
@@ -436,7 +440,15 @@ class ImageViewer:
 
     
     def save(self):
-        pass
+        # Ask user to select a directory to save the images
+        folder_path = filedialog.askdirectory()
+    
+        # Check if user selected a directory (if they didn't cancel the dialog)
+        if folder_path:
+            images_arr = self.img_ent_data  # Retrieve your list/array of images here
+            if images_arr is None:
+                messagebox.showerror("Error", "Please complete an entropy sort first.")
+            save_img(folder_path, images_arr)
 
 
 
