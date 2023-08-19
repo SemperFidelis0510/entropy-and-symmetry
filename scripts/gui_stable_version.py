@@ -221,9 +221,14 @@ class ImageViewer:
 
         # The save button is arranged on the right side of the combobox
         self.button_save = Button(frame, text="Save", command=self.save)
-        self.button_save.grid(row=2, column=1, sticky='ew')
+        self.button_save.grid(row=2, column=2, sticky='ew')
 
-    def on_combo_select(self, event=None):
+        self.confirm_button = Button(frame, text="Confirm", command=self.on_confirm_click)
+        self.confirm_button.grid(row=2, column=1, sticky='ew')
+
+
+    def on_confirm_click(self):
+        # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         selected_item = self.combo.get()
         preprocessed_images, _ = preprocess(self.directory, colors='rgb')
         img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)  # 注意，这里我们设置sort=False
@@ -242,6 +247,9 @@ class ImageViewer:
         # Update the image_files list
         self.image_files = sorted_filenames
         self.refresh_all_images(sorted_images)
+
+    def on_combo_select(self, event=None):
+        selected_item = self.combo.get()
 
 
 
