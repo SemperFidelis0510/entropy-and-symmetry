@@ -9,8 +9,9 @@ from skimage.measure import shannon_entropy
 from skimage.segmentation import slic
 
 from transforms import *
+from gui_stable_version import *
 
-
+#If one change this function, one should also change the function below.
 def label_ent(images, method, sort=True):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
