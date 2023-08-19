@@ -1,11 +1,13 @@
 import os
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
+from tkinter.messagebox import askyesno
 
 from PIL import ImageTk, Image
 from functions import *
 import sys
 from entropy import *
+import threading
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
@@ -45,7 +47,6 @@ class ImageViewer:
         if not self.image_files:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
-
         
         self.List_images = [None] * len(self.image_files)
         self.List_photoimages = [None] * len(self.image_files)
@@ -74,6 +75,7 @@ class ImageViewer:
     def init_window(self):
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
+        self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
@@ -106,6 +108,20 @@ class ImageViewer:
 
         sys.stdout = IORedirector(self.console)
 
+
+    def thread_it(self, func, *args):
+        """ Pack functions into threads """
+        self.myThread = threading.Thread(target=func, args=args)
+        self.myThread .setDaemon(True)  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread .start()
+
+    def clos_window(self):
+        ans = askyesno(title='WARNING', message='Are you sure to exit the program?\nIf yes exit, otherwise continue!')
+        if ans:
+            self.image_window.destroy()
+            sys.exit()
+        else:
+            return None
 
     def toggle_fullscreen(self, event=None):
         self.is_fullscreen = not self.is_fullscreen
@@ -241,7 +257,7 @@ class ImageViewer:
         self.button_save = Button(frame, text="Save", command=self.save)
         self.button_save.grid(row=2, column=2, sticky='ew')
 
-        self.confirm_button = Button(frame, text="Confirm", command=self.on_confirm_click)
+        self.confirm_button = Button(frame, text="Confirm", command=lambda:self.thread_it(self.on_confirm_click))
         self.confirm_button.grid(row=2, column=1, sticky='ew')
 
 
