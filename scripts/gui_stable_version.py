@@ -352,7 +352,6 @@ class ImageViewer:
                 self.List_thumbnail_images[idx] = ImageTk.PhotoImage(thumb)
 
         except Exception as e:
-            # your existing code for handling exception...
 
             # If there's an error, show a message and remove the problematic image from the list
             messagebox.showerror("Error", f"An error occurred while loading {self.image_files[idx]}: {str(e)}")
