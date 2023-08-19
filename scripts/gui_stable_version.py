@@ -265,7 +265,10 @@ class ImageViewer:
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         selected_item = self.combo.get()
         preprocessed_images, _ = preprocess(self.directory, colors='rgb')
-        img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
+        try:
+            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
         self.img_ent_data = img_ent
         
