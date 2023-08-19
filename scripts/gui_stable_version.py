@@ -35,6 +35,7 @@ class ImageViewer:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
 
+        
         self.List_images = [None] * len(self.image_files)
         self.List_photoimages = [None] * len(self.image_files)
         self.List_thumbnails = [None] * len(self.image_files)
@@ -45,6 +46,8 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
+        self.original_image_files = self.image_files.copy()
+
 
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
@@ -223,9 +226,25 @@ class ImageViewer:
     def on_combo_select(self, event=None):
         selected_item = self.combo.get()
         preprocessed_images, _ = preprocess(self.directory, colors='rgb')
-        sorted_images = label_ent(preprocessed_images, method=selected_item, sort=True)
-        images, _ = self.split_images_and_entropy(sorted_images)
-        self.refresh_all_images(images)
+        img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)  # 注意，这里我们设置sort=False
+
+        images, entropies = self.split_images_and_entropy(img_ent)
+    
+        # Sort the entropy and get the sorted index
+        sorted_indices = sorted(range(len(entropies)), key=lambda k: entropies[k])
+
+        # Sort the images using these indices
+        sorted_images = [images[i] for i in sorted_indices]
+
+        # Sort the original filenames using the same index
+        sorted_filenames = [self.original_image_files[i] for i in sorted_indices]
+
+        # Update the image_files list
+        self.image_files = sorted_filenames
+        self.refresh_all_images(sorted_images)
+
+
+
 
 
     def update_images_from_array(self, np_array, index):
@@ -258,6 +277,7 @@ class ImageViewer:
         self.load_visible_thumbnails()  # load visible thumbnails
         self.update_status_bar()
         self.update_thumbnails_UI()
+        self.update_all_thumbnails()
 
     def update_thumbnails_UI(self):
         for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
@@ -363,8 +383,19 @@ class ImageViewer:
         self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
         self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
 
+    def update_all_thumbnails(self):
+        for idx in range(len(self.image_files)):
+            if self.List_images[idx] is None:
+                self.load_image_at_index(idx)
+            thumbnail_img = self.List_thumbnail_images[idx]
+            # Update button image
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+
+    
     def save(self):
         pass
+
 
 
 def choose_directory():
