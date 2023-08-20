@@ -223,25 +223,25 @@ class ImageViewer:
 
     def create_zoom_controls(self, frame):
         button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
-        button_zoom_in.grid(row=0, column=0, sticky='w')
+        button_zoom_in.grid(row=0, column=1, sticky='ew')
 
         self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
         self.scale.set(100)
-        self.scale.grid(row=0, column=1, sticky='ew')
+        self.scale.grid(row=0, column=0, sticky='ew')
         self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
 
         button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
-        button_zoom_out.grid(row=0, column=2, sticky='e')
+        button_zoom_out.grid(row=0, column=2, sticky='ew')
 
     def create_navigation_buttons(self, frame):
         self.button_back = Button(frame, text="<<", command=self.back)
-        self.button_back.grid(row=1, column=0, sticky='w')
+        self.button_back.grid(row=1, column=1, sticky='ew')
 
         spacer = Label(frame, text=" " * 20)
-        spacer.grid(row=1, column=1, sticky='ew')
+        spacer.grid(row=1, column=0, sticky='ew')
 
         self.button_forward = Button(frame, text=">>", command=self.forward)
-        self.button_forward.grid(row=1, column=2, sticky='e')
+        self.button_forward.grid(row=1, column=2, sticky='ew')
 
     def create_calculation_buttons(self, frame):
         # Create a Combobox and make it visible
