@@ -1,6 +1,5 @@
 import math
 
-import matplotlib.pyplot as plt
 from scipy.signal import convolve2d
 from skimage.color import rgb2gray
 from skimage.feature import graycomatrix
@@ -9,6 +8,7 @@ from skimage.measure import shannon_entropy
 from skimage.segmentation import slic
 
 from transforms import *
+
 
 def label_ent(images, method, sort=True):
     """
@@ -137,9 +137,13 @@ def histogram(img_arr, color='rgb'):
 
 
 def calculate_GLCM_entropy(image):
-    distances = [1]  # Distance between pixels for co-occurrence
-    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
-    levels = 256  # Number of intensity levels in the image
+    # Check if the image is 3D (e.g., RGB) and convert to grayscale if necessary
+    if len(image.shape) == 3:
+        image = rgb2gray(image)
+
+    distances = [1]
+    angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
+    levels = 256
 
     gray_image = (image * 255).astype(np.uint8)
     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
@@ -147,7 +151,7 @@ def calculate_GLCM_entropy(image):
     total_entropy = 0
     for angle_idx in range(len(angles)):
         matrix = glcm[:, :, 0, angle_idx]
-        matrix = matrix / np.sum(matrix)  # Normalize matrix to probabilities
+        matrix = matrix / np.sum(matrix)
         entropy = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
         total_entropy += entropy
 
@@ -242,6 +246,10 @@ def calculate_texture_entropy(img_arr):
         gray_image = rgb2gray(img_arr)
     else:
         gray_image = img_arr
+
+    # Convert to 8-bit integer type
+    gray_image = (gray_image * 255).astype(np.uint8)
+
     # Apply Local Binary Pattern (LBP) to extract texture features
     radius = 1
     n_points = 8 * radius
@@ -306,6 +314,7 @@ def adaptive_entropy_estimation(img_arr, num_segments=100):
 def laplace_ent(image):
     return entropy(laplacian(image))
 
+
 def calculate_dwt_entropy(image, wavelet='db1', level=1):
-    w_transform_arr = dwt(image,wavelet,level)
+    w_transform_arr = dwt(image, wavelet, level)
     return entropy(w_transform_arr)
