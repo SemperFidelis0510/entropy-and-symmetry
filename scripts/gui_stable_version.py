@@ -1,11 +1,43 @@
 import os
 from tkinter import *
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, ttk
+from tkinter.messagebox import askyesno
 
 from PIL import ImageTk, Image
 from functions import *
+import sys
+from entropy import *
+import threading
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
+
+ENTROPY_METHODS = [
+    'hist', 
+    'hist_greyscale', 
+    'naive', 
+    'dft', 
+    'dwt', 
+    'laplace', 
+    'joint_red_green', 
+    'joint_all', 
+    'lbp', 
+    'lbp_gabor', 
+    'adapt', 
+    'GLCM', 
+    'RGBCM_each_channel', 
+    'RGBCM_to_gray'
+]
+
+class IORedirector(object):
+    def __init__(self, text_area):
+        self.text_area = text_area
+
+    def write(self, str_):
+        self.text_area.insert(END, str_ + '\n')
+        self.text_area.see(END)
+
+    def flush(self):
+        pass
 
 
 class ImageViewer:
@@ -15,7 +47,8 @@ class ImageViewer:
         if not self.image_files:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
-
+        
+        self.img_ent_data = None
         self.List_images = [None] * len(self.image_files)
         self.List_photoimages = [None] * len(self.image_files)
         self.List_thumbnails = [None] * len(self.image_files)
@@ -26,6 +59,8 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
+        self.original_image_files = self.image_files.copy()
+
 
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
@@ -35,24 +70,29 @@ class ImageViewer:
             self.load_image_at_index(self.img_no + 1)
 
         self.init_window()
+        self.console = None
+
 
     def init_window(self):
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
+        self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
-        # self.create_zoom_controls()
-        # self.create_navigation_buttons()
+        
         self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
         self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
+        self.console = Text(self.image_window, height=10, width=50)
+        self.console.grid(row=3, column=0, columnspan=4, pady=20, padx=10, sticky='ew')
 
         self.controls_frame = Frame(self.image_window)
         self.controls_frame.grid(row=1, column=1, columnspan=3, sticky='ew')
 
         self.create_zoom_controls(self.controls_frame)
         self.create_navigation_buttons(self.controls_frame)
+        self.create_calculation_buttons(self.controls_frame)
 
         self.update_buttons()
         self.update_listbox()
@@ -65,6 +105,23 @@ class ImageViewer:
         # Set weight to adjust canvas with window resize
         self.image_window.grid_rowconfigure(1, weight=1)
         self.image_window.grid_columnconfigure(1, weight=1)
+
+        sys.stdout = IORedirector(self.console)
+
+
+    def thread_it(self, func, *args):
+        """ Pack functions into threads """
+        self.myThread = threading.Thread(target=func, args=args)
+        self.myThread.daemon = True # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread .start()
+
+    def clos_window(self):
+        ans = askyesno(title='WARNING', message='Are you sure to exit the program?\nIf yes exit, otherwise continue!')
+        if ans:
+            self.image_window.destroy()
+            sys.exit()
+        else:
+            return None
 
     def toggle_fullscreen(self, event=None):
         self.is_fullscreen = not self.is_fullscreen
@@ -166,26 +223,121 @@ class ImageViewer:
 
     def create_zoom_controls(self, frame):
         button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
-        button_zoom_in.grid(row=0, column=0, sticky='w')
+        button_zoom_in.grid(row=0, column=1, sticky='ew')
 
         self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
         self.scale.set(100)
-        self.scale.grid(row=0, column=1, sticky='ew')
+        self.scale.grid(row=0, column=0, sticky='ew')
         self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
 
         button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
-        button_zoom_out.grid(row=0, column=2, sticky='e')
+        button_zoom_out.grid(row=0, column=2, sticky='ew')
 
     def create_navigation_buttons(self, frame):
         self.button_back = Button(frame, text="<<", command=self.back)
-        self.button_back.grid(row=1, column=0, sticky='w')
+        self.button_back.grid(row=1, column=1, sticky='ew')
 
         spacer = Label(frame, text=" " * 20)
-        spacer.grid(row=1, column=1, sticky='ew')
+        spacer.grid(row=1, column=0, sticky='ew')
 
         self.button_forward = Button(frame, text=">>", command=self.forward)
-        self.button_forward.grid(row=1, column=2, sticky='e')
+        self.button_forward.grid(row=1, column=2, sticky='ew')
 
+    def create_calculation_buttons(self, frame):
+        # Create a Combobox and make it visible
+        self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
+
+
+        self.combo.grid(row=2, column=0)  # Set the position of the combobox
+
+        # Binding selection event
+        self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
+
+        # The save button is arranged on the right side of the combobox
+        self.button_save = Button(frame, text="Save", command=self.save)
+        self.button_save.grid(row=2, column=2, sticky='ew')
+
+        self.confirm_button = Button(frame, text="Confirm", command=lambda:self.thread_it(self.on_confirm_click))
+        self.confirm_button.grid(row=2, column=1, sticky='ew')
+
+
+    def on_confirm_click(self):
+        # The logic of sorting and displaying pictures based on the entropy method selected by combo box
+        selected_item = self.combo.get()
+        preprocessed_images, _ = preprocess(self.directory, colors='rgb')
+        try:
+            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
+        except Exception as e:
+            messagebox.showerror("Error", f"An error occurred: {str(e)}")
+        # For save button
+        self.img_ent_data = img_ent
+        
+        # Split images and entropy
+        images, entropies = self.split_images_and_entropy(img_ent)
+    
+        # Sort the entropy and get the sorted index
+        sorted_indices = sorted(range(len(entropies)), key=lambda k: entropies[k])
+
+        # Sort the images using these indices
+        sorted_images = [images[i] for i in sorted_indices]
+
+        # Sort the original filenames using the same index
+        sorted_filenames = [self.original_image_files[i] for i in sorted_indices]
+
+        # Update the image_files list
+        self.image_files = sorted_filenames
+        self.refresh_all_images(sorted_images)
+
+    def on_combo_select(self, event=None):
+        selected_item = self.combo.get()
+
+
+
+
+
+    def update_images_from_array(self, np_array, index):
+        # Convert numpy array to PIL Image
+        img = Image.fromarray(np_array)
+    
+        # Update main image lists
+        self.List_images[index] = img
+        self.List_photoimages[index] = ImageTk.PhotoImage(img)
+    
+        # Create and update thumbnail
+        thumbnail_size = (50, 50)  # You can adjust the size as needed
+        thumbnail = img.copy()
+        thumbnail.thumbnail(thumbnail_size)
+        self.List_thumbnails[index] = thumbnail
+        self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
+
+    def refresh_all_images(self, np_arrays):
+        # Ensure the length of numpy arrays matches the length of image lists
+        if len(np_arrays) != len(self.List_images):
+            messagebox.showerror("Mismatch in number of images and numpy arrays!")
+            return
+
+        for idx, np_array in enumerate(np_arrays):
+            self.update_images_from_array(np_array, idx)
+
+        self.update_image()
+        self.update_buttons()
+        self.update_listbox()
+        self.load_visible_thumbnails()  # load visible thumbnails
+        self.update_status_bar()
+        self.update_thumbnails_UI()
+        self.update_all_thumbnails()
+
+    def update_thumbnails_UI(self):
+        for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+
+    def split_images_and_entropy(self, img_ent):
+        images = [entry[0] for entry in img_ent]
+        entropies = [entry[1] for entry in img_ent]
+        return images, entropies
+
+    
     def load_image_at_index(self, idx):
         """Load the image and thumbnail of the specified index."""
 
@@ -202,7 +354,6 @@ class ImageViewer:
                 self.List_thumbnail_images[idx] = ImageTk.PhotoImage(thumb)
 
         except Exception as e:
-            # your existing code for handling exception...
 
             # If there's an error, show a message and remove the problematic image from the list
             messagebox.showerror("Error", f"An error occurred while loading {self.image_files[idx]}: {str(e)}")
@@ -278,6 +429,28 @@ class ImageViewer:
             widget.config(relief=FLAT)
         self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
         self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
+
+    def update_all_thumbnails(self):
+        for idx in range(len(self.image_files)):
+            if self.List_images[idx] is None:
+                self.load_image_at_index(idx)
+            thumbnail_img = self.List_thumbnail_images[idx]
+            # Update button image
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+
+    
+    def save(self):
+        # Ask user to select a directory to save the images
+        folder_path = filedialog.askdirectory()
+    
+        # Check if user selected a directory (if they didn't cancel the dialog)
+        if folder_path:
+            images_arr = self.img_ent_data  # Retrieve your list/array of images here
+            if images_arr is None:
+                messagebox.showerror("Error", "Please complete an entropy sort first.")
+            save_img(folder_path, images_arr)
+
 
 
 def choose_directory():

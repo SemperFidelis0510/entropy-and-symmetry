@@ -103,7 +103,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
         images_arr.append(img_arr)
         print_progress_bar('Preprocessed', i, n, start_time=start_time)
 
-    print(f'\nPreprocessing done.')
+    print(f'\nPreprocessing done. Please wait for entropy calculation to start.')
 
     return images_arr, paths
 
