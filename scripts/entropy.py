@@ -1,3 +1,4 @@
+import json
 import math
 
 from scipy.signal import convolve2d
@@ -64,38 +65,43 @@ def calc_ent(img_arr, method):
     Note:
         Some methods may require specific functions to be defined elsewhere in the code.
     """
+    with open('data/ent_norm.json', 'r') as file:
+        ent_norm = json.load(file)
     match method:
         case 'hist':
-            return histogram(img_arr, 'rgb')
+            ent = histogram(img_arr, 'rgb')
         case 'hist_greyscale':
-            return histogram(img_arr, 'greyscale')
+            ent = histogram(img_arr, 'greyscale')
         case 'naive':
-            return entropy(img_arr)
+            ent = entropy(img_arr)
         case 'dft':
-            return calculate_dft_entropy(img_arr)
+            ent = calculate_dft_entropy(img_arr)
         case 'dwt':
-            return calculate_dwt_entropy(img_arr)
+            ent = calculate_dwt_entropy(img_arr)
         case 'laplace':
-            return laplace_ent(img_arr)
+            ent = laplace_ent(img_arr)
         case 'joint_red_green':
-            return calculate_joint_entropy_red_green(img_arr)
+            ent = calculate_joint_entropy_red_green(img_arr)
         case 'joint_all':
-            return calculate_joint_RGB_entropy(img_arr)
+            ent = calculate_joint_RGB_entropy(img_arr)
         case 'lbp':
-            return calculate_texture_entropy(img_arr)
+            ent = calculate_texture_entropy(img_arr)
         case 'lbp_gabor':
-            return calculate_texture_gabor_entropy(img_arr)
+            ent = calculate_texture_gabor_entropy(img_arr)
         case 'adapt':
-            return adaptive_entropy_estimation(img_arr)
+            ent = adaptive_entropy_estimation(img_arr)
         case 'GLCM':
-            return calculate_GLCM_entropy(img_arr)
+            ent = calculate_GLCM_entropy(img_arr)
         case 'RGBCM_each_channel':
-            return calculate_RGBCM_entropy(img_arr, scheme='each_channel')
+            ent = calculate_RGBCM_entropy(img_arr, scheme='each_channel')
         case 'RGBCM_to_gray':
-            return calculate_RGBCM_entropy(img_arr, scheme='to_gray')
+            ent = calculate_RGBCM_entropy(img_arr, scheme='to_gray')
         case _:
             print('No entropy method matched!!')
-            return
+            ent = None
+
+    ent /= ent_norm[method]
+    return ent
 
 
 def entropy(arr):
