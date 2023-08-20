@@ -108,7 +108,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     return images_arr, paths
 
 
-def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500, save=False):
+def get_google_map_image(location, zoom_level, width=500, height=500, save=False):
     """
     Retrieves a satellite image from Google Maps for the specified location, zoom level, and dimensions.
 
@@ -130,7 +130,7 @@ def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500,
     # api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     api_key = 'AIzaSyAnFhz63LUhs9BGZfU_MW5EATc-s9r7epQ'
     params = {
-        "center": f"{latitude},{longitude}",
+        "center": location,
         "zoom": zoom_level,
         "size": f"{width}x{height}",
         "maptype": "satellite",
@@ -142,7 +142,7 @@ def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500,
         image = Image.open(BytesIO(response.content))
         image = image.crop((0, 0, image.width, image.height - 22))
         if save:
-            image.save("../datasets/satellite/map_image.png")
+            image.save("../datasets/satellite/map_image1.png")
         image = np.array(image)
         return image
     else:
