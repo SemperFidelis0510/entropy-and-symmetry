@@ -127,7 +127,8 @@ def get_google_map_image(latitude, longitude, zoom_level, width=500, height=500,
         Exception: If there is an error retrieving the image.
     """
     url = "https://maps.googleapis.com/maps/api/staticmap"
-    api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+    # api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+    api_key = 'AIzaSyAnFhz63LUhs9BGZfU_MW5EATc-s9r7epQ'
     params = {
         "center": f"{latitude},{longitude}",
         "zoom": zoom_level,
