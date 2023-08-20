@@ -2,6 +2,8 @@ import platform
 import subprocess
 from io import BytesIO
 
+import time
+
 import requests
 
 from img_utils import *
@@ -142,7 +144,9 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         image = Image.open(BytesIO(response.content))
         image = image.crop((0, 0, image.width, image.height - 22))
         if save:
-            image.save("../datasets/satellite/map_image1.png")
+            timestamp = time.strftime('%Y%m%d%H%M%S')
+            filename = f"../datasets/satellite/map_image_{location.replace(',', '_')}_{timestamp}.png"
+            image.save(filename)
         image = np.array(image)
         return image
     else:
