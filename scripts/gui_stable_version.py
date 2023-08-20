@@ -28,6 +28,9 @@ ENTROPY_METHODS = [
     'RGBCM_to_gray'
 ]
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
+
 class IORedirector(object):
     def __init__(self, text_area):
         self.text_area = text_area
