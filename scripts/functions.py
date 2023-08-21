@@ -143,7 +143,7 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         image = image.crop((0, 0, image.width, image.height - 22))
         if save:
             timestamp = time.strftime('%Y%m%d%H%M%S')
-            filename = f"../datasets/satellite/map_image_{location.replace(',', '_')}_{timestamp}.png"
+            filename = f"{save}/map_image_{location.replace(',', '_')}_{timestamp}.png"
             image.save(filename)
             print(f'Saved picture location: {location}, Zoom level: {zoom_level}')
         image = np.array(image)
@@ -152,14 +152,14 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         raise Exception(f"Error retrieving image: {response.text}")
 
 
-def random_satellite_img(file_path, zoom_level, n_pics=10):
+def random_satellite_img(file_path, zoom_level, n_pics=10, save_path=f"../datasets/satellite"):
     with open(file_path, 'r') as f:
         rects = json.load(f)
 
     for rect in rects:
         for i in range(n_pics):
             coo = random_point_in_rectangle(rect)
-            img = get_google_map_image(coo, zoom_level, save=True)
+            img = get_google_map_image(coo, zoom_level, save=save_path)
             print(f"Image location: {coo}. Image entropy: {calc_ent(img, 'naive')}")
 
 
