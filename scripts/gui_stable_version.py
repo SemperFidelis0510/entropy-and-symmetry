@@ -9,6 +9,9 @@ import sys
 from entropy import *
 import threading
 from datetime import datetime
+import json
+
+CONFIG_FILE = "settings.json"
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
@@ -153,6 +156,10 @@ class ImageViewer:
         control_menu.add_cascade(label="Zoom", menu=scale_menu)
         control_menu.add_command(label="Exit", command=self.image_window.quit)
         menu_bar.add_cascade(label="Controls", menu=control_menu)
+        
+        settings_menu = Menu(menu_bar, tearoff=0)
+        settings_menu.add_command(label="Set Default Save Directory", command=self.choose_default_directory)
+        menu_bar.add_cascade(label="Settings", menu=settings_menu)
 
     def create_image_frame(self):
         frame_image = Frame(self.image_window, width=700, height=400)
@@ -472,7 +479,23 @@ class ImageViewer:
             # Save images to the subfolder
             save_img(subfolder_path, images_arr)
 
+    def save_default_directory(directory):
+        with open(CONFIG_FILE, 'w') as file:
+            json.dump({'default_directory': directory}, file)
 
+    def load_default_directory():
+        try:
+            with open(CONFIG_FILE, 'r') as file:
+                data = json.load(file)
+                return data.get('default_directory', '')  # 返回默认路径或者空字符串
+        except FileNotFoundError:
+            return ''
+        
+    def choose_default_directory(self):
+        directory = filedialog.askdirectory()
+        if directory:
+            self.save_default_directory(directory)
+            self.default_save_directory = directory
 
 def choose_directory():
     try:
