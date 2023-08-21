@@ -24,39 +24,41 @@ LON_MIN, LON_MAX = 73.5, 135.0
 zoom_levels = [14]
 
 # 确保保存目录存在
-save_directory = "../datasets/satellite/"
+save_directory = os.path.join(script_dir, "../datasets/satellite/")
 if not os.path.exists(save_directory):
     os.makedirs(save_directory)
 
-# 初始化空列表来存储坐标
-coord_list = []
+# JSON文件的保存路径
+json_save_path = os.path.join(script_dir, "../datasets/satellite/coord_names.json")
 
 # 在中国的边界内随机选择点
-num_images = 10  # 您可以更改此值以获取所需数量的图像
+num_images = 10
+coord_names = []
 for _ in range(num_images):
+    coords_for_this_run = []
     while True:
         latitude = random.uniform(LAT_MIN, LAT_MAX)
         longitude = random.uniform(LON_MIN, LON_MAX)
         location_point = Point(longitude, latitude)
         if china_boundary.contains(location_point):
-            # 根据经纬度值选择正确的后缀（N/S 和 E/W）
-            lat_suffix = "N" if latitude >= 0 else "S"
-            lon_suffix = "E" if longitude >= 0 else "W"
-            coord_list.append([f"{abs(latitude)}{lat_suffix}", f"{abs(longitude)}{lon_suffix}"])
             break
 
     location = f"{latitude},{longitude}"
 
     for zoom in zoom_levels:
-        image_array = get_google_map_image(location, zoom_level=zoom, save=True)
-
+        image_array = get_google_map_image(location, zoom_level=zoom, save=False)
+        
         # 保存图像
         filename = f"{save_directory}map_image_{location.replace(',', '_')}_{zoom}.png"
-        img = Image.fromarray(image_array)  # 转换numpy array为PIL Image对象
-        img.save(filename)
+        image = Image.fromarray(image_array)
+        image.save(filename)
+        
+    coords_for_this_run.append(location)
+    coord_names.append(coords_for_this_run)
 
-# 保存坐标到json文件
-with open('coord_names.json', 'w') as outfile:
-    json.dump(coord_list, outfile)
+# 保存坐标名到JSON文件
+with open(json_save_path, 'w') as json_file:
+    json.dump(coord_names, json_file)
+
 
 
