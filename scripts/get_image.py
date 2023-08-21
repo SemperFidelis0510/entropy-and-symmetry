@@ -4,9 +4,11 @@ import geopandas as gpd
 from shapely.geometry import Point
 from functions import get_google_map_image
 
-# 1. 加载中国的边界数据
-# 请确保您下载了适当的边界数据文件并将其路径替换为下面的路径
-path_to_china_boundary = "path/to/china_boundary_shapefile.shp"
+# 获取当前脚本的绝对路径
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# 使用os.path.join()将脚本的路径与相对路径结合起来，从而形成绝对路径
+path_to_china_boundary = os.path.join(script_dir, "../resources/gadm36_CHN_shp/gadm36_CHN_1.shp")
 gdf = gpd.read_file(path_to_china_boundary)
 
 # 获取中国的边界
