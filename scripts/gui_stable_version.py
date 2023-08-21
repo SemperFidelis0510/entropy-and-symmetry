@@ -8,6 +8,7 @@ from functions import *
 import sys
 from entropy import *
 import threading
+from datetime import datetime
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
@@ -452,7 +453,24 @@ class ImageViewer:
             images_arr = self.img_ent_data  # Retrieve your list/array of images here
             if images_arr is None:
                 messagebox.showerror("Error", "Please complete an entropy sort first.")
-            save_img(folder_path, images_arr)
+                return
+
+            # 1. Get the selected entropy method
+            entropy_method = self.combo.get()
+
+            # 2. Get the current time
+            current_time = datetime.now().strftime('%Y%m%d_%H%M%S')  # Format: YYYYMMDD_HHMMSS
+
+            # 3. Create a subfolder name based on entropy method and current time
+            subfolder_name = f"{entropy_method}_{current_time}"
+            subfolder_path = os.path.join(folder_path, subfolder_name)
+
+            # 4. Create the subfolder
+            if not os.path.exists(subfolder_path):
+                os.makedirs(subfolder_path)
+
+            # Save images to the subfolder
+            save_img(subfolder_path, images_arr)
 
 
 
