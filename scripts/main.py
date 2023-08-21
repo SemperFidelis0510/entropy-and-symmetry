@@ -68,17 +68,22 @@ def ent_for_img(path):
 
 def main():
     method = 'naive'
-    folder_path = '../datasets/satellite2'
+    folder_path = '../datasets/satellite'
+
+    state = 'china'
+    coo_json = f'../datasets/coordinates/coo_{state}.json'
+    sat_img_path = f"../datasets/satellite/{state}"
 
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
-    sort_folder(folder_path, method)
+    random_satellite_img(coo_json, 14, save_path=sat_img_path)
+    # sort_folder(folder_path, method)
     # sort_by_noise(folder_path, method)
 
 
 if __name__ == '__main__':
     main()
     # ent_for_img(r"C:\scripts\entropy-and-symmetry\datasets\noising\18.png")
-    # random_satellite_img('../datasets/satellite/coord_names.json', 14, save_path=f"../datasets/satellite2/")
+
     # norm_ent()
