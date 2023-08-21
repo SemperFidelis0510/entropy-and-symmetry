@@ -1,39 +1,41 @@
-import os
+import json
+import sys
+import threading
+from datetime import datetime
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 
-from PIL import ImageTk, Image
-from functions import *
-import sys
+from PIL import ImageTk
+
 from entropy import *
-import threading
-from datetime import datetime
-import json
+from functions import *
 
 CONFIG_FILE = "settings.json"
 
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
 ENTROPY_METHODS = [
-    'hist', 
-    'hist_greyscale', 
-    'naive', 
-    'dft', 
-    'dwt', 
-    'laplace', 
-    'joint_red_green', 
-    'joint_all', 
-    'lbp', 
-    'lbp_gabor', 
-    'adapt', 
-    'GLCM', 
-    'RGBCM_each_channel', 
-    'RGBCM_to_gray'
+    'hist',
+    'hist_greyscale',
+    'naive',
+    'dft',
+    'dwt',
+    'laplace',
+    'joint_red_green',
+    'joint_all',
+    'lbp',
+    'lbp_gabor',
+    'adapt',
+    'GLCM',
+    'RGBCM_each_channel',
+    'RGBCM_to_gray',
+    'naive_hsb'
 ]
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
+
 
 class IORedirector(object):
     def __init__(self, text_area):
@@ -54,7 +56,7 @@ class ImageViewer:
         if not self.image_files:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
-        
+
         self.img_ent_data = None
         self.List_images = [None] * len(self.image_files)
         self.List_photoimages = [None] * len(self.image_files)
@@ -68,7 +70,6 @@ class ImageViewer:
         self.status_bar = None
         self.original_image_files = self.image_files.copy()
 
-
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
         if self.img_no > 0:
@@ -79,7 +80,6 @@ class ImageViewer:
         self.init_window()
         self.console = None
 
-
     def init_window(self):
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
@@ -87,7 +87,7 @@ class ImageViewer:
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
-        
+
         self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
         self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
@@ -115,12 +115,11 @@ class ImageViewer:
 
         sys.stdout = IORedirector(self.console)
 
-
     def thread_it(self, func, *args):
         """ Pack functions into threads """
         self.myThread = threading.Thread(target=func, args=args)
-        self.myThread.daemon = True # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
-        self.myThread .start()
+        self.myThread.daemon = True  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread.start()
 
     def clos_window(self):
         ans = askyesno(title='WARNING', message='Are you sure to exit the program?\nIf yes exit, otherwise continue!')
@@ -156,7 +155,7 @@ class ImageViewer:
         control_menu.add_cascade(label="Zoom", menu=scale_menu)
         control_menu.add_command(label="Exit", command=self.image_window.quit)
         menu_bar.add_cascade(label="Controls", menu=control_menu)
-        
+
         settings_menu = Menu(menu_bar, tearoff=0)
         settings_menu.add_command(label="Set Default Save Directory", command=self.choose_default_directory)
         menu_bar.add_cascade(label="Settings", menu=settings_menu)
@@ -258,7 +257,6 @@ class ImageViewer:
         # Create a Combobox and make it visible
         self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
 
-
         self.combo.grid(row=2, column=0)  # Set the position of the combobox
 
         # Binding selection event
@@ -268,9 +266,8 @@ class ImageViewer:
         self.button_save = Button(frame, text="Save", command=self.save)
         self.button_save.grid(row=2, column=2, sticky='ew')
 
-        self.confirm_button = Button(frame, text="Confirm", command=lambda:self.thread_it(self.on_confirm_click))
+        self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
         self.confirm_button.grid(row=2, column=1, sticky='ew')
-
 
     def on_confirm_click(self):
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
@@ -282,10 +279,10 @@ class ImageViewer:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
         self.img_ent_data = img_ent
-        
+
         # Split images and entropy
         images, entropies = self.split_images_and_entropy(img_ent)
-    
+
         # Sort the entropy and get the sorted index
         sorted_indices = sorted(range(len(entropies)), key=lambda k: entropies[k])
 
@@ -302,18 +299,14 @@ class ImageViewer:
     def on_combo_select(self, event=None):
         selected_item = self.combo.get()
 
-
-
-
-
     def update_images_from_array(self, np_array, index):
         # Convert numpy array to PIL Image
         img = Image.fromarray(np_array)
-    
+
         # Update main image lists
         self.List_images[index] = img
         self.List_photoimages[index] = ImageTk.PhotoImage(img)
-    
+
         # Create and update thumbnail
         thumbnail_size = (50, 50)  # You can adjust the size as needed
         thumbnail = img.copy()
@@ -348,7 +341,6 @@ class ImageViewer:
         entropies = [entry[1] for entry in img_ent]
         return images, entropies
 
-    
     def load_image_at_index(self, idx):
         """Load the image and thumbnail of the specified index."""
 
@@ -450,11 +442,10 @@ class ImageViewer:
             self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
             self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
 
-    
     def save(self):
         # Ask user to select a directory to save the images
         folder_path = filedialog.askdirectory()
-    
+
         # Check if user selected a directory (if they didn't cancel the dialog)
         if folder_path:
             images_arr = self.img_ent_data  # Retrieve your list/array of images here
@@ -490,12 +481,13 @@ class ImageViewer:
                 return data.get('default_directory', '')  # 返回默认路径或者空字符串
         except FileNotFoundError:
             return ''
-        
+
     def choose_default_directory(self):
         directory = filedialog.askdirectory()
         if directory:
             self.save_default_directory(directory)
             self.default_save_directory = directory
+
 
 def choose_directory():
     try:

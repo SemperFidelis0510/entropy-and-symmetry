@@ -16,18 +16,18 @@ ent_methods = [
     'adapt',
     'GLCM',
     'RGBCM_each_channel',
-    'RGBCM_to_gray'
+    'RGBCM_to_gray',
+    'naive_hsb'
 ]
 
 
-def sort_folder(path, method):
+def sort_folder(path, method, colors='rgb', ent_norm=None):
     # colors = 'greyscale'
-    colors = 'rgb'
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays, _ = preprocess(path, colors=colors)
 
-    sorted_list = label_ent(img_arrays, method, sort=True)
+    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm)
 
     print('\nThe images are sorted by entropy.')
 
@@ -54,6 +54,7 @@ def norm_ent():
     N = {}
     for ent in ent_methods:
         N[ent] = calc_ent(img_arr, ent)
+        print(f'Entropy calculated for method: {ent}.')
 
     with open('data/ent_norm.json', 'w') as file:
         json.dump(N, file)
@@ -67,20 +68,30 @@ def ent_for_img(path):
 
 
 def main():
-    method = 'adapt'
+    method = 'naive_hsb'
+    colors = 'hsb'
     # folder_path = '../datasets/satellite/argentina'
 
     state = 'argentina'
     coo_json = f'../datasets/coordinates/coo_{state}.json'
     folder_path = f"../datasets/satellite/{state}"
 
+    with open('data/ent_norm.json', 'r') as file:
+        ent_norm = json.load(file)
+    if method not in ent_norm:
+        fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+        ent_norm[method] = calc_ent(fixed_noise, method)
+        with open('data/ent_norm.json', 'w') as file:
+            json.dump(ent_norm, file)
+
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
     # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
-    sort_folder(folder_path, method)
+    sort_folder(folder_path, method, colors, ent_norm)
     # sort_by_noise(folder_path, method)
     # ent_for_img(r"C:\scripts\entropy-and-symmetry\datasets\noising\18.png")
+    # norm_ent()
 
 
 if __name__ == '__main__':

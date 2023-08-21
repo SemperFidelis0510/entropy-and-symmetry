@@ -1,3 +1,5 @@
+import colorsys
+
 import numpy as np
 import pywt
 
@@ -147,6 +149,7 @@ def laplacian(x):
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
 
+
 def dwt(image, wavelet='db1', level=None):
     rank = image.ndim
 
@@ -168,3 +171,20 @@ def dwt(image, wavelet='db1', level=None):
 
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
+
+
+def rgb_to_hsb_image(rgb_image):
+    # Normalize RGB values to [0, 1]
+    rgb_image = rgb_image / 255.0
+
+    # Initialize an empty array for HSB values
+    hsb_image = np.zeros_like(rgb_image, dtype=float)
+
+    # Iterate through the pixels and convert RGB to HSB
+    for i in range(rgb_image.shape[0]):
+        for j in range(rgb_image.shape[1]):
+            r, g, b = rgb_image[i, j]
+            h, s, v = colorsys.rgb_to_hsv(r, g, b)
+            hsb_image[i, j] = (h * 360, s * 100, v * 100)  # Convert to degrees and percentage
+
+    return hsb_image

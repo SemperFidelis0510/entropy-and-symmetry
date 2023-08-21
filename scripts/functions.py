@@ -88,7 +88,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
         i += 1
 
         img = Image.open(path)
-        if colors == 'rgb':
+        if colors in ['rgb', 'hsb']:
             img = img.convert('RGB')
         elif colors == 'greyscale':
             img = img.convert('L')
@@ -98,7 +98,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
         cropped = img.crop((0, 0, crop_size, crop_size))
         img_arr = np.array(cropped)
 
-        if colors == 'rgb':
+        if colors in ['rgb', 'hsb']:
             if img_arr.shape[2] == 4:
                 img_arr = img_arr[:, :, :-1]
             elif img_arr.ndim == 2:
