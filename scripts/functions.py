@@ -1,4 +1,3 @@
-import json
 import platform
 import random
 import subprocess
@@ -6,8 +5,8 @@ from io import BytesIO
 
 import requests
 
+from entropy import *
 from img_utils import *
-from utils import *
 
 
 def save_img(folder_path, images_arr):
@@ -29,8 +28,8 @@ def save_img(folder_path, images_arr):
 
     i = 0
     for arr in images_arr:
-        path = os.path.join(folder_path, f'i={i}_s={arr[1]:.3f}.bmp')
-        Image.fromarray(arr[0]).save(path)
+        path = os.path.join(folder_path, f'i={i}_s={arr[1]}.bmp')
+        Image.fromarray(arr[0], 'RGB').save(path)
         i += 1
 
     print(f'Sorted images saved to: {os.path.abspath(folder_path)}')
@@ -146,6 +145,7 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
             timestamp = time.strftime('%Y%m%d%H%M%S')
             filename = f"../datasets/satellite/map_image_{location.replace(',', '_')}_{timestamp}.png"
             image.save(filename)
+            print(f'Saved picture location: {location}, Zoom level: {zoom_level}')
         image = np.array(image)
         return image
     else:
@@ -159,7 +159,8 @@ def random_satellite_img(file_path, zoom_level, n_pics=10):
     for rect in rects:
         for i in range(n_pics):
             coo = random_point_in_rectangle(rect)
-            get_google_map_image(coo, zoom_level, save=True)
+            img = get_google_map_image(coo, zoom_level, save=True)
+            print(f"Image location: {coo}. Image entropy: {calc_ent(img, 'naive')}")
 
 
 def parse_coordinate(coordinate_str):
