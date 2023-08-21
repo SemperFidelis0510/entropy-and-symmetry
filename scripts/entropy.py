@@ -282,10 +282,17 @@ def calculate_texture_entropy(img_arr):
     return texture_entropy
 
 
-
 def calculate_texture_gabor_entropy(img_arr):
-    # Convert the image to grayscale
-    gray_image = np.mean(img_arr, axis=2)
+    # Ensure img_arr is a numpy array
+    img_arr = np.asarray(img_arr)
+
+    # Convert the image to grayscale if it's a color image
+    if img_arr.ndim == 3 and img_arr.shape[-1] in [3, 4]:  # Check for RGB or RGBA image
+        gray_image = 0.299*img_arr[:,:,0] + 0.587*img_arr[:,:,1] + 0.114*img_arr[:,:,2]
+    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):  # Grayscale or single-channel image
+        gray_image = img_arr.squeeze()
+    else:
+        raise ValueError("Input image should be either grayscale or RGB.")
 
     # Define parameters for Gabor filter
     wavelength = 5.0
@@ -302,12 +309,10 @@ def calculate_texture_gabor_entropy(img_arr):
     gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
 
     # Calculate image entropy
-    flat_gabor_response = gabor_response.flatten()
-    hist, _ = np.histogram(flat_gabor_response, bins=256, range=(-255, 255), density=True)
-    entropy_value = entropy(hist)
+    hist, _ = np.histogram(gabor_response, bins=256, density=True)
+    entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
 
     return entropy_value
-
 
 def adaptive_entropy_estimation(img_arr, num_segments=100):
     if len(img_arr.shape) == 3:
