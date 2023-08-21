@@ -479,23 +479,42 @@ class ImageViewer:
             # Save images to the subfolder
             save_img(subfolder_path, images_arr)
 
-    def save_default_directory(self, directory):
-        with open(CONFIG_FILE, 'w') as file:
-            json.dump({'default_directory': directory}, file)
+    def save_default_directory(self, user_chosen_path):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        relative_path = os.path.relpath(user_chosen_path, script_dir)
+
+        # 把现在的绝对路径换成相对路径
+        settings = {
+            "default_directory": relative_path
+        }
+
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+
+    def get_default_directory(self):
+        with open("settings.json", "r") as f:
+            settings = json.load(f)
+    
+        # 转换相对路径到绝对路径
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        absolute_path = os.path.join(script_dir, settings["default_directory"])
+
+        return absolute_path
+
 
     def load_default_directory(self):
         try:
             with open(CONFIG_FILE, 'r') as file:
                 data = json.load(file)
-                return data.get('default_directory', '')  # 返回默认路径或者空字符串
+                relative_path = data.get('default_directory', '')
+            
+                # 如果相对路径存在，转换为绝对路径
+                if relative_path:
+                    return os.path.join(os.getcwd(), relative_path)
+                return ''
         except FileNotFoundError:
             return ''
-        
-    def choose_default_directory(self):
-        directory = filedialog.askdirectory()
-        if directory:
-            self.save_default_directory(directory)
-            self.default_save_directory = directory
+
 
 def choose_directory():
     try:
