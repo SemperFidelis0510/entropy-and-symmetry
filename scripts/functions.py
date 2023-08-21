@@ -2,8 +2,6 @@ import platform
 import subprocess
 from io import BytesIO
 
-import time
-
 import requests
 
 from img_utils import *
@@ -115,8 +113,7 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
     Retrieves a satellite image from Google Maps for the specified location, zoom level, and dimensions.
 
     Args:
-        latitude (float): Latitude of the location.
-        longitude (float): Longitude of the location.
+        location (str): Name of location, or its coordinates.
         zoom_level (int): Zoom level for the map image.
         width (int, optional): Width of the image in pixels. Default is 500.
         height (int, optional): Height of the image in pixels. Default is 500.
