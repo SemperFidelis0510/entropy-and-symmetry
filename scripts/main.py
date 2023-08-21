@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from entropy import *
 from functions import *
 
 ent_methods = [
@@ -21,10 +20,9 @@ ent_methods = [
 ]
 
 
-def sort_folder(path):
+def sort_folder(path, method):
     # colors = 'greyscale'
     colors = 'rgb'
-    method = 'dft'
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays, _ = preprocess(path, colors=colors)
@@ -36,8 +34,7 @@ def sort_folder(path):
     save_img(dst_folder, sorted_list)
 
 
-def sort_by_noise(path):
-    method = 'naive'
+def sort_by_noise(path, method):
     dst_folder = f'../processed/noise_m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     n = 10
 
@@ -70,19 +67,18 @@ def ent_for_img(path):
 
 
 def main():
-    # folder_path = r'../datasets/pattern_images'
-    folder_path = r'../datasets/web_symmetries/rotation'
-    # folder_path = r'../datasets/Fractals with controlled parameter/Line-Replacement Fractals/snowflake'
-    folder_path = '../datasets/noising'
+    method = 'naive'
+    folder_path = '../datasets/satellite'
 
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
-    # sort_folder(folder_path)
-    # sort_by_noise(folder_path)
+    sort_folder(folder_path, method)
+    # sort_by_noise(folder_path, method)
 
 
 if __name__ == '__main__':
-    # main()
-    ent_for_img(r"C:\scripts\entropy-and-symmetry\datasets\noising\18.png")
+    main()
+    # ent_for_img(r"C:\scripts\entropy-and-symmetry\datasets\noising\18.png")
+    # random_satellite_img('../datasets/coo.json', 14)
     # norm_ent()
