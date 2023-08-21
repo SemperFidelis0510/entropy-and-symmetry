@@ -16,3 +16,4 @@ for _ in range(10):  # Get 10 images
     lon = random.uniform(*LONGITUDE_RANGE)
     location = f"{lat:.6f},{lon:.6f}"
     image_array = get_google_map_image(location, zoom_level=5, save=True)
+ 
