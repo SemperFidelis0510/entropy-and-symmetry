@@ -67,8 +67,8 @@ def ent_for_img(path):
 
 
 def main():
-    method = 'naive'
-    folder_path = '../datasets/satellite'
+    method = 'dft'
+    folder_path = '../datasets/satellite/argentina'
 
     state = 'argentina'
     coo_json = f'../datasets/coordinates/coo_{state}.json'
@@ -77,7 +77,7 @@ def main():
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
-    random_satellite_img(coo_json, 14, save_path=sat_img_path)
+    random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
     # sort_folder(folder_path, method)
     # sort_by_noise(folder_path, method)
 

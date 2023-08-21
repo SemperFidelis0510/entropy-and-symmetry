@@ -163,11 +163,15 @@ def random_satellite_img(file_path, zoom_level, n_pics=10, save_path=f"../datase
     with open(file_path, 'r') as f:
         rects = json.load(f)
 
+    n = n_pics * len(rects)
+    j = 0
     for rect in rects:
         for i in range(n_pics):
+            j += 1
             coo = random_point_in_rectangle(rect)
             img = get_google_map_image(coo, zoom_level, save=save_path)
-            print(f"Image location: {coo}.")
+            print(f'Got picture: {j}/{n}')
+            # print(f"Image location: {coo}.")
             # print(f"Image entropy: {calc_ent(img, 'naive')}.")
 
 
