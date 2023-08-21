@@ -68,7 +68,7 @@ def ent_for_img(path):
 
 def main():
     method = 'naive'
-    folder_path = '../datasets/satellite3'
+    folder_path = '../datasets/satellite2'
 
     folder_path = normalize_path(folder_path)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
