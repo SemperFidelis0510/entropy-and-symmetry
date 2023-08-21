@@ -67,7 +67,7 @@ def ent_for_img(path):
 
 
 def main():
-    method = 'dft'
+    method = 'adapt'
     # folder_path = '../datasets/satellite/argentina'
 
     state = 'argentina'

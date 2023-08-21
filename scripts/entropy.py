@@ -314,22 +314,28 @@ def calculate_texture_gabor_entropy(img_arr):
 
     return entropy_value
 
+
 def adaptive_entropy_estimation(img_arr, num_segments=100):
+    # Convert the image to grayscale
     if len(img_arr.shape) == 3:
         gray_image = rgb2gray(img_arr)
     else:
         gray_image = img_arr
+
+    # Segment the image using SLIC
     segments = slic(img_arr, n_segments=num_segments, compactness=10, sigma=1)
 
     segment_entropies = []
-    for segment_idx in range(num_segments):
+    unique_segments = np.unique(segments)
+
+    for segment_idx in unique_segments:
         segment_mask = (segments == segment_idx)
         segment_region = gray_image[segment_mask]
         segment_entropy = shannon_entropy(segment_region)
         segment_entropies.append(segment_entropy)
 
     total_entropy = np.sum(segment_entropies)
-    adaptive_entropy = total_entropy / num_segments
+    adaptive_entropy = total_entropy / len(unique_segments)
 
     return adaptive_entropy
 
