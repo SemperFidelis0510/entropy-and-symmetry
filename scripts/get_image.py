@@ -1,10 +1,10 @@
 import os
 import random
+import json
 import geopandas as gpd
 from shapely.geometry import Point
 from functions import get_google_map_image
 from PIL import Image
-
 
 # 获取当前脚本的绝对路径
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -21,14 +21,17 @@ LAT_MIN, LAT_MAX = 18.0, 53.5
 LON_MIN, LON_MAX = 73.5, 135.0
 
 # 定义缩放级别
-zoom_levels = [4, 9, 14, 19]
+zoom_levels = [14]
 
 # 确保保存目录存在
 save_directory = "../datasets/satellite/"
 if not os.path.exists(save_directory):
     os.makedirs(save_directory)
 
-# 3. 在中国的边界内随机选择点
+# 初始化空列表来存储坐标
+coord_list = []
+
+# 在中国的边界内随机选择点
 num_images = 10  # 您可以更改此值以获取所需数量的图像
 for _ in range(num_images):
     while True:
@@ -36,6 +39,10 @@ for _ in range(num_images):
         longitude = random.uniform(LON_MIN, LON_MAX)
         location_point = Point(longitude, latitude)
         if china_boundary.contains(location_point):
+            # 根据经纬度值选择正确的后缀（N/S 和 E/W）
+            lat_suffix = "N" if latitude >= 0 else "S"
+            lon_suffix = "E" if longitude >= 0 else "W"
+            coord_list.append([f"{abs(latitude)}{lat_suffix}", f"{abs(longitude)}{lon_suffix}"])
             break
 
     location = f"{latitude},{longitude}"
@@ -45,6 +52,11 @@ for _ in range(num_images):
 
         # 保存图像
         filename = f"{save_directory}map_image_{location.replace(',', '_')}_{zoom}.png"
-        image = Image.fromarray(image_array)
-        image.save(filename)
+        img = Image.fromarray(image_array)  # 转换numpy array为PIL Image对象
+        img.save(filename)
+
+# 保存坐标到json文件
+with open('coord_names.json', 'w') as outfile:
+    json.dump(coord_list, outfile)
+
 
