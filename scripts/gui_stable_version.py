@@ -479,11 +479,11 @@ class ImageViewer:
             # Save images to the subfolder
             save_img(subfolder_path, images_arr)
 
-    def save_default_directory(directory):
+    def save_default_directory(self, directory):
         with open(CONFIG_FILE, 'w') as file:
             json.dump({'default_directory': directory}, file)
 
-    def load_default_directory():
+    def load_default_directory(self):
         try:
             with open(CONFIG_FILE, 'r') as file:
                 data = json.load(file)
