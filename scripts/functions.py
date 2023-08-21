@@ -144,11 +144,15 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
         image = image.crop((0, 0, image.width, image.height - 22))
+
         if save:
+            if not os.path.exists(save):
+                os.makedirs(save)
             timestamp = time.strftime('%Y%m%d%H%M%S')
             filename = f"{save}/map_image_{location.replace(',', '_')}_{timestamp}.png"
             image.save(filename)
             print(f'Saved picture location: {location}, Zoom level: {zoom_level}')
+
         image = np.array(image)
         return image
     else:
@@ -159,11 +163,16 @@ def random_satellite_img(file_path, zoom_level, n_pics=10, save_path=f"../datase
     with open(file_path, 'r') as f:
         rects = json.load(f)
 
+    n = n_pics * len(rects)
+    j = 0
     for rect in rects:
         for i in range(n_pics):
+            j += 1
             coo = random_point_in_rectangle(rect)
             img = get_google_map_image(coo, zoom_level, save=save_path)
-            print(f"Image location: {coo}. Image entropy: {calc_ent(img, 'naive')}")
+            print(f'Got picture: {j}/{n}')
+            # print(f"Image location: {coo}.")
+            # print(f"Image entropy: {calc_ent(img, 'naive')}.")
 
 
 def parse_coordinate(coordinate_str):
