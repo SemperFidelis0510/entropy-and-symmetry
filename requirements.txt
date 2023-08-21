@@ -8,3 +8,5 @@ discord
 PyWavelets
 requests
 tk
+geopandas
+shapely
