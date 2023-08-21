@@ -247,11 +247,20 @@ def calculate_joint_RGB_entropy(rgb_image):
 
 
 def calculate_texture_entropy(img_arr):
-    # Convert the image to grayscale
-    if len(img_arr.shape) == 3:
+    # Ensure img_arr is a numpy array
+    img_arr = np.asarray(img_arr)
+
+    # Convert the image to grayscale if it's a color image
+    if img_arr.ndim == 3 and img_arr.shape[-1] == 3:  # Check for RGB image
         gray_image = rgb2gray(img_arr)
+    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):  # Grayscale or single-channel image
+        gray_image = img_arr.squeeze()
     else:
-        gray_image = img_arr
+        raise ValueError("Input image should be either grayscale or RGB.")
+
+    # Normalize the grayscale image if it isn't already
+    if gray_image.max() > 1:
+        gray_image = gray_image / 255.0
 
     # Convert to 8-bit integer type
     gray_image = (gray_image * 255).astype(np.uint8)
@@ -262,13 +271,16 @@ def calculate_texture_entropy(img_arr):
     lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
 
     # Calculate histogram of LBP values
-    hist, _ = np.histogram(lbp_image.ravel(), bins=np.arange(0, 2 ** n_points))
+    n_bins = int(n_points * (n_points - 1) / 2) + 2  # for 'uniform' method with n_points=8, this is 59 + 1 = 60
+    hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
     hist = hist.astype("float")
     hist /= (hist.sum() + np.finfo(float).eps)
 
+    # Calculate texture entropy
     texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
 
     return texture_entropy
+
 
 
 def calculate_texture_gabor_entropy(img_arr):
