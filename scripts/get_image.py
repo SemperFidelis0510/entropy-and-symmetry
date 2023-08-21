@@ -3,12 +3,14 @@ import random
 import geopandas as gpd
 from shapely.geometry import Point
 from functions import get_google_map_image
+from PIL import Image
+
 
 # 获取当前脚本的绝对路径
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # 使用os.path.join()将脚本的路径与相对路径结合起来，从而形成绝对路径
-path_to_china_boundary = os.path.join(script_dir, "../resources/gadm36_CHN_shp/gadm36_CHN_1.shp")
+path_to_china_boundary = os.path.join(script_dir, "../resources/gadm36_CHN_shp/gadm36_CHN_0.shp")
 gdf = gpd.read_file(path_to_china_boundary)
 
 # 获取中国的边界
@@ -43,4 +45,6 @@ for _ in range(num_images):
 
         # 保存图像
         filename = f"{save_directory}map_image_{location.replace(',', '_')}_{zoom}.png"
-        image_array.save(filename)
+        image = Image.fromarray(image_array)
+        image.save(filename)
+
