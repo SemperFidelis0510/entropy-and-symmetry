@@ -29,7 +29,8 @@ def save_img(folder_path, images_arr):
     i = 0
     for arr in images_arr:
         path = os.path.join(folder_path, f'i={i}_s={arr[1]}.bmp')
-        Image.fromarray(arr[0], 'RGB').save(path)
+        img = arr[0]
+        Image.fromarray(img, 'RGB').save(path)
         i += 1
 
     print(f'Sorted images saved to: {os.path.abspath(folder_path)}')
@@ -87,7 +88,9 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
         i += 1
 
         img = Image.open(path)
-        if colors == 'greyscale':
+        if colors == 'rgb':
+            img = img.convert('RGB')
+        elif colors == 'greyscale':
             img = img.convert('L')
 
         if vary_crop:
@@ -96,7 +99,7 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
         img_arr = np.array(cropped)
 
         if colors == 'rgb':
-            if img_arr.ndim == 4:
+            if img_arr.shape[2] == 4:
                 img_arr = img_arr[:, :, :-1]
             elif img_arr.ndim == 2:
                 img_arr = np.stack([img_arr] * 3, axis=-1)
