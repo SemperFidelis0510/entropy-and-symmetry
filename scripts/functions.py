@@ -1,4 +1,6 @@
+import json
 import platform
+import random
 import subprocess
 from io import BytesIO
 
@@ -148,3 +150,58 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         return image
     else:
         raise Exception(f"Error retrieving image: {response.text}")
+
+
+def random_satellite_img(file_path, zoom_level, n_pics=10):
+    with open(file_path, 'r') as f:
+        rects = json.load(f)
+
+    for rect in rects:
+        for i in range(n_pics):
+            coo = random_point_in_rectangle(rect)
+            get_google_map_image(coo, zoom_level, save=True)
+
+
+def parse_coordinate(coordinate_str):
+    """
+    Parse a coordinate string in the format "valueN/S, valueE/W" and convert to numerical values.
+
+    :param coordinate_str: String containing latitude and longitude in the format "valueN/S, valueE/W".
+    :return: Tuple of (latitude, longitude) as floating-point numbers. Latitude is in the range -90 to 90,
+             and longitude is in the range -180 to 180.
+    """
+    if ", " in coordinate_str:
+        latitude, longitude = coordinate_str.split(", ")
+    else:
+        latitude, longitude = coordinate_str.split(",")
+    lat_value, lat_dir = float(latitude[:-1]), latitude[-1]
+    lon_value, lon_dir = float(longitude[:-1]), longitude[-1]
+
+    if lat_dir == 'S':
+        lat_value = -lat_value
+    if lon_dir == 'W':
+        lon_value = -lon_value
+
+    return lat_value, lon_value
+
+
+def random_point_in_rectangle(coo):
+    """
+    Randomly select a point within a rectangle defined by coordinates in coo.
+
+    :param coo: List of two strings, each containing "latitude, longitude" for the corners of the rectangle.
+    :return: String of "latitude, longitude" for the randomly selected point.
+    """
+    top_left = parse_coordinate(coo[0])
+    bottom_right = parse_coordinate(coo[1])
+
+    # Randomly select a latitude between the top-left and bottom-right latitudes
+    random_latitude = random.uniform(bottom_right[0], top_left[0])
+
+    # Randomly select a longitude between the top-left and bottom-right longitudes
+    random_longitude = random.uniform(top_left[1], bottom_right[1])
+
+    # Format the coordinates as a string
+    coordinates_str = "{:.4f}, {:.4f}".format(random_latitude, random_longitude)
+
+    return coordinates_str
