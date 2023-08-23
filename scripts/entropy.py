@@ -1,4 +1,3 @@
-import json
 import math
 
 from scipy.signal import convolve2d
@@ -11,7 +10,7 @@ from skimage.segmentation import slic
 from transforms import *
 
 
-def label_ent(images, method, sort=True):
+def label_ent(images, method, sort=True, ent_norm=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
 
@@ -19,6 +18,7 @@ def label_ent(images, method, sort=True):
         images (list): List of image arrays.
         method (str): Name of method to use for entropy calculation.
         sort (bool, optional): Whether to sort the images by entropy. Default is True.
+        ent_norm (dict, optional): Entropy normalization dictionary.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -29,7 +29,7 @@ def label_ent(images, method, sort=True):
     start_time = time.time()
     for img in images:
         i += 1
-        img_ent.append([img, calc_ent(img, method)])
+        img_ent.append([img, calc_ent(img, method, ent_norm=ent_norm)])
         print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
@@ -38,7 +38,7 @@ def label_ent(images, method, sort=True):
     return img_ent
 
 
-def calc_ent(img_arr, method):
+def calc_ent(img_arr, method, ent_norm=None):
     """
     Calculates the entropy of an image array using the specified method.
 
@@ -58,6 +58,7 @@ def calc_ent(img_arr, method):
             - 'GLCM': Entropy calculation using Gray-Level Co-occurrence Matrix.
             - 'RGBCM_each_channel': Entropy calculation using Red-Green-Blue Co-occurrence Matrix for each channel.
             - 'RGBCM_to_gray': Entropy calculation using Red-Green-Blue Co-occurrence Matrix converted to grayscale.
+        ent_norm (dict, optional): Normalization dictionary to normalize the entropy based on a fixed image.
 
     Returns:
         float: Calculated entropy value, or None if the method is not recognized.
@@ -65,8 +66,7 @@ def calc_ent(img_arr, method):
     Note:
         Some methods may require specific functions to be defined elsewhere in the code.
     """
-    with open('data/ent_norm.json', 'r') as file:
-        ent_norm = json.load(file)
+
     match method:
         case 'hist':
             ent = histogram(img_arr, 'rgb')
@@ -96,11 +96,15 @@ def calc_ent(img_arr, method):
             ent = calculate_RGBCM_entropy(img_arr, scheme='each_channel')
         case 'RGBCM_to_gray':
             ent = calculate_RGBCM_entropy(img_arr, scheme='to_gray')
+        case 'naive_hsb':
+            ent = entropy(rgb_to_hsb_image(img_arr))
         case _:
             print('No entropy method matched!!')
             ent = None
 
-    ent /= ent_norm[method]
+    if ent_norm is not None:
+        ent /= ent_norm[method]
+
     return ent
 
 
@@ -288,7 +292,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     # Convert the image to grayscale if it's a color image
     if img_arr.ndim == 3 and img_arr.shape[-1] in [3, 4]:  # Check for RGB or RGBA image
-        gray_image = 0.299*img_arr[:,:,0] + 0.587*img_arr[:,:,1] + 0.114*img_arr[:,:,2]
+        gray_image = 0.299 * img_arr[:, :, 0] + 0.587 * img_arr[:, :, 1] + 0.114 * img_arr[:, :, 2]
     elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):  # Grayscale or single-channel image
         gray_image = img_arr.squeeze()
     else:
