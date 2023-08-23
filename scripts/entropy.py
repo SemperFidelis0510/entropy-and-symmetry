@@ -32,14 +32,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb'):
     for img in images:
         i += 1
 
-        if colors == 'hsb':
-            c_img = rgb_to_hsb_image(img)
-        elif colors == 'greyscale':
-            pass
-        else:
-            c_img = img
-
-        img_ent.append([img, calc_ent(c_img, method, ent_norm=ent_norm)])
+        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm)])
         print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
@@ -79,9 +72,7 @@ def calc_ent(img_arr, method, ent_norm=None):
 
     match method:
         case 'hist':
-            ent = histogram(img_arr, 'rgb')
-        case 'hist_greyscale':
-            ent = histogram(img_arr, 'greyscale')
+            ent = histogram(img_arr)
         case 'naive':
             ent = entropy(img_arr)
         case 'dft':
@@ -106,8 +97,6 @@ def calc_ent(img_arr, method, ent_norm=None):
             ent = calculate_RGBCM_entropy(img_arr, scheme='each_channel')
         case 'RGBCM_to_gray':
             ent = calculate_RGBCM_entropy(img_arr, scheme='to_gray')
-        case 'naive_hsb':
-            ent = entropy(rgb_to_hsb_image(img_arr))
         case _:
             print('No entropy method matched!!')
             ent = None
@@ -143,17 +132,18 @@ def entropy(arr):
         raise ValueError("Array must be 1D, 2D, or 3D")
 
 
-def histogram(img_arr, color='rgb'):
-    match color:
-        case 'rgb':
-            bins_ = 256 ** 3
-            flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
-            hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
-            return entropy(hist)
-        case 'greyscale':
-            bins_ = 256
-            hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
-            return entropy(hist)
+def histogram(img_arr):
+    if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
+        bins_ = 256 ** 3
+        flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
+        hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+        return entropy(hist)
+    elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
+        bins_ = 256
+        hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
+        return entropy(hist)
+    else:
+        raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
 
 
 def calculate_GLCM_entropy(image):
@@ -172,8 +162,8 @@ def calculate_GLCM_entropy(image):
     for angle_idx in range(len(angles)):
         matrix = glcm[:, :, 0, angle_idx]
         matrix = matrix / np.sum(matrix)
-        entropy = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
-        total_entropy += entropy
+        entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
+        total_entropy += entropy_
 
     return total_entropy
 
@@ -185,10 +175,10 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
 
     total_entropy = 0
 
-    def calculate_entropy(matrix):
-        matrix = matrix / np.sum(matrix)  # Normalize matrix to probabilities
-        entropy = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))  # Avoid log(0)
-        return entropy
+    def calculate_entropy(matrix_):
+        matrix_ = matrix_ / np.sum(matrix_)  # Normalize matrix to probabilities
+        entropy_ = -np.sum(matrix_ * np.log2(matrix_ + np.finfo(float).eps))  # Avoid log(0)
+        return entropy_
 
     if scheme == 'each_channel':
         # Calculate entropy for each color channel separately
@@ -201,8 +191,8 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
             channel_entropy = 0
             for angle_idx in range(len(angles)):
                 matrix = glcm[:, :, 0, angle_idx]
-                entropy = calculate_entropy(matrix)
-                channel_entropy += entropy
+                entropy_ = calculate_entropy(matrix)
+                channel_entropy += entropy_
 
             total_entropy += channel_entropy
 
@@ -213,9 +203,9 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
         glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
         for angle_idx in range(len(angles)):
-            matrix = glcm[:, :, 0, angle_idx]
-            entropy = calculate_entropy(matrix)
-            total_entropy += entropy
+            matrix_ = glcm[:, :, 0, angle_idx]
+            entropy_ = calculate_entropy(matrix_)
+            total_entropy += entropy_
 
     return total_entropy
 

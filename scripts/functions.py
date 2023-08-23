@@ -1,5 +1,6 @@
 import platform
 import random
+import json
 import subprocess
 from io import BytesIO
 
@@ -60,7 +61,7 @@ def load_images(path):
     return images_path
 
 
-def preprocess(folder_path, crop_size=None, colors='rgb'):
+def preprocess(folder_path, crop_size=None):
     """
     Preprocesses images from a given folder path by cropping and converting to the specified color format.
 
@@ -87,22 +88,17 @@ def preprocess(folder_path, crop_size=None, colors='rgb'):
     for path in paths:
         i += 1
 
-        img = Image.open(path)
-        if colors in ['rgb', 'hsb']:
-            img = img.convert('RGB')
-        elif colors == 'greyscale':
-            img = img.convert('L')
+        img = Image.open(path).convert('RGB')
 
         if vary_crop:
             crop_size = min(img.size)
         cropped = img.crop((0, 0, crop_size, crop_size))
         img_arr = np.array(cropped)
 
-        if colors in ['rgb', 'hsb']:
-            if img_arr.shape[2] == 4:
-                img_arr = img_arr[:, :, :-1]
-            elif img_arr.ndim == 2:
-                img_arr = np.stack([img_arr] * 3, axis=-1)
+        if img_arr.shape[2] == 4:
+            img_arr = img_arr[:, :, :-1]
+        elif img_arr.ndim == 2:
+            img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
         print_progress_bar('Preprocessed', i, n, start_time=start_time)

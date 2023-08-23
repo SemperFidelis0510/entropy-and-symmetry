@@ -2,6 +2,7 @@ import colorsys
 
 import numpy as np
 import pywt
+from skimage.color import rgb2gray
 
 from utils import *
 
@@ -173,18 +174,30 @@ def dwt(image, wavelet='db1', level=None):
         raise ValueError("Array must be 1D, 2D, or 3D")
 
 
-def rgb_to_hsb_image(rgb_image):
-    # Normalize RGB values to [0, 1]
-    rgb_image = rgb_image / 255.0
+def change_channels(img, channels):
+    match channels:
+        case 'rgb':
+            img = img
+        case 'hsb':
+            # Normalize RGB values to [0, 1]
+            img = img / 255.0
 
-    # Initialize an empty array for HSB values
-    hsb_image = np.zeros_like(rgb_image, dtype=float)
+            # Initialize an empty array for HSB values
+            hsb_image = np.zeros_like(img, dtype=float)
 
-    # Iterate through the pixels and convert RGB to HSB
-    for i in range(rgb_image.shape[0]):
-        for j in range(rgb_image.shape[1]):
-            r, g, b = rgb_image[i, j]
-            h, s, v = colorsys.rgb_to_hsv(r, g, b)
-            hsb_image[i, j] = (h * 360, s * 100, v * 100)  # Convert to degrees and percentage
+            # Iterate through the pixels and convert RGB to HSB
+            for i in range(img.shape[0]):
+                for j in range(img.shape[1]):
+                    r, g, b = img[i, j]
+                    h, s, v = colorsys.rgb_to_hsv(r, g, b)
+                    hsb_image[i, j] = (h * 360, s * 100, v * 100)  # Convert to degrees and percentage
 
-    return hsb_image
+            img = hsb_image
+
+        case 'YCbCr':
+            pass
+
+        case 'greyscale':
+            img = rgb2gray(img)
+
+    return img
