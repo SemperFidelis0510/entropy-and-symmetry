@@ -17,7 +17,6 @@ ent_methods = [
     'GLCM',
     'RGBCM_each_channel',
     'RGBCM_to_gray',
-    'naive_hsb'
 ]
 
 color_opts = ['rgb',
@@ -37,7 +36,7 @@ def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None):
 
     img_arrays, _ = preprocess(path)
 
-    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, color_weight=color_weight)
+    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, color_weight=color_weight, colors=colors)
 
     print('\nThe images are sorted by entropy.')
 
@@ -71,16 +70,17 @@ def norm_ent():
 
 
 def main():
-    method = 'dft'
-    colors = 'rgb'
+    method = 'lbp'
+    colors = 'YCbCr'
+    eps = 0.2
 
-    folder_path = datasets['china']
+    folder_path = datasets['satellite']
 
     ent_norm = get_ent_norm(method)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
     # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
-    sort_folder(folder_path, method, colors, ent_norm)
+    sort_folder(folder_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
 
 
 if __name__ == '__main__':
