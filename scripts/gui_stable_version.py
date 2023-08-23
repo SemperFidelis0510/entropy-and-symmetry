@@ -116,6 +116,8 @@ class ImageViewer:
         # Set weight to adjust canvas with window resize
         self.image_window.grid_rowconfigure(1, weight=1)
         self.image_window.grid_columnconfigure(1, weight=1)
+        self.controls_frame.grid_rowconfigure(1, weight=1)
+        self.controls_frame.grid_columnconfigure(1, weight=1)
 
         sys.stdout = IORedirector(self.console)
 
