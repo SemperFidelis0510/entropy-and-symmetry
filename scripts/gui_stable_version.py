@@ -88,6 +88,7 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
+        self.image_window.geometry(self.center_window_coordinates(600, 800))  # 800x600 is the desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
@@ -122,7 +123,7 @@ class ImageViewer:
         sys.stdout = IORedirector(self.console)
 
         self.center_window(self.image_window)
-        
+
     def thread_it(self, func, *args):
         """ Pack functions into threads """
         self.myThread = threading.Thread(target=func, args=args)
@@ -543,21 +544,31 @@ class ImageViewer:
             self.save_default_directory(self.default_save_directory)
 
     def center_window(self, window):
-        window.update_idletasks()  # 这确保窗口大小已被"实现"
+        window.update_idletasks()  # Ensure that the window size has been 'implemented'
     
-        # 获取屏幕的宽度和高度
+        # Obtain the width and height of the screen
         screen_width = window.winfo_screenwidth()
         screen_height = window.winfo_screenheight()
     
-        # 获取窗口的宽度和高度
+        # Obtain the width and height of the window
         width = window.winfo_width()
         height = window.winfo_height()
 
-        # 计算x和y坐标，使窗口居中
+        # Calculate the x and y coordinates to center the window
         x = (screen_width // 2) - (width // 2)
         y = (screen_height // 2) - (height // 2)
 
         window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+
+    def center_window_coordinates(self, width=None, height=None):
+        if width is None:
+            width = self.image_window.winfo_reqwidth()
+        if height is None:
+            height = self.image_window.winfo_reqheight()
+        x = (self.image_window.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.image_window.winfo_screenheight() // 2) - (height // 2)
+        return '{}x{}+{}+{}'.format(width, height, x, y)
+
 
 def choose_directory():
     try:
