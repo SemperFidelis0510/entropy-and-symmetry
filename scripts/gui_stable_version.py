@@ -511,7 +511,7 @@ class ImageViewer:
         directory = filedialog.askdirectory()
         if directory:
             self.config_path = os.path.join(directory, "settings.json")
-            # 保存当前的默认保存目录到新的位置
+            # Save the current default save directory to a new location
             self.save_default_directory(self.default_save_directory)
 
 
