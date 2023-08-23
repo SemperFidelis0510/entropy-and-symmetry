@@ -69,8 +69,6 @@ def preprocess(folder_path, crop_size=None):
     Args:
         folder_path (str): Path to the folder containing the images.
         crop_size (int, optional): Size of the cropped square. If None, the crop size will vary based on the image size.
-        colors (str, optional): Color format, either 'rgb' or 'greyscale'. Default is 'rgb'.
-
     Returns:
         images_arr (list): List of preprocessed image arrays.
         paths (list): List of paths to the processed images.

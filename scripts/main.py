@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from functions import *
@@ -21,6 +20,8 @@ ent_methods = [
     'naive_hsb'
 ]
 
+color_opts = ['rgb', 'hsb', 'YCbCr', 'greyscale']
+
 
 def sort_folder(path, method, colors='rgb', ent_norm=None):
     # colors = 'greyscale'
@@ -28,7 +29,7 @@ def sort_folder(path, method, colors='rgb', ent_norm=None):
 
     img_arrays, _ = preprocess(path)
 
-    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm)
+    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, colors=colors)
 
     print('\nThe images are sorted by entropy.')
 
@@ -70,7 +71,7 @@ def ent_for_img(path):
 
 def main():
     method = 'naive'
-    colors = 'hsb'
+    colors = 'rgb'
     # folder_path = '../datasets/satellite/argentina'
 
     state = 'argentina'
