@@ -52,6 +52,8 @@ class IORedirector(object):
 class ImageViewer:
     def __init__(self, directory):
         self.directory = directory
+        self.config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
+        self.default_save_directory = self.load_default_directory()
         self.image_files = [f for f in os.listdir(directory) if f.endswith(IMAGE_EXTENSIONS)]
         if not self.image_files:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
@@ -158,7 +160,9 @@ class ImageViewer:
 
         settings_menu = Menu(menu_bar, tearoff=0)
         settings_menu.add_command(label="Set Default Save Directory", command=self.choose_default_directory)
+        settings_menu.add_command(label="Choose Config File Location", command=self.choose_config_location)
         menu_bar.add_cascade(label="Settings", menu=settings_menu)
+
 
     def create_image_frame(self):
         frame_image = Frame(self.image_window, width=700, height=400)
@@ -443,74 +447,73 @@ class ImageViewer:
             self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
 
     def save(self):
-        # Ask user to select a directory to save the images
-        folder_path = filedialog.askdirectory()
+        # First, try to get the default save directory from settings.json
+        default_save_directory = self.load_default_directory()
 
-        # Check if user selected a directory (if they didn't cancel the dialog)
-        if folder_path:
-            images_arr = self.img_ent_data  # Retrieve your list/array of images here
-            if images_arr is None:
-                messagebox.showerror("Error", "Please complete an entropy sort first.")
-                return
+        if not default_save_directory or not os.path.exists(default_save_directory):
+            # If there's no default directory in the settings or it doesn't exist, ask the user
+            folder_path = filedialog.askdirectory()
+        else:
+            folder_path = default_save_directory
 
-            # 1. Get the selected entropy method
-            entropy_method = self.combo.get()
+        # Check if a valid directory was chosen or retrieved from the settings
+        if not folder_path:
+            return
 
-            # 2. Get the current time
-            current_time = datetime.now().strftime('%Y%m%d_%H%M%S')  # Format: YYYYMMDD_HHMMSS
+        images_arr = self.img_ent_data  # Retrieve your list/array of images here
+        if images_arr is None:
+            messagebox.showerror("Error", "Please complete an entropy sort first.")
+            return
 
-            # 3. Create a subfolder name based on entropy method and current time
-            subfolder_name = f"{entropy_method}_{current_time}"
-            subfolder_path = os.path.join(folder_path, subfolder_name)
+        # 1. Get the selected entropy method
+        entropy_method = self.combo.get()
 
-            # 4. Create the subfolder
-            if not os.path.exists(subfolder_path):
-                os.makedirs(subfolder_path)
+        # 2. Get the current time
+        current_time = datetime.now().strftime('%Y%m%d_%H%M%S')  # Format: YYYYMMDD_HHMMSS
 
-            # Save images to the subfolder
-            save_img(subfolder_path, images_arr)
+        # 3. Create a subfolder name based on entropy method and current time
+        subfolder_name = f"{entropy_method}_{current_time}"
+        subfolder_path = os.path.join(folder_path, subfolder_name)
+
+        # 4. Create the subfolder
+        if not os.path.exists(subfolder_path):
+            os.makedirs(subfolder_path)
+
+        # Save images to the subfolder
+        save_img(subfolder_path, images_arr)
+
 
     def save_default_directory(self, user_chosen_path):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        relative_path = os.path.relpath(user_chosen_path, script_dir)
-
-        # 把现在的绝对路径换成相对路径
         settings = {
-            "default_directory": relative_path
+            "default_directory": user_chosen_path
         }
 
-        with open("settings.json", "w") as f:
+        with open(self.config_path, "w") as f:
             json.dump(settings, f)
-
-    def get_default_directory(self):
-        with open("settings.json", "r") as f:
-            settings = json.load(f)
-    
-        # 转换相对路径到绝对路径
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        absolute_path = os.path.join(script_dir, settings["default_directory"])
-
-        return absolute_path
 
 
     def load_default_directory(self):
         try:
-            with open(CONFIG_FILE, 'r') as file:
+            with open(self.config_path, 'r') as file:
                 data = json.load(file)
-                relative_path = data.get('default_directory', '')
-            
-                # 如果相对路径存在，转换为绝对路径
-                if relative_path:
-                    return os.path.join(os.getcwd(), relative_path)
-                return ''
+                return data.get('default_directory', '')
         except FileNotFoundError:
             return ''
-        
+
+
     def choose_default_directory(self):
         directory = filedialog.askdirectory()
         if directory:
             self.save_default_directory(directory)
             self.default_save_directory = directory
+
+    def choose_config_location(self):
+        directory = filedialog.askdirectory()
+        if directory:
+            self.config_path = os.path.join(directory, "settings.json")
+            # Save the current default save directory to a new location
+            self.save_default_directory(self.default_save_directory)
+
 
 
 def choose_directory():

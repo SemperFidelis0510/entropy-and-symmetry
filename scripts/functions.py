@@ -7,6 +7,7 @@ import requests
 
 from entropy import *
 from img_utils import *
+import json
 
 
 def save_img(folder_path, images_arr):
