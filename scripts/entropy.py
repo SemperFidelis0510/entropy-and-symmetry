@@ -111,7 +111,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
     return ent
 
 
-def entropy(arr, color_weight=(0.2989, 0.5870, 0.1140)):
+def entropy(arr, color_weight=None):
     arr = np.abs(arr)
 
     if arr.ndim == 1 or arr.ndim == 2:
@@ -124,8 +124,10 @@ def entropy(arr, color_weight=(0.2989, 0.5870, 0.1140)):
     elif arr.ndim == 3:
         if arr.shape[-1] != 3:  # Check if the last dimension has 3 channels (RGB)
             raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
-
-        weighted_arr = np.dot(arr, color_weight)
+        if color_weight is not None:
+            weighted_arr = np.dot(arr, color_weight)
+        else: # Default wrighted
+            weighted_arr = np.dot(arr, (0.2989, 0.5870, 0.1140))
         return entropy(weighted_arr)
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
