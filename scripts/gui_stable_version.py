@@ -333,7 +333,7 @@ class ImageViewer:
     def on_combo_color_select(self, event=None):
         selected_color = self.combo.get()
         self.update_confirm_button_state()
-        
+
     def update_images_from_array(self, np_array, index):
         # Convert numpy array to PIL Image
         img = Image.fromarray(np_array)
@@ -426,11 +426,16 @@ class ImageViewer:
         self.update_status_bar()
 
     def resize_image(self, percent):
+        if not self.List_images[self.img_no]:
+            print("Image not loaded or None")
+            return
+
         self.zoom_percent = percent
         img_resized = self.List_images[self.img_no].resize((int(self.List_images[self.img_no].width * percent / 100),
                                                             int(self.List_images[self.img_no].height * percent / 100)))
         self.List_photoimages[self.img_no] = ImageTk.PhotoImage(img_resized)
         self.canvas_image.itemconfig(self.image_on_canvas, image=self.List_photoimages[self.img_no])
+
 
     def update_image(self):
         self.canvas_image.itemconfig(self.image_on_canvas, image=self.List_photoimages[self.img_no])
