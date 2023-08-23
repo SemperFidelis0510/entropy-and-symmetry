@@ -10,7 +10,7 @@ from skimage.segmentation import slic
 from transforms import *
 
 
-def label_ent(images, method, sort=True, ent_norm=None, colors='rgb'):
+def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
 
@@ -32,7 +32,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb'):
     for img in images:
         i += 1
 
-        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm)])
+        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
         print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
@@ -41,7 +41,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb'):
     return img_ent
 
 
-def calc_ent(img_arr, method, ent_norm=None):
+def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
     """
     Calculates the entropy of an image array using the specified method.
 
@@ -107,30 +107,24 @@ def calc_ent(img_arr, method, ent_norm=None):
     return ent
 
 
-def entropy(arr):
-    # Check the rank of the array
-    rank = arr.ndim
+def entropy(arr, color_weight=(0.2989, 0.5870, 0.1140)):
     arr = np.abs(arr)
 
-    # Handle 1D and 2D arrays
-    if rank == 1 or rank == 2:
+    if arr.ndim == 1 or arr.ndim == 2:
         total_sum = np.sum(arr)
+        if total_sum == 0:
+            return 0
         normalize_arr = arr / total_sum
-        ent = 0
-        for data in normalize_arr.flatten():
-            ent -= data * math.log(data + np.finfo(float).eps, 2)
-        return ent
+        return -np.sum(normalize_arr * np.log2(normalize_arr + np.finfo(float).eps))
 
-    # Handle 3D arrays
-    elif rank == 3:
-        total_entropy = 0
-        for slice_2d in arr:
-            total_entropy += entropy(slice_2d)  # Recursively call the function for each 2D slice
-        return total_entropy
+    elif arr.ndim == 3:
+        if arr.shape[-1] != 3:  # Check if the last dimension has 3 channels (RGB)
+            raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
 
+        weighted_arr = np.dot(arr, color_weight)
+        return entropy(weighted_arr)
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
-
 
 def histogram(img_arr):
     if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)

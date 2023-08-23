@@ -22,27 +22,27 @@ ent_methods = [
 ]
 
 
-def sort_folder(path, method, colors='rgb', ent_norm=None):
+def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None):
     # colors = 'greyscale'
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays, _ = preprocess(path)
 
-    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm)
+    sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, color_weight=color_weight)
 
     print('\nThe images are sorted by entropy.')
 
     save_img(dst_folder, sorted_list)
 
 
-def sort_by_noise(path, method):
+def sort_by_noise(path, method, color_weight=None):
     dst_folder = f'../processed/noise_m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     n = 10
 
     img_arrays, _ = preprocess(path)
     img_arrays = noise_by_increment(img_arrays[0], n)
 
-    sorted_list = label_ent(img_arrays, method, sort=True)
+    sorted_list = label_ent(img_arrays, method, sort=True, color_weight=color_weight)
 
     print('\nThe images are sorted by entropy.')
 
