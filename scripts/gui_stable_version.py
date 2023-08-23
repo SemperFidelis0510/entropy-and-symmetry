@@ -121,6 +121,8 @@ class ImageViewer:
 
         sys.stdout = IORedirector(self.console)
 
+        self.center_window(self.image_window)
+        
     def thread_it(self, func, *args):
         """ Pack functions into threads """
         self.myThread = threading.Thread(target=func, args=args)
@@ -540,7 +542,22 @@ class ImageViewer:
             # Save the current default save directory to a new location
             self.save_default_directory(self.default_save_directory)
 
+    def center_window(self, window):
+        window.update_idletasks()  # 这确保窗口大小已被"实现"
+    
+        # 获取屏幕的宽度和高度
+        screen_width = window.winfo_screenwidth()
+        screen_height = window.winfo_screenheight()
+    
+        # 获取窗口的宽度和高度
+        width = window.winfo_width()
+        height = window.winfo_height()
 
+        # 计算x和y坐标，使窗口居中
+        x = (screen_width // 2) - (width // 2)
+        y = (screen_height // 2) - (height // 2)
+
+        window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
 
 def choose_directory():
     try:
