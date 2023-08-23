@@ -109,6 +109,7 @@ class ImageViewer:
         self.update_buttons()
         self.update_listbox()
         self.update_confirm_button_state()
+        self.button_save.config(state=DISABLED)# Disable save button until entropy calculation is complete
 
         self.image_window.bind('<Right>', self.forward)
         self.image_window.bind('<Left>', self.back)
@@ -291,6 +292,7 @@ class ImageViewer:
         self.confirm_button.grid(row=2, column=2, sticky='ew')
 
     def on_confirm_click(self):
+        self.start_entropy_calculation()
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         method = self.combo.get()
         selected_color = self.combo_color.get()
@@ -325,6 +327,14 @@ class ImageViewer:
         # Update the image_files list
         self.image_files = sorted_filenames
         self.refresh_all_images(sorted_images)
+        self.entropy_calculation_complete()
+
+    def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
+        self.button_save.config(state=NORMAL)
+
+    def start_entropy_calculation(self):  # Call this when you start the entropy calculation
+        self.button_save.config(state=DISABLED)
+
 
     def on_combo_select(self, event=None):
         selected_item = self.combo.get()
