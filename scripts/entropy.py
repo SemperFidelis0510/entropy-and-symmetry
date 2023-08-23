@@ -101,6 +101,10 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             print('No entropy method matched!!')
             ent = None
 
+    if method != 'adapt': # skip those already returned entropy
+        ent = entropy(transform_result, color_weight=color_weight)
+    else:
+        ent = transform_result
     if ent_norm is not None:
         ent /= ent_norm[method]
 
