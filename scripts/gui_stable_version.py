@@ -108,6 +108,7 @@ class ImageViewer:
 
         self.update_buttons()
         self.update_listbox()
+        self.update_confirm_button_state()
 
         self.image_window.bind('<Right>', self.forward)
         self.image_window.bind('<Left>', self.back)
@@ -327,10 +328,12 @@ class ImageViewer:
 
     def on_combo_select(self, event=None):
         selected_item = self.combo.get()
+        self.update_confirm_button_state()
 
     def on_combo_color_select(self, event=None):
         selected_color = self.combo.get()
-
+        self.update_confirm_button_state()
+        
     def update_images_from_array(self, np_array, index):
         # Convert numpy array to PIL Image
         img = Image.fromarray(np_array)
@@ -568,6 +571,14 @@ class ImageViewer:
         x = (self.image_window.winfo_screenwidth() // 2) - (width // 2)
         y = (self.image_window.winfo_screenheight() // 2) - (height // 2)
         return '{}x{}+{}+{}'.format(width, height, x, y)
+    
+    def update_confirm_button_state(self, event=None):
+        if self.combo.get():  # If there's a value selected in the combobox
+            if self.combo_color.get():
+                self.confirm_button.config(state=NORMAL)
+        else:
+            self.confirm_button.config(state=DISABLED)
+
 
 
 def choose_directory():
