@@ -33,6 +33,8 @@ ENTROPY_METHODS = [
     'naive_hsb'
 ]
 
+COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
@@ -260,11 +262,13 @@ class ImageViewer:
     def create_calculation_buttons(self, frame):
         # Create a Combobox and make it visible
         self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
-
         self.combo.grid(row=2, column=0)  # Set the position of the combobox
+        self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
+        self.combo_color.grid(row=1, column=0)  # Set the position of the combobox
 
         # Binding selection event
         self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
+        self.combo_color.bind("<<ComboboxSelected>>", self.on_combo_color_select)
 
         # The save button is arranged on the right side of the combobox
         self.button_save = Button(frame, text="Save", command=self.save)
@@ -276,9 +280,10 @@ class ImageViewer:
     def on_confirm_click(self):
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         selected_item = self.combo.get()
+        selected_color = self.combo_color.get()
         preprocessed_images, _ = preprocess(self.directory)
         try:
-            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False, ent_norm=None, colors='rgb')
+            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False, ent_norm=None, colors=selected_color)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
@@ -302,6 +307,9 @@ class ImageViewer:
 
     def on_combo_select(self, event=None):
         selected_item = self.combo.get()
+
+    def on_combo_color_select(self, event=None):
+        selected_color = self.combo.get()
 
     def update_images_from_array(self, np_array, index):
         # Convert numpy array to PIL Image
@@ -467,12 +475,13 @@ class ImageViewer:
 
         # 1. Get the selected entropy method
         entropy_method = self.combo.get()
+        color = self.combo_color.get()
 
         # 2. Get the current time
         current_time = datetime.now().strftime('%Y%m%d_%H%M%S')  # Format: YYYYMMDD_HHMMSS
 
         # 3. Create a subfolder name based on entropy method and current time
-        subfolder_name = f"{entropy_method}_{current_time}"
+        subfolder_name = f"{color}_{entropy_method}_{current_time}"
         subfolder_path = os.path.join(folder_path, subfolder_name)
 
         # 4. Create the subfolder
