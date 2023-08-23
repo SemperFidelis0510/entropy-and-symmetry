@@ -278,7 +278,7 @@ class ImageViewer:
         selected_item = self.combo.get()
         preprocessed_images, _ = preprocess(self.directory)
         try:
-            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
+            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False, ent_norm=None, colors='rgb')
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
