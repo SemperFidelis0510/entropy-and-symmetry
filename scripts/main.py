@@ -1,4 +1,3 @@
-import json
 from datetime import datetime
 
 from functions import *
@@ -21,12 +20,15 @@ ent_methods = [
     'naive_hsb'
 ]
 
+color_opts = ['rgb', 'hsb', 'YCbCr', 'greyscale']
+
 
 def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None):
     # colors = 'greyscale'
     dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays, _ = preprocess(path)
+
 
     sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, color_weight=color_weight)
 
@@ -70,7 +72,7 @@ def ent_for_img(path):
 
 def main():
     method = 'naive'
-    colors = 'hsb'
+    colors = 'rgb'
     # folder_path = '../datasets/satellite/argentina'
 
     state = 'argentina'
