@@ -279,11 +279,19 @@ class ImageViewer:
 
     def on_confirm_click(self):
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
-        selected_item = self.combo.get()
+        method = self.combo.get()
         selected_color = self.combo_color.get()
+        with open('data/ent_norm.json', 'r') as file:
+            ent_norm = json.load(file)
+        if method not in ent_norm:
+            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+            ent_norm[method] = calc_ent(fixed_noise, method)
+            with open('data/ent_norm.json', 'w') as file:
+                json.dump(ent_norm, file)
+
         preprocessed_images, _ = preprocess(self.directory)
         try:
-            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False, ent_norm=None, colors=selected_color)
+            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
