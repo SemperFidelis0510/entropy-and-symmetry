@@ -10,7 +10,7 @@ from skimage.segmentation import slic
 from transforms import *
 
 
-def label_ent(images, method, sort=True, ent_norm=None):
+def label_ent(images, method, sort=True, ent_norm=None, colors='rgb'):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
 
@@ -19,6 +19,7 @@ def label_ent(images, method, sort=True, ent_norm=None):
         method (str): Name of method to use for entropy calculation.
         sort (bool, optional): Whether to sort the images by entropy. Default is True.
         ent_norm (dict, optional): Entropy normalization dictionary.
+        colors (str, optional): Which color channels to use for entropy calculation.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -27,9 +28,18 @@ def label_ent(images, method, sort=True, ent_norm=None):
     n = len(images)
     i = 0
     start_time = time.time()
+
     for img in images:
         i += 1
-        img_ent.append([img, calc_ent(img, method, ent_norm=ent_norm)])
+
+        if colors == 'hsb':
+            c_img = rgb_to_hsb_image(img)
+        elif colors == 'greyscale':
+            pass
+        else:
+            c_img = img
+
+        img_ent.append([img, calc_ent(c_img, method, ent_norm=ent_norm)])
         print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
