@@ -276,7 +276,7 @@ class ImageViewer:
     def on_confirm_click(self):
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         selected_item = self.combo.get()
-        preprocessed_images, _ = preprocess(self.directory, colors='rgb')
+        preprocessed_images, _ = preprocess(self.directory)
         try:
             img_ent = label_ent(preprocessed_images, method=selected_item, sort=False)
         except Exception as e:
