@@ -69,34 +69,34 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
     Note:
         Some methods may require specific functions to be defined elsewhere in the code.
     """
-
+    transform_result = img_arr
     match method:
         case 'hist':
-            ent = histogram(img_arr)
+            transform_result = histogram(img_arr)
         case 'naive':
-            ent = entropy(img_arr)
+            pass
         case 'dft':
-            ent = calculate_dft_entropy(img_arr)
+            transform_result = dft(img_arr)
         case 'dwt':
-            ent = calculate_dwt_entropy(img_arr)
+            transform_result = dwt(img_arr, wavelet='db1', level=1)
         case 'laplace':
-            ent = laplace_ent(img_arr)
+            transform_result = laplace_ent(img_arr)
         case 'joint_red_green':
-            ent = calculate_joint_entropy_red_green(img_arr)
+            transform_result = calculate_joint_entropy_red_green(img_arr)
         case 'joint_all':
-            ent = calculate_joint_RGB_entropy(img_arr)
+            transform_result = calculate_joint_RGB_entropy(img_arr)
         case 'lbp':
-            ent = calculate_texture_entropy(img_arr)
+            transform_result = calculate_texture_entropy(img_arr)
         case 'lbp_gabor':
-            ent = calculate_texture_gabor_entropy(img_arr)
+            transform_result = calculate_texture_gabor_entropy(img_arr)
         case 'adapt':
-            ent = adaptive_entropy_estimation(img_arr)
+            transform_result = adaptive_entropy_estimation(img_arr)
         case 'GLCM':
-            ent = calculate_GLCM_entropy(img_arr)
+            transform_result = calculate_GLCM_entropy(img_arr)
         case 'RGBCM_each_channel':
-            ent = calculate_RGBCM_entropy(img_arr, scheme='each_channel')
+            transform_result = calculate_RGBCM_entropy(img_arr, scheme='each_channel')
         case 'RGBCM_to_gray':
-            ent = calculate_RGBCM_entropy(img_arr, scheme='to_gray')
+            transform_result = calculate_RGBCM_entropy(img_arr, scheme='to_gray')
         case _:
             print('No entropy method matched!!')
             ent = None
@@ -131,11 +131,11 @@ def histogram(img_arr):
         bins_ = 256 ** 3
         flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
         hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
-        return entropy(hist)
+        return hist
     elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
         bins_ = 256
         hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
-        return entropy(hist)
+        return hist
     else:
         raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
 
@@ -152,14 +152,15 @@ def calculate_GLCM_entropy(image):
     gray_image = (image * 255).astype(np.uint8)
     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
-    total_entropy = 0
+    #total_entropy = 0
     for angle_idx in range(len(angles)):
         matrix = glcm[:, :, 0, angle_idx]
         matrix = matrix / np.sum(matrix)
-        entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
-        total_entropy += entropy_
 
-    return total_entropy
+        #entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
+        #total_entropy += entropy_
+
+    return
 
 
 def calculate_RGBCM_entropy(image, scheme='each_channel'):
@@ -204,9 +205,6 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
     return total_entropy
 
 
-def calculate_dft_entropy(image):
-    dft_img = dft(image)
-    return entropy(dft_img)
 
 
 def calculate_joint_entropy_red_green(img_arr):
@@ -217,8 +215,8 @@ def calculate_joint_entropy_red_green(img_arr):
 
     joint_probabilities = joint_histogram / np.sum(joint_histogram)
 
-    joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
-    return joint_entropy
+    #joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
+    return joint_probabilities
 
 
 def calculate_joint_RGB_entropy(rgb_image):
@@ -233,15 +231,17 @@ def calculate_joint_RGB_entropy(rgb_image):
     p_b = hist_b / np.sum(hist_b)
 
     # Calculate joint entropy using the definition of joint entropy
-    joint_entropy = 0
+    # joint_entropy = 0
+    result = []
     for i in range(256):
         for j in range(256):
             for k in range(256):
                 if p_r[i] > 0 and p_g[j] > 0 and p_b[k] > 0:
                     joint_prob = p_r[i] * p_g[j] * p_b[k]
-                    joint_entropy -= joint_prob * np.log2(joint_prob)
+                    result.append(joint_prob)
+                    #joint_entropy -= joint_prob * np.log2(joint_prob)
 
-    return joint_entropy
+    return result
 
 
 def calculate_texture_entropy(img_arr):
@@ -275,9 +275,9 @@ def calculate_texture_entropy(img_arr):
     hist /= (hist.sum() + np.finfo(float).eps)
 
     # Calculate texture entropy
-    texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
+    # texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
 
-    return texture_entropy
+    return hist
 
 
 def calculate_texture_gabor_entropy(img_arr):
@@ -308,9 +308,9 @@ def calculate_texture_gabor_entropy(img_arr):
 
     # Calculate image entropy
     hist, _ = np.histogram(gabor_response, bins=256, density=True)
-    entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
+    #entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
 
-    return entropy_value
+    return hist
 
 
 def adaptive_entropy_estimation(img_arr, num_segments=100):
@@ -339,9 +339,5 @@ def adaptive_entropy_estimation(img_arr, num_segments=100):
 
 
 def laplace_ent(image):
-    return entropy(laplacian(image))
+    return laplacian(image)
 
-
-def calculate_dwt_entropy(image, wavelet='db1', level=1):
-    w_transform_arr = dwt(image, wavelet, level)
-    return entropy(w_transform_arr)
