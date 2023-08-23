@@ -91,7 +91,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             transform_result = calculate_texture_gabor_entropy(img_arr)
         case 'adapt':
             transform_result = adaptive_entropy_estimation(img_arr)
-        case 'RGBCM_each_channel':
+        case 'RGBCM':
             transform_result = calculate_CM_cooccurrence(img_arr)
         case _:
             print('No entropy method matched!!')

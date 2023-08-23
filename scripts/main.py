@@ -14,9 +14,7 @@ ent_methods = [
     'lbp',
     'lbp_gabor',
     'adapt',
-    'GLCM',
-    'RGBCM_each_channel',
-    'RGBCM_to_gray',
+    'RGBCM'
 ]
 
 color_opts = ['rgb',
@@ -70,17 +68,21 @@ def norm_ent():
 
 
 def main():
-    method = 'lbp'
+    method = 'RGBCM'
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['satellite']
+    folder_path = datasets['argentina']
+    sat_img_path = '../datasets/satellite/new'
+    coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
     ent_norm = get_ent_norm(method)
     print(f'Dataset path: {os.path.abspath(folder_path)}')
 
     # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
-    sort_folder(folder_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
+    # for c in coo:
+    #     get_google_map_image(c, 14, 500, 500, sat_img_path)
+    sort_folder(sat_img_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
 
 
 if __name__ == '__main__':

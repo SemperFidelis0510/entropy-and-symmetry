@@ -27,10 +27,7 @@ ENTROPY_METHODS = [
     'lbp',
     'lbp_gabor',
     'adapt',
-    'GLCM',
-    'RGBCM_each_channel',
-    'RGBCM_to_gray',
-    'naive_hsb'
+    'RGBCM'
 ]
 
 COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']

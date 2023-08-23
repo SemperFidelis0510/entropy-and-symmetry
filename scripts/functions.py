@@ -133,6 +133,9 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
 
     Raises:
         Exception: If there is an error retrieving the image.
+
+    Docs:
+        https://developers.google.com/maps/documentation/maps-static/start
     """
     url = "https://maps.googleapis.com/maps/api/staticmap"
     # api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
@@ -142,7 +145,8 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         "zoom": zoom_level,
         "size": f"{width}x{height}",
         "maptype": "satellite",
-        "key": api_key
+        "key": api_key,
+        "scale": 2
     }
     response = requests.get(url, params=params)
 
