@@ -54,20 +54,29 @@ def load_images(path):
     Returns:
         images_path (list): List of paths to the image files with extensions 'jpg', 'bmp', and 'png'.
     """
-    images_path = []
-    for filename in os.listdir(path):
-        if filename.lower().endswith(('.jpg', '.bmp', '.png')):
-            img_path = os.path.join(path, filename)
-            images_path.append(img_path)
-    return images_path
+    if isinstance(path, list):
+        path = normalize_path(path)
+        return path
+    elif os.path.isdir(path):
+        images_path = []
+        for root, _, filenames in os.walk(path):
+            for filename in filenames:
+                if filename.lower().endswith(('.jpg', '.bmp', '.png')):
+                    img_path = os.path.join(root, filename)
+                    images_path.append(img_path)
+        return images_path
+    elif os.path.isfile(path) and path.lower().endswith(('.jpg', '.bmp', '.png')):
+        return [path]
+    else:
+        raise ValueError("The provided path is neither a directory nor a valid image file.")
 
 
-def preprocess(folder_path, crop_size=None):
+def preprocess(img_path, crop_size=None):
     """
     Preprocesses images from a given folder path by cropping and converting to the specified color format.
 
     Args:
-        folder_path (str): Path to the folder containing the images.
+        img_path (str): Path to the folder containing the images.
         crop_size (int, optional): Size of the cropped square. If None, the crop size will vary based on the image size.
     Returns:
         images_arr (list): List of preprocessed image arrays.
@@ -78,12 +87,13 @@ def preprocess(folder_path, crop_size=None):
     else:
         vary_crop = False
 
-    paths = [p for p in load_images(folder_path) if p.lower().endswith(('.jpg', '.bmp', '.png'))]
-    n = len(paths)
-    i = 0
-
     images_arr = []
     start_time = time.time()
+    i = 0
+
+    paths = load_images(img_path)
+    n = len(paths)
+
     for path in paths:
         i += 1
 
@@ -213,3 +223,22 @@ def random_point_in_rectangle(coo):
     coordinates_str = "{:.4f}, {:.4f}".format(random_latitude, random_longitude)
 
     return coordinates_str
+
+
+def ent_for_img(path, methods):
+    img_arr = np.array(Image.open(path))
+    for ent in methods:
+        s = calc_ent(img_arr, ent)
+        print(f'Entropy: {s},  Method: {ent}')
+
+
+def get_ent_norm(method):
+    with open('data/ent_norm.json', 'r') as file:
+        ent_norm = json.load(file)
+    if method not in ent_norm:
+        fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+        ent_norm[method] = calc_ent(fixed_noise, method)
+        with open('data/ent_norm.json', 'w') as file:
+            json.dump(ent_norm, file)
+
+    return ent_norm
