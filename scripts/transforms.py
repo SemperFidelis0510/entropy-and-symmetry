@@ -195,8 +195,17 @@ def change_channels(img, channels):
             img = hsb_image
 
         case 'YCbCr':
-            pass
-
+            kR = 0.299
+            kG = 0.587
+            kB = 0.114
+            R = img[..., 0]
+            G = img[..., 1]
+            B = img[..., 2]
+            y = kR * R + kG * G + kB * B
+            cb = (-kR / (2 * (1 - kB))) * R + (-kG / (2 * (1 - kB))) * G + 1 / 2 * B
+            cr = 1 / 2 * R + (-kG / (2 * (1 - kR))) * G + (-kB / (2 * (1 - kR))) * B
+            ycbcr_image_array = np.stack([y, cb, cr], axis=-1)
+            img = ycbcr_image_array
         case 'greyscale':
             img = rgb2gray(img)
 
