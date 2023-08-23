@@ -151,7 +151,7 @@ def calculate_CM_cooccurrence(image):
 
     height, width, _ = image.shape  # Get image dimensions
 
-    cooccurrence_array = np.zeros((height, width, 3))  # Initialize array for co-occurrence matrices
+    cooccurrence_array = np.zeros((256, 256, 3))  # Initialize array for co-occurrence matrices
 
     for channel in range(3):  # Iterate over the first, second, and third channels
         channel_image = image[:, :, channel]
@@ -160,7 +160,7 @@ def calculate_CM_cooccurrence(image):
                             normed=True)
 
         for angle_idx in range(len(angles)):
-            cooccurrence_array[:, :, channel] = cooccurrence_array[:, :, channel] + glcm[:, :, 0, angle_idx] # Store co-occurrence matrix
+            cooccurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]  # Accumulate co-occurrence matrix
 
     return cooccurrence_array
 
