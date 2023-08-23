@@ -3,6 +3,7 @@ import colorsys
 import numpy as np
 import pywt
 from skimage.color import rgb2gray
+from scipy.ndimage import convolve
 
 from utils import *
 
@@ -108,47 +109,27 @@ def custom_permute(matrix, permutation_matrix=None):
     return reshaped_matrix
 
 
-def laplacian(x):
-    rank = x.ndim
+def laplacian(arr):
+    rank = arr.ndim
 
-    # Handle 1D arrays
+    # Define the kernel based on the array's rank
     if rank == 1:
-        result = np.zeros_like(x)
-        for i in range(len(x)):
-            result[i] = 2 * x[i]
-            if i > 0:
-                result[i] -= x[i - 1]
-            if i < len(x) - 1:
-                result[i] -= x[i + 1]
-        return result
-
-    # Handle 2D arrays
+        kernel = np.array([-1, 2, -1])
     elif rank == 2:
-        rows, cols = x.shape
-        result = np.zeros((rows, cols))
-        for i in range(rows):
-            for j in range(cols):
-                result[i, j] = 4 * x[i, j]
-                if i > 0:
-                    result[i, j] -= x[i - 1, j]
-                if i < rows - 1:
-                    result[i, j] -= x[i + 1, j]
-                if j > 0:
-                    result[i, j] -= x[i, j - 1]
-                if j < cols - 1:
-                    result[i, j] -= x[i, j + 1]
-        return result
-
-    # Handle 3D arrays
+        kernel = np.array([[0, -1, 0],
+                           [-1, 4, -1],
+                           [0, -1, 0]])
     elif rank == 3:
-        result = np.empty_like(x, dtype=np.float64)
-        for i in range(x.shape[2]):
-            slice_2d = x[:, :, i]
-            result[:, :, i] = laplacian(slice_2d)  # Recursively call the function for each 2D slice
-        return result
-
+        kernel = np.zeros((3, 3, 3))
+        kernel[1, 1, 1] = 6
+        kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[2, 1, 1] = -1
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
+
+    # Apply the convolution with the kernel
+    result = convolve(arr, kernel, mode='constant', cval=0.0)
+
+    return result
 
 
 def dwt(image, wavelet='db1', level=None):
