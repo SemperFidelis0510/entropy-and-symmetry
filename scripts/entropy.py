@@ -32,8 +32,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
     for img in images:
         i += 1
 
-        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm,
-                                      color_weight=color_weight)])
+        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
         print_progress_bar('Entropy calculated', i, n, start_time=start_time)
     print('\nEntropy calculation done.')
 
@@ -102,7 +101,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             print('No entropy method matched!!')
             ent = None
 
-    if method != 'adapt':  # skip those already returned entropy
+    if method != 'adapt': # skip those already returned entropy
         ent = entropy(transform_result, color_weight=color_weight)
     else:
         ent = transform_result
@@ -131,7 +130,6 @@ def entropy(arr, color_weight=(0.2989, 0.5870, 0.1140)):
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
 
-
 def histogram(img_arr):
     if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
         bins_ = 256 ** 3
@@ -158,15 +156,19 @@ def calculate_GLCM_entropy(image):
     gray_image = (image * 255).astype(np.uint8)
     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
-    # total_entropy = 0
+    #total_entropy = 0
+    flattened_matrices = []
+
     for angle_idx in range(len(angles)):
         matrix = glcm[:, :, 0, angle_idx]
-        matrix = matrix / np.sum(matrix)
+        flattened_matrices.append(matrix.ravel())
 
-        # entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
-        # total_entropy += entropy_
+    final_array = np.concatenate(flattened_matrices)
 
-    return
+    #entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
+        #total_entropy += entropy_
+
+    return final_array
 
 
 def calculate_RGBCM_entropy(image, scheme='each_channel'):
@@ -176,39 +178,62 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
 
     total_entropy = 0
 
-    def calculate_entropy(matrix_):
-        matrix_ = matrix_ / np.sum(matrix_)  # Normalize matrix to probabilities
-        entropy_ = -np.sum(matrix_ * np.log2(matrix_ + np.finfo(float).eps))  # Avoid log(0)
-        return entropy_
+    # def calculate_entropy(matrix_):
+    #     matrix_ = matrix_ / np.sum(matrix_)  # Normalize matrix to probabilities
+    #     entropy_ = -np.sum(matrix_ * np.log2(matrix_ + np.finfo(float).eps))  # Avoid log(0)
+    #     return entropy_
 
     if scheme == 'each_channel':
-        # Calculate entropy for each color channel separately
+        flattened_matrices = []
+
         for channel in range(3):  # Iterate over R, G, and B channels
             channel_image = image[:, :, channel]
             gray_image = (channel_image * 255).astype(np.uint8)
             glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
                                 normed=True)
 
-            channel_entropy = 0
             for angle_idx in range(len(angles)):
                 matrix = glcm[:, :, 0, angle_idx]
-                entropy_ = calculate_entropy(matrix)
-                channel_entropy += entropy_
+                flattened_matrices.append(matrix.ravel())
 
-            total_entropy += channel_entropy
+        final_array = np.concatenate(flattened_matrices)
+        # Calculate entropy for each color channel separately
+        # for channel in range(3):  # Iterate over R, G, and B channels
+        #     channel_image = image[:, :, channel]
+        #     gray_image = (channel_image * 255).astype(np.uint8)
+        #     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
+        #                         normed=True)
+        #     for angle_idx in range(len(angles)):
+        #         matrix = glcm[:, :, 0, angle_idx]
+            # channel_entropy = 0
+            # for angle_idx in range(len(angles)):
+            #     matrix = glcm[:, :, 0, angle_idx]
+            #     entropy_ = calculate_entropy(matrix)
+            #     channel_entropy += entropy_
+            #
+            # total_entropy += channel_entropy
 
     elif scheme == 'to_gray':
         # Convert the RGB image to grayscale and calculate entropy
         gray_image = rgb2gray(image)
         gray_image = (gray_image * 255).astype(np.uint8)
         glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+        flattened_matrices = []
 
         for angle_idx in range(len(angles)):
-            matrix_ = glcm[:, :, 0, angle_idx]
-            entropy_ = calculate_entropy(matrix_)
-            total_entropy += entropy_
+            matrix = glcm[:, :, 0, angle_idx]
+            flattened_matrices.append(matrix.ravel())
+
+        final_array = np.concatenate(flattened_matrices)
+
+        # for angle_idx in range(len(angles)):
+        #     matrix_ = glcm[:, :, 0, angle_idx]
+        #     entropy_ = calculate_entropy(matrix_)
+        #     total_entropy += entropy_
 
     return total_entropy
+
+
 
 
 def calculate_joint_entropy_red_green(img_arr):
@@ -219,7 +244,7 @@ def calculate_joint_entropy_red_green(img_arr):
 
     joint_probabilities = joint_histogram / np.sum(joint_histogram)
 
-    # joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
+    #joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
     return joint_probabilities
 
 
@@ -243,7 +268,7 @@ def calculate_joint_RGB_entropy(rgb_image):
                 if p_r[i] > 0 and p_g[j] > 0 and p_b[k] > 0:
                     joint_prob = p_r[i] * p_g[j] * p_b[k]
                     result.append(joint_prob)
-                    # joint_entropy -= joint_prob * np.log2(joint_prob)
+                    #joint_entropy -= joint_prob * np.log2(joint_prob)
 
     return result
 
@@ -312,7 +337,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     # Calculate image entropy
     hist, _ = np.histogram(gabor_response, bins=256, density=True)
-    # entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
+    #entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
 
     return hist
 
@@ -344,3 +369,4 @@ def adaptive_entropy_estimation(img_arr, num_segments=100):
 
 def laplace_ent(image):
     return laplacian(image)
+
