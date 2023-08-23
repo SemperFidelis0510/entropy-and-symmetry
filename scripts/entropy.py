@@ -153,14 +153,18 @@ def calculate_GLCM_entropy(image):
     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
     #total_entropy = 0
+    flattened_matrices = []
+
     for angle_idx in range(len(angles)):
         matrix = glcm[:, :, 0, angle_idx]
-        matrix = matrix / np.sum(matrix)
+        flattened_matrices.append(matrix.ravel())
 
-        #entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
+    final_array = np.concatenate(flattened_matrices)
+
+    #entropy_ = -np.sum(matrix * np.log2(matrix + np.finfo(float).eps))
         #total_entropy += entropy_
 
-    return
+    return final_array
 
 
 def calculate_RGBCM_entropy(image, scheme='each_channel'):
@@ -170,37 +174,58 @@ def calculate_RGBCM_entropy(image, scheme='each_channel'):
 
     total_entropy = 0
 
-    def calculate_entropy(matrix_):
-        matrix_ = matrix_ / np.sum(matrix_)  # Normalize matrix to probabilities
-        entropy_ = -np.sum(matrix_ * np.log2(matrix_ + np.finfo(float).eps))  # Avoid log(0)
-        return entropy_
+    # def calculate_entropy(matrix_):
+    #     matrix_ = matrix_ / np.sum(matrix_)  # Normalize matrix to probabilities
+    #     entropy_ = -np.sum(matrix_ * np.log2(matrix_ + np.finfo(float).eps))  # Avoid log(0)
+    #     return entropy_
 
     if scheme == 'each_channel':
-        # Calculate entropy for each color channel separately
+        flattened_matrices = []
+
         for channel in range(3):  # Iterate over R, G, and B channels
             channel_image = image[:, :, channel]
             gray_image = (channel_image * 255).astype(np.uint8)
             glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
                                 normed=True)
 
-            channel_entropy = 0
             for angle_idx in range(len(angles)):
                 matrix = glcm[:, :, 0, angle_idx]
-                entropy_ = calculate_entropy(matrix)
-                channel_entropy += entropy_
+                flattened_matrices.append(matrix.ravel())
 
-            total_entropy += channel_entropy
+        final_array = np.concatenate(flattened_matrices)
+        # Calculate entropy for each color channel separately
+        # for channel in range(3):  # Iterate over R, G, and B channels
+        #     channel_image = image[:, :, channel]
+        #     gray_image = (channel_image * 255).astype(np.uint8)
+        #     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
+        #                         normed=True)
+        #     for angle_idx in range(len(angles)):
+        #         matrix = glcm[:, :, 0, angle_idx]
+            # channel_entropy = 0
+            # for angle_idx in range(len(angles)):
+            #     matrix = glcm[:, :, 0, angle_idx]
+            #     entropy_ = calculate_entropy(matrix)
+            #     channel_entropy += entropy_
+            #
+            # total_entropy += channel_entropy
 
     elif scheme == 'to_gray':
         # Convert the RGB image to grayscale and calculate entropy
         gray_image = rgb2gray(image)
         gray_image = (gray_image * 255).astype(np.uint8)
         glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
+        flattened_matrices = []
 
         for angle_idx in range(len(angles)):
-            matrix_ = glcm[:, :, 0, angle_idx]
-            entropy_ = calculate_entropy(matrix_)
-            total_entropy += entropy_
+            matrix = glcm[:, :, 0, angle_idx]
+            flattened_matrices.append(matrix.ravel())
+
+        final_array = np.concatenate(flattened_matrices)
+
+        # for angle_idx in range(len(angles)):
+        #     matrix_ = glcm[:, :, 0, angle_idx]
+        #     entropy_ = calculate_entropy(matrix_)
+        #     total_entropy += entropy_
 
     return total_entropy
 
