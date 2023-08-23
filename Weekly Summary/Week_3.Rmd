@@ -1,0 +1,43 @@
+---
+title: "Entropy and Symmetry Project Weekly Summary"
+author: "Zixuan Guan"
+date: "2023-08-23"
+output: html_document
+---
+
+## Introduction
+
+This week, we embarked on a captivating journey to analyze satellite images from China, Argentina, and the USA, leveraging the capabilities of the geopandas library and Google Maps. Our aim was to understand the entropy distribution of these images and its correlation with visual symmetry.
+
+## Methodology
+
+### Data Collection
+
+1. We **randomly** fetched satellite images of the specified regions using **geopandas** and **Google Maps**.
+2. To maintain a balance between natural landscapes and urban areas, we manually filtered out some of the overly repetitive images.
+3. However, an intuitive discrepancy was observed during the entropy calculation process. Images predominantly colored blue (indicative of oceans) were interspersed throughout the ordered samples.
+
+### Entropy Calculation and Troubleshooting
+
+1. Our initial hypothesis attributed this anomaly to the JPEG format's channel processing.
+2. To address this, we augmented our `label_ent` function by introducing the `change-channels` method. 
+3. We then applied the `entropy` function to the `img_ent` list outputted by `cal_ent`. 
+4. This function algorithmically weakens channels other than grey, thus realigning the entropy ranking for oceanic images in a way that is consistent with our intuition.
+
+### Looking Forward
+
+1. As a future endeavor, we intend to employ machine learning to derive an optimal linear combination.
+2. This week, we plan to exploit cloud computing capabilities to achieve preliminary functionalities.
+
+## GUI Improvements
+
+Our project's GUI has undergone substantial enhancement:
+
+1. It is now equipped to accommodate the new functionalities.
+2. We have successfully decoupled the computation and GUI components. Despite GPU computations not supporting the `pillow` library, we've managed to delegate the computational tasks to the GPU, while the CPU handles the GUI.
+
+---
+
+That concludes our weekly summary. As we delve deeper into the project, we anticipate many more insights and are excited about the directions we can explore.
+
+---
