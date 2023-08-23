@@ -99,7 +99,7 @@ class ImageViewer:
         self.console.grid(row=3, column=0, columnspan=4, pady=20, padx=10, sticky='ew')
 
         self.controls_frame = Frame(self.image_window)
-        self.controls_frame.grid(row=1, column=1, columnspan=3, sticky='ew')
+        self.controls_frame.grid(row=1, column=1, columnspan=4, sticky='ew')
 
         self.create_zoom_controls(self.controls_frame)
         self.create_navigation_buttons(self.controls_frame)
@@ -238,33 +238,40 @@ class ImageViewer:
                 self.load_image_at_index(idx)
 
     def create_zoom_controls(self, frame):
+        spacer = Label(frame, text=" " * 20)
+        spacer.grid(row=0, column=0, sticky='ew')
+        
         button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
-        button_zoom_in.grid(row=0, column=1, sticky='ew')
+        button_zoom_in.grid(row=0, column=2, sticky='ew')
 
         self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
         self.scale.set(100)
-        self.scale.grid(row=0, column=0, sticky='ew')
+        self.scale.grid(row=0, column=1, sticky='ew')
         self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
 
         button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
-        button_zoom_out.grid(row=0, column=2, sticky='ew')
+        button_zoom_out.grid(row=0, column=3, sticky='ew')
 
     def create_navigation_buttons(self, frame):
         self.button_back = Button(frame, text="<<", command=self.back)
-        self.button_back.grid(row=1, column=1, sticky='ew')
+        self.button_back.grid(row=1, column=2, sticky='ew')
 
         spacer = Label(frame, text=" " * 20)
         spacer.grid(row=1, column=0, sticky='ew')
 
         self.button_forward = Button(frame, text=">>", command=self.forward)
-        self.button_forward.grid(row=1, column=2, sticky='ew')
+        self.button_forward.grid(row=1, column=3, sticky='ew')
 
     def create_calculation_buttons(self, frame):
+        method_label = Label(frame, text="Entropy Method")
+        color_label = Label(frame, text="Color Space")
+        method_label.grid(row=2, column=0, sticky='ew')
+        color_label.grid(row=1, column=0, sticky='ew')
         # Create a Combobox and make it visible
         self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
-        self.combo.grid(row=2, column=0)  # Set the position of the combobox
+        self.combo.grid(row=2, column=1)  # Set the position of the combobox
         self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
-        self.combo_color.grid(row=1, column=0)  # Set the position of the combobox
+        self.combo_color.grid(row=1, column=1)  # Set the position of the combobox
 
         # Binding selection event
         self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
@@ -272,18 +279,26 @@ class ImageViewer:
 
         # The save button is arranged on the right side of the combobox
         self.button_save = Button(frame, text="Save", command=self.save)
-        self.button_save.grid(row=2, column=2, sticky='ew')
+        self.button_save.grid(row=2, column=3, sticky='ew')
 
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
-        self.confirm_button.grid(row=2, column=1, sticky='ew')
+        self.confirm_button.grid(row=2, column=2, sticky='ew')
 
     def on_confirm_click(self):
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
-        selected_item = self.combo.get()
+        method = self.combo.get()
         selected_color = self.combo_color.get()
+        with open('data/ent_norm.json', 'r') as file:
+            ent_norm = json.load(file)
+        if method not in ent_norm:
+            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+            ent_norm[method] = calc_ent(fixed_noise, method)
+            with open('data/ent_norm.json', 'w') as file:
+                json.dump(ent_norm, file)
+
         preprocessed_images, _ = preprocess(self.directory)
         try:
-            img_ent = label_ent(preprocessed_images, method=selected_item, sort=False, ent_norm=None, colors=selected_color)
+            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
