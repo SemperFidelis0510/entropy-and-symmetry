@@ -1,6 +1,8 @@
 from datetime import datetime
-
+import warnings
 from functions import *
+
+warnings.filterwarnings("ignore")
 
 ent_methods = [
     'hist',
@@ -25,7 +27,8 @@ color_opts = ['rgb',
 datasets = {'china': "../datasets/satellite/china",
             'usa': "../datasets/satellite/usa",
             'argentina': "../datasets/satellite/argentina",
-            'satellite': "../datasets/satellite"}
+            'satellite': "../datasets/satellite",
+            'noise': "../datasets/noising"}
 
 
 def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None):
@@ -68,11 +71,11 @@ def norm_ent():
 
 
 def main():
-    method = 'hist'
+    method = 'RGBCM'
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['satellite']
+    folder_path = datasets['argentina']
     sat_img_path = '../datasets/satellite'
     coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
@@ -82,7 +85,8 @@ def main():
     # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
-    sort_folder(folder_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
+    # sort_folder(folder_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
+    sort_by_noise(datasets['noise'], method)
 
 
 if __name__ == '__main__':
