@@ -53,7 +53,15 @@ class ImageViewer:
         self.directory = directory
         self.config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
         self.default_save_directory = self.load_default_directory()
-        self.image_files = [f for f in os.listdir(directory) if f.endswith(IMAGE_EXTENSIONS)]
+
+        # Recursively gather all image files in the directory and its subdirectories
+        self.image_files = []
+        for dirpath, dirnames, filenames in os.walk(directory):
+            for filename in filenames:
+                if filename.endswith(IMAGE_EXTENSIONS):
+                    full_path = os.path.join(dirpath, filename)
+                    self.image_files.append(full_path)
+
         if not self.image_files:
             messagebox.showerror("Error", "No supported images found in the selected directory.")
             return
