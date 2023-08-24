@@ -21,6 +21,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
         ent_norm (dict, optional): Entropy normalization dictionary.
         colors (str, optional): Which color channels to use for entropy calculation.
         callback (function, optional): Callback function to use for progress bar.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -67,6 +68,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             - 'RGBCM_each_channel': Entropy calculation using Red-Green-Blue Co-occurrence Matrix for each channel.
             - 'RGBCM_to_gray': Entropy calculation using Red-Green-Blue Co-occurrence Matrix converted to grayscale.
         ent_norm (dict, optional): Normalization dictionary to normalize the entropy based on a fixed image.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         float: Calculated entropy value, or None if the method is not recognized.
@@ -97,7 +99,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
         case 'adapt':
             transform_result = adaptive_entropy_estimation(img_arr)
         case 'RGBCM':
-            transform_result = calculate_CM_cooccurrence(img_arr)
+            transform_result = calculate_CM_co_occurrence(img_arr)
         case _:
             raise ValueError(f"No entropy method matched for method '{method}'!!")
 
@@ -126,7 +128,7 @@ def entropy(arr, color_weight=None):
             raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
         if color_weight is not None:
             weighted_arr = np.dot(arr, color_weight)
-        else:  # Default wrighted
+        else:  # Default weighted
             weighted_arr = np.dot(arr, (0.2989, 0.5870, 0.1140))
         return entropy(weighted_arr)
     else:
@@ -180,7 +182,7 @@ def calculate_CM_cooccurrence(image):
         # Normalize the accumulated co-occurrence matrix for each channel
         cooccurrence_array[:, :, channel] /= len(angles)
 
-    return cooccurrence_array
+    return co_occurrence_array
 
 
 def calculate_joint_entropy_red_green(img_arr):
