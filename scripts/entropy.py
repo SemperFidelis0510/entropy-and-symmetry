@@ -10,7 +10,7 @@ from skimage.segmentation import slic
 from transforms import *
 
 
-def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None):
+def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None, callback=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
 
@@ -20,6 +20,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
         sort (bool, optional): Whether to sort the images by entropy. Default is True.
         ent_norm (dict, optional): Entropy normalization dictionary.
         colors (str, optional): Which color channels to use for entropy calculation.
+        callback (function, optional): Callback function to use for progress bar.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -31,10 +32,13 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
 
     for img in images:
         i += 1
-
         img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
-        print_progress_bar('Entropy calculated', i, n, start_time=start_time)
-    print('\nEntropy calculation done.')
+        
+        # Use the callback if provided, else use the default print_progress_bar
+        if callback:
+            callback('Entropy calculated', i, n, start_time=start_time)
+        else:
+            print_progress_bar('Entropy calculated', i, n, start_time=start_time)
 
     if sort:
         img_ent = sorted(img_ent, key=lambda x: x[1])
