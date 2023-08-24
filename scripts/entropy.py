@@ -21,6 +21,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
         ent_norm (dict, optional): Entropy normalization dictionary.
         colors (str, optional): Which color channels to use for entropy calculation.
         callback (function, optional): Callback function to use for progress bar.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -67,6 +68,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             - 'RGBCM_each_channel': Entropy calculation using Red-Green-Blue Co-occurrence Matrix for each channel.
             - 'RGBCM_to_gray': Entropy calculation using Red-Green-Blue Co-occurrence Matrix converted to grayscale.
         ent_norm (dict, optional): Normalization dictionary to normalize the entropy based on a fixed image.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         float: Calculated entropy value, or None if the method is not recognized.
@@ -126,7 +128,7 @@ def entropy(arr, color_weight=None):
             raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
         if color_weight is not None:
             weighted_arr = np.dot(arr, color_weight)
-        else:  # Default wrighted
+        else:  # Default weighted
             weighted_arr = np.dot(arr, (0.2989, 0.5870, 0.1140))
         return entropy(weighted_arr)
     else:
@@ -147,14 +149,14 @@ def histogram(img_arr):
         raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
 
 
-def calculate_CM_cooccurrence(image):
+def calculate_CM_co_occurrence(image):
     distances = [1]  # Distance between pixels for co-occurrence
     angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
     levels = 256  # Number of intensity levels in the image
 
     height, width, _ = image.shape  # Get image dimensions
 
-    cooccurrence_array = np.zeros((256, 256, 3))  # Initialize array for co-occurrence matrices
+    co_occurrence_array = np.zeros((256, 256, 3))  # Initialize array for co-occurrence matrices
 
     for channel in range(3):  # Iterate over the first, second, and third channels
         channel_image = image[:, :, channel]
@@ -163,9 +165,9 @@ def calculate_CM_cooccurrence(image):
                             normed=True)
 
         for angle_idx in range(len(angles)):
-            cooccurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]  # Accumulate co-occurrence matrix
+            co_occurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]  # Accumulate co-occurrence matrix
 
-    return cooccurrence_array
+    return co_occurrence_array
 
 
 def calculate_joint_entropy_red_green(img_arr):
