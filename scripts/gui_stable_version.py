@@ -304,7 +304,7 @@ class ImageViewer:
 
         preprocessed_images, _ = preprocess(self.directory)
         try:
-            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color)
+            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color, callback=self.update_progress)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
@@ -333,6 +333,16 @@ class ImageViewer:
 
     def start_entropy_calculation(self):  # Call this when you start the entropy calculation
         self.button_save.config(state=DISABLED)
+        # Create a new Toplevel window for progress bar
+        self.progress_window = Toplevel(self.image_window)
+        self.progress_window.title("Calculating Entropy...")
+
+        # Add a label for information
+        Label(self.progress_window, text="Please wait while calculating entropy...").pack(pady=10)
+
+        # Create and pack the progress bar
+        self.progress = ttk.Progressbar(self.progress_window, orient="horizontal", length=200, mode="determinate")
+        self.progress.pack(pady=20)
 
 
     def on_combo_select(self, event=None):
@@ -592,6 +602,13 @@ class ImageViewer:
                 self.confirm_button.config(state=NORMAL)
         else:
             self.confirm_button.config(state=DISABLED)
+
+    def update_progress(self, text, iteration, total, start_time=None):
+        percent = (iteration / float(total)) * 100
+        self.progress["value"] = percent
+        self.progress.update()
+        if iteration == total:
+            self.progress_window.destroy()
 
 
 
