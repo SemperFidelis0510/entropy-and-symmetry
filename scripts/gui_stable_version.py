@@ -314,7 +314,7 @@ class ImageViewer:
         self.image_window.after(0, self.preprogress_window.destroy)
         self.start_entropy_calculation()
         try:
-            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm,
+            img_ent = label_ent(preprocessed_images, method=method, sort=True, ent_norm=ent_norm,
                                 colors=selected_color, callback=self.update_progress)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
