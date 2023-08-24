@@ -72,8 +72,8 @@ def main():
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['argentina']
-    sat_img_path = '../datasets/satellite/new'
+    folder_path = datasets['satellite']
+    sat_img_path = '../datasets/satellite'
     coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
     ent_norm = get_ent_norm(method)
@@ -82,7 +82,7 @@ def main():
     # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
-    sort_folder(sat_img_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
+    sort_folder(folder_path, method, colors, ent_norm, color_weight=(1 - 2 * eps, eps, eps))
 
 
 if __name__ == '__main__':
