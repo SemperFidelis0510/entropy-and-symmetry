@@ -1,10 +1,12 @@
 from datetime import datetime
+import warnings
 
 from functions import *
 
+warnings.filterwarnings("ignore")
+
 ent_methods = [
-    # 'hist',
-    # 'hist_greyscale',
+    'hist',
     'naive',
     'dft',
     'dwt',
@@ -17,8 +19,6 @@ ent_methods = [
     'RGBCM'
 ]
 
-ent_methods_length = len(ent_methods)
-method_default_weight = [1 / ent_methods_length for _ in range(ent_methods_length)]
 
 color_opts = ['rgb',
               'hsb',
@@ -32,32 +32,40 @@ datasets = {'china': "../datasets/satellite/china",
 
 
 def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None, linearCombine=False,
-                method_weight=method_default_weight):
+                method_weight=None):
     # colors = 'greyscale'
-    dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
+    if isinstance(method, str):
+        m_name = method
+    elif isinstance(method, list):
+        m_name = '-'.join(method)
+    elif isinstance(method, dict):
+        m_name = '-'.join(method.keys())
+
+    dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
     img_arrays, _ = preprocess(path)
-    if linearCombine == True:
-        sorted_list = linearCombine_ent(img_arrays, ent_methods, method_weight, sort=True, ent_norm=ent_norm,
-                                        color_weight=color_weight, colors=colors)
+    if linearCombine:
+        sorted_list = linearCombine_ent(img_arrays, method, method_weight, sort=True, ent_norm=ent_norm, colors=colors,
+                                        color_weight=color_weight)
     else:
-        sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, color_weight=color_weight,
-                                colors=colors)
+        sorted_list = label_ent(img_arrays, method, sort=True, ent_norm=ent_norm, colors=colors,
+                                color_weight=color_weight)
 
     print('\nThe images are sorted by entropy.')
 
     save_img(dst_folder, sorted_list)
 
 
-def sort_by_noise(path, method, color_weight=None, linearCombine=False, method_weight=method_default_weight):
+def sort_by_noise(path, method, color_weight=None, colors='rgb', ent_norm=None, linearCombine=False,
+                  method_weight=None):
     dst_folder = f'../processed/noise_m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     n = 10
 
     img_arrays, _ = preprocess(path)
     img_arrays = noise_by_increment(img_arrays[0], n)
-    if linearCombine == True:
+    if linearCombine:
         sorted_list = linearCombine_ent(img_arrays, ent_methods, method_weight, sort=True, ent_norm=ent_norm,
-                                        color_weight=color_weight, colors=colors)
+                                        colors=colors, color_weight=color_weight)
     else:
         sorted_list = label_ent(img_arrays, method, sort=True, color_weight=color_weight)
 
@@ -79,7 +87,7 @@ def norm_ent():
 
 
 def main():
-    method = 'hist'
+    method = {'hist': 1 / 2, 'naive': 1 / 2}
     colors = 'YCbCr'
     eps = 0.2
 
@@ -95,7 +103,7 @@ def main():
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
     sort_folder(folder_path, method, colors, ent_norm=ent_norm, color_weight=(1 - 2 * eps, eps, eps),
-                linearCombine=True, method_weight=method_default_weight)
+                linearCombine=False, method_weight=None)
 
 
 if __name__ == '__main__':
