@@ -9,42 +9,17 @@ from utils import *
 
 
 def dft(image):
-    """
-    Computes the Discrete Fourier Transform (DFT) of a 1D, 2D, or 3D array (image).
-
-    Args:
-        image (np.ndarray): Input array (image) for which to compute the DFT. Can be 1D, 2D, or 3D.
-
-    Returns:
-        np.ndarray: Absolute values of the Fourier Transform, with the same shape as the input array.
-
-    Raises:
-        ValueError: If the input array is not 1D, 2D, or 3D.
-
-    Note:
-        For 3D arrays, the DFT is computed for each 2D slice along the third dimension.
-    """
     rank = image.ndim
 
-    # Handle 1D arrays
     if rank == 1:
-        f_transform = np.fft.fft(image)
-        return np.abs(f_transform)
-
-    # Handle 2D arrays
+        return np.abs(np.fft.fft(image))
     elif rank == 2:
-        f_transform = np.fft.fft2(image)
-        return np.abs(f_transform)
-
-    # Handle 3D arrays
+        return np.abs(np.fft.fft2(image))
     elif rank == 3:
         result = np.empty_like(image, dtype=np.float64)
         for i in range(image.shape[2]):
-            slice_2d = image[:, :, i]
-            f_transform = np.fft.fft2(slice_2d)
-            result[:, :, i] = np.abs(f_transform)
+            result[:, :, i] = np.abs(np.fft.fft2(image[:, :, i]))
         return result
-
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
 

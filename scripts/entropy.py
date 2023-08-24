@@ -10,6 +10,13 @@ from skimage.segmentation import slic
 from transforms import *
 
 
+def linearCombine_ent(images, ent_methods, method_weight, sort=True, ent_norm=None, colors='rgb', color_weight=None,
+                      callback=None):
+    ent_array = []
+    for method in ent_methods:
+        ent_array.append(label_ent(images, method, sort, ent_norm=ent_norm, colors=colors, color_weight=color_weight,
+                                   callback=callback))
+    return np.dot(ent_array, method_weight)
 def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None, callback=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
@@ -21,6 +28,7 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
         ent_norm (dict, optional): Entropy normalization dictionary.
         colors (str, optional): Which color channels to use for entropy calculation.
         callback (function, optional): Callback function to use for progress bar.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
@@ -67,6 +75,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
             - 'RGBCM_each_channel': Entropy calculation using Red-Green-Blue Co-occurrence Matrix for each channel.
             - 'RGBCM_to_gray': Entropy calculation using Red-Green-Blue Co-occurrence Matrix converted to grayscale.
         ent_norm (dict, optional): Normalization dictionary to normalize the entropy based on a fixed image.
+        color_weight (tuple, optional): Decides the weights of contributions of each channel to the entropy.
 
     Returns:
         float: Calculated entropy value, or None if the method is not recognized.
@@ -126,7 +135,7 @@ def entropy(arr, color_weight=None):
             raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
         if color_weight is not None:
             weighted_arr = np.dot(arr, color_weight)
-        else:  # Default wrighted
+        else:  # Default weighted
             weighted_arr = np.dot(arr, (0.2989, 0.5870, 0.1140))
         return entropy(weighted_arr)
     else:
@@ -148,112 +157,143 @@ def histogram(img_arr):
 
 
 def calculate_CM_cooccurrence(image):
+    """
+    Calculate the color co-occurrence matrix for an RGB image at different angles.
+
+    Parameters:
+    - image: 3D NumPy array representing the RGB image.
+
+    Returns:
+    - 3D NumPy array representing the accumulated co-occurrence matrices for each color channel.
+    """
     distances = [1]  # Distance between pixels for co-occurrence
     angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
     levels = 256  # Number of intensity levels in the image
 
-    height, width, _ = image.shape  # Get image dimensions
+    # Initialize array for co-occurrence matrices
+    cooccurrence_array = np.zeros((levels, levels, 3))
 
-    cooccurrence_array = np.zeros((256, 256, 3))  # Initialize array for co-occurrence matrices
-
-    for channel in range(3):  # Iterate over the first, second, and third channels
+    for channel in range(3):  # Iterate over RGB channels
         channel_image = image[:, :, channel]
+
+        # Ensure it's in 8-bit integer type
         gray_image = (channel_image * 255).astype(np.uint8)
-        glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
-                            normed=True)
+
+        # Calculate GLCM
+        glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False, normed=True)
 
         for angle_idx in range(len(angles)):
-            cooccurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]  # Accumulate co-occurrence matrix
+            # Accumulate co-occurrence matrices
+            cooccurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
+
+        # Normalize the accumulated co-occurrence matrix for each channel
+        cooccurrence_array[:, :, channel] /= len(angles)
 
     return cooccurrence_array
 
 
 def calculate_joint_entropy_red_green(img_arr):
-    red_channel = img_arr[:, :, 0]
-    green_channel = img_arr[:, :, 1]
+    """
+    Calculate the joint probabilities of the red and green channels in the given image array.
 
+    Parameters:
+    - img_arr: 3D NumPy array representing the image. The first dimension is height,
+               the second is width, and the third is channels (RGB).
+
+    Returns:
+    - 2D NumPy array representing the joint probabilities.
+    """
+    # Extract red and green channels from the image array
+    red_channel, green_channel = img_arr[:, :, 0], img_arr[:, :, 1]
+
+    # Calculate the 2D histogram
     joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256)
 
-    joint_probabilities = joint_histogram / np.sum(joint_histogram)
+    # Calculate joint probabilities
+    joint_probabilities = joint_histogram / joint_histogram.sum()
 
-    # joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
     return joint_probabilities
 
 
 def calculate_joint_RGB_entropy(rgb_image):
-    # Calculate histograms for each color channel
-    hist_r, _ = np.histogram(rgb_image[:, :, 0], bins=256, range=(0, 256))
-    hist_g, _ = np.histogram(rgb_image[:, :, 1], bins=256, range=(0, 256))
-    hist_b, _ = np.histogram(rgb_image[:, :, 2], bins=256, range=(0, 256))
+    """
+    Calculate the joint probabilities for the RGB channels in the given image array.
 
-    # Normalize histograms to obtain probability distributions
-    p_r = hist_r / np.sum(hist_r)
-    p_g = hist_g / np.sum(hist_g)
-    p_b = hist_b / np.sum(hist_b)
+    Parameters:
+    - rgb_image: 3D NumPy array representing the image. The first dimension is height,
+                 the second is width, and the third is channels (RGB).
 
-    # Calculate joint entropy using the definition of joint entropy
-    # joint_entropy = 0
-    result = []
-    for i in range(256):
-        for j in range(256):
-            for k in range(256):
-                if p_r[i] > 0 and p_g[j] > 0 and p_b[k] > 0:
-                    joint_prob = p_r[i] * p_g[j] * p_b[k]
-                    result.append(joint_prob)
-                    # joint_entropy -= joint_prob * np.log2(joint_prob)
+    Returns:
+    - 3D NumPy array representing the joint probabilities.
+    """
+    # Flatten and stack the color channels
+    rgb_flatten = np.vstack([rgb_image[:, :, i].ravel() for i in range(3)]).T
 
-    return result
+    # Calculate the 3D histogram
+    joint_histogram, _ = np.histogramdd(rgb_flatten, bins=256, range=[[0, 256], [0, 256], [0, 256]])
+
+    # Calculate joint probabilities
+    joint_probabilities = joint_histogram / joint_histogram.sum()
+
+    return joint_probabilities
 
 
 def calculate_texture_entropy(img_arr):
-    # Ensure img_arr is a numpy array
-    img_arr = np.asarray(img_arr)
+        """
+        Calculate the histogram of Local Binary Pattern (LBP) values for the texture of a given image.
 
-    # Convert the image to grayscale if it's a color image
-    if img_arr.ndim == 3 and img_arr.shape[-1] == 3:  # Check for RGB image
-        gray_image = rgb2gray(img_arr)
-    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):  # Grayscale or single-channel image
-        gray_image = img_arr.squeeze()
-    else:
-        raise ValueError("Input image should be either grayscale or RGB.")
+        Parameters:
+        - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
 
-    # Normalize the grayscale image if it isn't already
-    if gray_image.max() > 1:
-        gray_image = gray_image / 255.0
+        Returns:
+        - 1D NumPy array representing the histogram of LBP values.
+        """
+        # Convert the image to grayscale if it's a color image
+        if img_arr.ndim == 3 and img_arr.shape[-1] == 3:
+            gray_image = rgb2gray(img_arr)
+        elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
+            gray_image = img_arr.squeeze()
+        else:
+            raise ValueError("Input image should be either grayscale or RGB.")
 
-    # Convert to 8-bit integer type
-    gray_image = (gray_image * 255).astype(np.uint8)
+        # Normalize the grayscale image if it isn't already
+        if gray_image.max() > 1:
+            gray_image /= 255.0
 
-    # Apply Local Binary Pattern (LBP) to extract texture features
-    radius = 1
-    n_points = 8 * radius
-    lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
+        # Apply Local Binary Pattern (LBP) to extract texture features
+        radius = 1
+        n_points = 8 * radius
+        lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
 
-    # Calculate histogram of LBP values
-    n_bins = int(n_points * (n_points - 1) / 2) + 2  # for 'uniform' method with n_points=8, this is 59 + 1 = 60
-    hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
-    hist = hist.astype("float")
-    hist /= (hist.sum() + np.finfo(float).eps)
+        # Calculate histogram of LBP values
+        n_bins = int(n_points * (n_points - 1) / 2) + 2
+        hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
 
-    # Calculate texture entropy
-    # texture_entropy = -np.sum(hist * np.log2(hist + np.finfo(float).eps))
+        # Normalize histogram
+        hist = hist.astype("float")
+        hist /= (hist.sum() + np.finfo(float).eps)
 
-    return hist
-
+        return hist
 
 def calculate_texture_gabor_entropy(img_arr):
-    # Ensure img_arr is a numpy array
-    img_arr = np.asarray(img_arr)
+    """
+        Calculate the histogram of Gabor-filtered values for the texture of a given image.
 
+        Parameters:
+        - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
+
+        Returns:
+        - 1D NumPy array representing the histogram of Gabor-filtered values.
+        """
     # Convert the image to grayscale if it's a color image
-    if img_arr.ndim == 3 and img_arr.shape[-1] in [3, 4]:  # Check for RGB or RGBA image
+    if img_arr.ndim == 3 and img_arr.shape[-1] in [3, 4]:
         gray_image = 0.299 * img_arr[:, :, 0] + 0.587 * img_arr[:, :, 1] + 0.114 * img_arr[:, :, 2]
-    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):  # Grayscale or single-channel image
+    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
         gray_image = img_arr.squeeze()
     else:
         raise ValueError("Input image should be either grayscale or RGB.")
 
-    # Define parameters for Gabor filter
+    # Define Gabor filter parameters
     wavelength = 5.0
     orientation = np.pi / 4
     frequency = 1 / wavelength
@@ -267,16 +307,25 @@ def calculate_texture_gabor_entropy(img_arr):
     # Apply Gabor filter
     gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
 
-    # Calculate image entropy
+    # Calculate histogram
     hist, _ = np.histogram(gabor_response, bins=256, density=True)
-    # entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
 
     return hist
 
 
 def adaptive_entropy_estimation(img_arr, num_segments=100):
-    # Convert the image to grayscale
-    if len(img_arr.shape) == 3:
+    """
+        Estimate the adaptive entropy of an image by segmenting it and averaging the entropies of the segments.
+
+        Parameters:
+        - img_arr: 2D or 3D NumPy array representing the image.
+        - num_segments: Number of segments to divide the image into using the SLIC algorithm.
+
+        Returns:
+        - float: Adaptive entropy of the image.
+        """
+    # Convert the image to grayscale if it's a color image
+    if img_arr.ndim == 3:
         gray_image = rgb2gray(img_arr)
     else:
         gray_image = img_arr
@@ -284,17 +333,24 @@ def adaptive_entropy_estimation(img_arr, num_segments=100):
     # Segment the image using SLIC
     segments = slic(img_arr, n_segments=num_segments, compactness=10, sigma=1)
 
+    # Initialize list to store segment entropies
     segment_entropies = []
-    unique_segments = np.unique(segments)
 
+    # Loop through each unique segment
+    unique_segments = np.unique(segments)
     for segment_idx in unique_segments:
         segment_mask = (segments == segment_idx)
         segment_region = gray_image[segment_mask]
-        segment_entropy = shannon_entropy(segment_region)
+
+        # Calculate the entropy of each segment using the Shannon entropy formula
+        hist, _ = np.histogram(segment_region, bins=256)
+        prob_dist = hist / hist.sum()
+        segment_entropy = entropy(prob_dist)
+
         segment_entropies.append(segment_entropy)
 
-    total_entropy = np.sum(segment_entropies)
-    adaptive_entropy = total_entropy / len(unique_segments)
+    # Calculate adaptive entropy
+    adaptive_entropy = np.mean(segment_entropies)
 
     return adaptive_entropy
 
