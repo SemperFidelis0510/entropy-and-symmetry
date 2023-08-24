@@ -297,7 +297,6 @@ class ImageViewer:
 
         self.confirm_button.grid(row=2, column=2, sticky='ew')
 
-    
     def on_confirm_click(self):
         self.image_window.after(0, self.start_preprocess)
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
@@ -315,7 +314,8 @@ class ImageViewer:
         self.image_window.after(0, self.preprogress_window.destroy)
         self.start_entropy_calculation()
         try:
-            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color, callback=self.update_progress)
+            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm,
+                                colors=selected_color, callback=self.update_progress)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button

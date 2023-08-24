@@ -32,8 +32,9 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
 
     for img in images:
         i += 1
-        img_ent.append([img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
-        
+        img_ent.append(
+            [img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
+
         # Use the callback if provided, else use the default print_progress_bar
         if callback:
             callback('Entropy calculated', i, n, start_time=start_time)
@@ -98,10 +99,9 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
         case 'RGBCM':
             transform_result = calculate_CM_cooccurrence(img_arr)
         case _:
-            print('No entropy method matched!!')
-            ent = None
+            raise ValueError(f"No entropy method matched for method '{method}'!!")
 
-    if method != 'adapt': # skip those already returned entropy
+    if method != 'adapt':  # skip those already returned entropy
         ent = entropy(transform_result, color_weight=color_weight)
     else:
         ent = transform_result
@@ -126,11 +126,12 @@ def entropy(arr, color_weight=None):
             raise ValueError("entropy function: 3D array must represent an RGB image with three channels")
         if color_weight is not None:
             weighted_arr = np.dot(arr, color_weight)
-        else: # Default wrighted
+        else:  # Default wrighted
             weighted_arr = np.dot(arr, (0.2989, 0.5870, 0.1140))
         return entropy(weighted_arr)
     else:
         raise ValueError("Array must be 1D, 2D, or 3D")
+
 
 def histogram(img_arr):
     if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
@@ -144,8 +145,6 @@ def histogram(img_arr):
         return hist
     else:
         raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
-
-
 
 
 def calculate_CM_cooccurrence(image):
@@ -169,8 +168,6 @@ def calculate_CM_cooccurrence(image):
     return cooccurrence_array
 
 
-
-
 def calculate_joint_entropy_red_green(img_arr):
     red_channel = img_arr[:, :, 0]
     green_channel = img_arr[:, :, 1]
@@ -179,7 +176,7 @@ def calculate_joint_entropy_red_green(img_arr):
 
     joint_probabilities = joint_histogram / np.sum(joint_histogram)
 
-    #joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
+    # joint_entropy = -np.sum(joint_probabilities * np.log2(joint_probabilities + np.finfo(float).eps))
     return joint_probabilities
 
 
@@ -203,7 +200,7 @@ def calculate_joint_RGB_entropy(rgb_image):
                 if p_r[i] > 0 and p_g[j] > 0 and p_b[k] > 0:
                     joint_prob = p_r[i] * p_g[j] * p_b[k]
                     result.append(joint_prob)
-                    #joint_entropy -= joint_prob * np.log2(joint_prob)
+                    # joint_entropy -= joint_prob * np.log2(joint_prob)
 
     return result
 
@@ -272,7 +269,7 @@ def calculate_texture_gabor_entropy(img_arr):
 
     # Calculate image entropy
     hist, _ = np.histogram(gabor_response, bins=256, density=True)
-    #entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
+    # entropy_value = entropy(hist + np.finfo(float).eps)  # Add small value to avoid log(0)
 
     return hist
 

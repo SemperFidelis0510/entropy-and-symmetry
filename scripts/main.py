@@ -68,7 +68,7 @@ def norm_ent():
 
 
 def main():
-    method = 'RGBCM'
+    method = 'hist'
     colors = 'YCbCr'
     eps = 0.2
 
