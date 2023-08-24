@@ -286,11 +286,11 @@ class ImageViewer:
         self.button_save.grid(row=2, column=3, sticky='ew')
 
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
+
         self.confirm_button.grid(row=2, column=2, sticky='ew')
 
     def on_confirm_click(self):
-        self.start_entropy_calculation()
-        self.confirm_button.config(state=DISABLED)
+        self.image_window.after(0, self.start_preprocess)
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         method = self.combo.get()
         selected_color = self.combo_color.get()
@@ -302,9 +302,12 @@ class ImageViewer:
             with open('data/ent_norm.json', 'w') as file:
                 json.dump(ent_norm, file)
 
-        preprocessed_images, _ = preprocess(self.directory)
+        preprocessed_images, _ = preprocess(self.directory, callback=self.update_preprogress)
+        self.image_window.after(0, self.preprogress_window.destroy)
+        self.start_entropy_calculation()
         try:
-            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm, colors=selected_color, callback=self.update_progress)
+            img_ent = label_ent(preprocessed_images, method=method, sort=False, ent_norm=ent_norm,
+                                colors=selected_color, callback=self.update_progress)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
         # For save button
@@ -325,14 +328,28 @@ class ImageViewer:
         # Update the image_files list
         self.image_files = sorted_filenames
         self.refresh_all_images(sorted_images)
-        self.entropy_calculation_complete()
-        self.confirm_button.config(state=NORMAL)
+        self.image_window.after(0, self.entropy_calculation_complete)
+        self.image_window.after(0, self.progress_window.destroy)
 
     def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
         self.button_save.config(state=NORMAL)
+        self.confirm_button.config(state=NORMAL)
+
+    def start_preprocess(self):
+        self.button_save.config(state=DISABLED)
+        self.confirm_button.config(state=DISABLED)
+        # Create a new Toplevel window for progress bar
+        self.preprogress_window = Toplevel(self.image_window)
+        self.preprogress_window.title("Preprocessing Images...")
+
+        # Add a label for information
+        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
+
+        # Create and pack the progress bar
+        self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
+        self.preprogress.pack(pady=20)
 
     def start_entropy_calculation(self):  # Call this when you start the entropy calculation
-        self.button_save.config(state=DISABLED)
         # Create a new Toplevel window for progress bar
         self.progress_window = Toplevel(self.image_window)
         self.progress_window.title("Calculating Entropy...")
@@ -607,8 +624,11 @@ class ImageViewer:
         percent = (iteration / float(total)) * 100
         self.progress["value"] = percent
         self.progress.update()
-        if iteration == total:
-            self.progress_window.destroy()
+
+    def update_preprogress(self, text, iteration, total, start_time=None):
+        percent = (iteration / float(total)) * 100
+        self.preprogress["value"] = percent
+        self.preprogress.update()
 
 
 

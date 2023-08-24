@@ -135,14 +135,8 @@ def entropy(arr, color_weight=None):
 
 def histogram(img_arr):
     if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
-        img_arr = img_arr.astype(np.uint32)  # Convert to an integer type
-        # Reduce color resolution by right-shifting
-        reduced_img_arr = img_arr >> 4
-        # Combine the reduced RGB values into a single integer
-        flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:, :,
-                                                                                                 2]
-        # Create the histogram with fewer bins
-        bins_ = 64 ** 3
+        bins_ = 256 ** 3
+        flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
         hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
         return hist
     elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
@@ -151,7 +145,6 @@ def histogram(img_arr):
         return hist
     else:
         raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
-
 
 
 def calculate_CM_cooccurrence(image):
@@ -308,3 +301,57 @@ def adaptive_entropy_estimation(img_arr, num_segments=100):
 
 def laplace_ent(image):
     return laplacian(image)
+
+
+def batch_entropy_calculation(methods, img_arr, ent_norm=None, color_weight=None, sortbymethod=None):
+    """
+    Computes entropy for a batch of images using multiple methods.
+
+    Args:
+        methods (list): List of entropy calculation methods as strings.
+        img_arr (list): List of image arrays.
+        ent_norm (dict, optional): Normalization dictionary to normalize the entropy based on a fixed image.
+        color_weight: Optional parameter, this will be used to determine the RGB contribution in entropy calculation.
+        sortbymethod (str): Optional parameter, this will be used to sort the result according to the method, if not given, it is not sorted
+    Returns:
+        list: A list of lists, where each inner list contains an image array as the first element and a dictionary of
+              calculated entropies as the second element.
+    """
+    results = []
+
+    for img in img_arr:
+        ent_dict = {}
+
+        for method in methods:
+            ent_value = calc_ent(img, method, ent_norm, color_weight)
+
+            if ent_value is not None:  # Checking in case calc_ent returns None for an unrecognized method
+                ent_dict[method] = ent_value
+
+        results.append([img, ent_dict])
+    if sortbymethod is not None:
+        return sort_by_entropy(results, sortbymethod)
+    return results
+
+
+def sort_by_entropy(batch_result, method):
+    """
+    Sorts the result of batch_entropy_calculation based on the entropy value calculated by a specific method.
+
+    Args:
+        batch_result (list): The list of lists returned by batch_entropy_calculation.
+        method (str): The method whose entropy values should be used for sorting.
+
+    Returns:
+        list: A list of lists sorted based on the entropy value calculated by the specified method.
+    """
+
+    # Check if the method exists in the first dictionary to avoid sorting by a non-existing method
+    if method not in batch_result[0][1]:
+        print(f"Method {method} not found in the entropy dictionary.")
+        return None
+
+    # Sort based on the entropy value for the specified method
+    sorted_result = sorted(batch_result, key=lambda x: x[1].get(method, 0))
+
+    return sorted_result
