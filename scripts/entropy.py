@@ -10,6 +10,13 @@ from skimage.segmentation import slic
 from transforms import *
 
 
+def linearCombine_ent(images, ent_methods, method_weight, sort=True, ent_norm=None, colors='rgb', color_weight=None,
+                      callback=None):
+    ent_array = []
+    for method in ent_methods:
+        ent_array.append(label_ent(images, method, sort, ent_norm=ent_norm, colors=colors, color_weight=color_weight,
+                                   callback=callback))
+    return np.dot(ent_array, method_weight)
 def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None, callback=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
@@ -99,7 +106,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
         case 'adapt':
             transform_result = adaptive_entropy_estimation(img_arr)
         case 'RGBCM':
-            transform_result = calculate_CM_co_occurrence(img_arr)
+            transform_result = calculate_CM_cooccurrence(img_arr)
         case _:
             raise ValueError(f"No entropy method matched for method '{method}'!!")
 
@@ -182,7 +189,7 @@ def calculate_CM_cooccurrence(image):
         # Normalize the accumulated co-occurrence matrix for each channel
         cooccurrence_array[:, :, channel] /= len(angles)
 
-    return co_occurrence_array
+    return cooccurrence_array
 
 
 def calculate_joint_entropy_red_green(img_arr):
