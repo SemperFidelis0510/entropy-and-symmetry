@@ -71,13 +71,14 @@ def load_images(path):
         raise ValueError("The provided path is neither a directory nor a valid image file.")
 
 
-def preprocess(img_path, crop_size=None):
+def preprocess(img_path, crop_size=None, callback=None):
     """
     Preprocesses images from a given folder path by cropping and converting to the specified color format.
 
     Args:
         img_path (str): Path to the folder containing the images.
         crop_size (int, optional): Size of the cropped square. If None, the crop size will vary based on the image size.
+        callback (function, optional): Function to call to update the progress. If None, the function will use print_progress_bar.
     Returns:
         images_arr (list): List of preprocessed image arrays.
         paths (list): List of paths to the processed images.
@@ -110,9 +111,18 @@ def preprocess(img_path, crop_size=None):
             img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
-        print_progress_bar('Preprocessed', i, n, start_time=start_time)
+        
+        # Check if callback is provided
+        if callback:
+            callback('Preprocessed', i, n, start_time)
+        else:
+            print_progress_bar('Preprocessed', i, n, start_time=start_time)
 
-    print(f'\nPreprocessing done. Please wait for entropy calculation to start.')
+    # Notify the end of the task
+    if callback:
+        callback(f'\nPreprocessing done. Please wait for entropy calculation to start.', n, n)
+    else:
+        print(f'\nPreprocessing done. Please wait for entropy calculation to start.')
 
     return images_arr, paths
 
