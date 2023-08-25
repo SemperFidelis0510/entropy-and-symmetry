@@ -2,8 +2,8 @@ class Image:
     def __init__(self, rawData):
         self.rawData = rawData
         self.preprocessedData = None
-        self.transformedData = None
-        self.entropyResults = None
+        self.transformedData = []
+        self.entropyResults = []
 
     def load(self):
         pass
