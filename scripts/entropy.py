@@ -1,5 +1,3 @@
-import math
-
 from scipy.signal import convolve2d
 from skimage.color import rgb2gray
 from skimage.feature import graycomatrix
@@ -10,20 +8,31 @@ from skimage.segmentation import slic
 from transforms import *
 
 
-def linearCombine_ent(images, ent_methods, method_weight, sort=True, ent_norm=None, colors='rgb', color_weight=None,
+def linearCombine_ent(images, methods, method_weight=None, sort=True, ent_norm=None, colors='rgb',
+                      color_weight=None,
                       callback=None):
+    if isinstance(methods, str):
+        methods = [methods]
+    if method_weight is None:
+        num_methods = len(methods)
+        method_weight = [1 / num_methods] * num_methods
     ent_array = []
-    for method in ent_methods:
+
+    for method in methods:
         ent_array.append(label_ent(images, method, sort, ent_norm=ent_norm, colors=colors, color_weight=color_weight,
                                    callback=callback))
+        print(f'\nEntropy calculated by method: {method}')
     return np.dot(ent_array, method_weight)
-def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weight=None, callback=None):
+
+
+def label_ent(images, methods, sort=True, ent_norm=None, colors='rgb', color_weight=None,
+              callback=None):
     """
     Calculates entropy for a list of images using the specified method and optionally sorts them by entropy.
 
     Args:
         images (list): List of image arrays.
-        method (str): Name of method to use for entropy calculation.
+        methods (list/str): Name of method to use for entropy calculation.
         sort (bool, optional): Whether to sort the images by entropy. Default is True.
         ent_norm (dict, optional): Entropy normalization dictionary.
         colors (str, optional): Which color channels to use for entropy calculation.
@@ -33,6 +42,12 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
     Returns:
         img_ent (list): List of tuples containing the image array and its corresponding entropy.
     """
+    if isinstance(methods, str):
+        methods = {methods: 1}
+    elif isinstance(methods, list):
+        num_methods = len(methods)
+        methods = {met: 1 / num_methods for met in methods}
+
     img_ent = []
     n = len(images)
     i = 0
@@ -40,8 +55,13 @@ def label_ent(images, method, sort=True, ent_norm=None, colors='rgb', color_weig
 
     for img in images:
         i += 1
-        img_ent.append(
-            [img, calc_ent(change_channels(img, colors), method, ent_norm=ent_norm, color_weight=color_weight)])
+        s_dict = {}
+        for method in methods:
+            s_dict[method] = calc_ent(change_channels(img, colors), method,
+                                      ent_norm=ent_norm, color_weight=color_weight)
+
+        c = complexity(s_dict, methods)
+        img_ent.append([img, c])
 
         # Use the callback if provided, else use the default print_progress_bar
         if callback:
@@ -106,7 +126,7 @@ def calc_ent(img_arr, method, ent_norm=None, color_weight=None):
         case 'adapt':
             transform_result = adaptive_entropy_estimation(img_arr)
         case 'RGBCM':
-            transform_result = calculate_CM_cooccurrence(img_arr)
+            transform_result = calculate_CM_co_occurrence(img_arr)
         case _:
             raise ValueError(f"No entropy method matched for method '{method}'!!")
 
@@ -144,8 +164,14 @@ def entropy(arr, color_weight=None):
 
 def histogram(img_arr):
     if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
-        bins_ = 256 ** 3
-        flattened_img_arr = (img_arr[:, :, 0] << 16) + (img_arr[:, :, 1] << 8) + img_arr[:, :, 2]
+        img_arr = img_arr.astype(np.uint32)  # Convert to an integer type
+        # Reduce color resolution by right-shifting
+        reduced_img_arr = img_arr >> 4
+        # Combine the reduced RGB values into a single integer
+        flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:, :,
+                                                                                                 2]
+        # Create the histogram with fewer bins
+        bins_ = 64 ** 3
         hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
         return hist
     elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
@@ -156,7 +182,7 @@ def histogram(img_arr):
         raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
 
 
-def calculate_CM_cooccurrence(image):
+def calculate_CM_co_occurrence(image):
     """
     Calculate the color co-occurrence matrix for an RGB image at different angles.
 
@@ -171,7 +197,7 @@ def calculate_CM_cooccurrence(image):
     levels = 256  # Number of intensity levels in the image
 
     # Initialize array for co-occurrence matrices
-    cooccurrence_array = np.zeros((levels, levels, 3))
+    co_occurrence_array = np.zeros((levels, levels, 3))
 
     for channel in range(3):  # Iterate over RGB channels
         channel_image = image[:, :, channel]
@@ -184,12 +210,12 @@ def calculate_CM_cooccurrence(image):
 
         for angle_idx in range(len(angles)):
             # Accumulate co-occurrence matrices
-            cooccurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
+            co_occurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
 
         # Normalize the accumulated co-occurrence matrix for each channel
-        cooccurrence_array[:, :, channel] /= len(angles)
+        co_occurrence_array[:, :, channel] /= len(angles)
 
-    return cooccurrence_array
+    return co_occurrence_array
 
 
 def calculate_joint_entropy_red_green(img_arr):
@@ -239,41 +265,42 @@ def calculate_joint_RGB_entropy(rgb_image):
 
 
 def calculate_texture_entropy(img_arr):
-        """
-        Calculate the histogram of Local Binary Pattern (LBP) values for the texture of a given image.
+    """
+    Calculate the histogram of Local Binary Pattern (LBP) values for the texture of a given image.
 
-        Parameters:
-        - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
+    Parameters:
+    - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
 
-        Returns:
-        - 1D NumPy array representing the histogram of LBP values.
-        """
-        # Convert the image to grayscale if it's a color image
-        if img_arr.ndim == 3 and img_arr.shape[-1] == 3:
-            gray_image = rgb2gray(img_arr)
-        elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
-            gray_image = img_arr.squeeze()
-        else:
-            raise ValueError("Input image should be either grayscale or RGB.")
+    Returns:
+    - 1D NumPy array representing the histogram of LBP values.
+    """
+    # Convert the image to grayscale if it's a color image
+    if img_arr.ndim == 3 and img_arr.shape[-1] == 3:
+        gray_image = rgb2gray(img_arr)
+    elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
+        gray_image = img_arr.squeeze()
+    else:
+        raise ValueError("Input image should be either grayscale or RGB.")
 
-        # Normalize the grayscale image if it isn't already
-        if gray_image.max() > 1:
-            gray_image /= 255.0
+    # Normalize the grayscale image if it isn't already
+    if gray_image.max() > 1:
+        gray_image /= 255.0
 
-        # Apply Local Binary Pattern (LBP) to extract texture features
-        radius = 1
-        n_points = 8 * radius
-        lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
+    # Apply Local Binary Pattern (LBP) to extract texture features
+    radius = 1
+    n_points = 8 * radius
+    lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
 
-        # Calculate histogram of LBP values
-        n_bins = int(n_points * (n_points - 1) / 2) + 2
-        hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
+    # Calculate histogram of LBP values
+    n_bins = int(n_points * (n_points - 1) / 2) + 2
+    hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
 
-        # Normalize histogram
-        hist = hist.astype("float")
-        hist /= (hist.sum() + np.finfo(float).eps)
+    # Normalize histogram
+    hist = hist.astype("float")
+    hist /= (hist.sum() + np.finfo(float).eps)
 
-        return hist
+    return hist
+
 
 def calculate_texture_gabor_entropy(img_arr):
     """
@@ -411,3 +438,12 @@ def sort_by_entropy(batch_result, method):
     sorted_result = sorted(batch_result, key=lambda x: x[1].get(method, 0))
 
     return sorted_result
+
+
+def complexity(s_dict, method=None):
+    c = 0
+    if isinstance(method, dict):
+        # calculate by weights with linear combination
+        for met in s_dict:
+            c += s_dict[met] * method[met]
+    return c

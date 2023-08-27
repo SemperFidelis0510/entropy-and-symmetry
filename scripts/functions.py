@@ -111,7 +111,7 @@ def preprocess(img_path, crop_size=None, callback=None):
             img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
-        
+
         # Check if callback is provided
         if callback:
             callback('Preprocessed', i, n, start_time)
@@ -249,10 +249,18 @@ def ent_for_img(path, methods):
 def get_ent_norm(method):
     with open('data/ent_norm.json', 'r') as file:
         ent_norm = json.load(file)
-    if method not in ent_norm:
-        fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
-        ent_norm[method] = calc_ent(fixed_noise, method)
-        with open('data/ent_norm.json', 'w') as file:
-            json.dump(ent_norm, file)
+    if isinstance(method, str):
+        method = [method]
+
+    for met in method:
+        if met not in ent_norm:
+            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+            ent_norm[met] = calc_ent(fixed_noise, met)
+            with open('data/ent_norm.json', 'w') as file:
+                json.dump(ent_norm, file)
 
     return ent_norm
+
+
+def norm_weights(methods):
+    pass
