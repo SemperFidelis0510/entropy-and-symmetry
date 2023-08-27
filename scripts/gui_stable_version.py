@@ -259,10 +259,10 @@ class ImageViewer:
 
 
     def create_thumbnail_frame(self):
-        frame_thumbnails_container = Frame(self.image_window, width=70)  # Adjust width
+        frame_thumbnails_container = Frame(self.image_window, width=60)  # Adjust width
         frame_thumbnails_container.grid(row=0, column=0, rowspan=3, sticky="ns")
         frame_thumbnails_container.grid_propagate(False)  # Forbid internal components to change size
-        self.canvas_thumbnails = Canvas(frame_thumbnails_container, width=70, height=600)
+        self.canvas_thumbnails = Canvas(frame_thumbnails_container, width=60, height=600)
         self.canvas_thumbnails.pack(side=LEFT, fill=BOTH, expand=True)
         scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
         scrollbar.config(command=self.on_scroll)
