@@ -178,7 +178,19 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         raise Exception(f"Error retrieving image: {response.text}")
 
 
-def random_satellite_img(file_path, zoom_level, n_pics=10, save_path=f"../datasets/satellite"):
+def random_satellite_img(file_path, zoom_level=14, n_pics=10, save_path=f"../datasets/satellite"):
+    """
+    Generates random satellite images based on given rectangular coordinates.
+
+    Parameters:
+    - file_path (str): The path to the JSON file containing the rectangular coordinates.
+    - zoom_level (int, optional): The zoom level for the satellite images. Default is 14.
+    - n_pics (int, optional): The number of pictures to generate for each rectangle. Default is 10.
+    - save_path (str, optional): The path where the generated images will be saved. Default is "../datasets/satellite".
+
+    Returns:
+    None
+    """
     with open(file_path, 'r') as f:
         rects = json.load(f)
 
@@ -246,18 +258,19 @@ def ent_for_img(path, methods):
         print(f'Entropy: {s},  Method: {ent}')
 
 
-def get_ent_norm(method):
+def get_ent_norm(method=None):
     with open('data/ent_norm.json', 'r') as file:
         ent_norm = json.load(file)
     if isinstance(method, str):
         method = [method]
 
-    for met in method:
-        if met not in ent_norm:
-            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
-            ent_norm[met] = calc_ent(fixed_noise, met)
-            with open('data/ent_norm.json', 'w') as file:
-                json.dump(ent_norm, file)
+    if method is not None:
+        for met in method:
+            if met not in ent_norm:
+                fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+                ent_norm[met] = calc_ent(fixed_noise, met)
+                with open('data/ent_norm.json', 'w') as file:
+                    json.dump(ent_norm, file)
 
     return ent_norm
 
