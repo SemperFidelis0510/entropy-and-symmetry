@@ -1,0 +1,26 @@
+name: Python Test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run test script
+      run: python test_entropies.py
+      working-directory: tests/
