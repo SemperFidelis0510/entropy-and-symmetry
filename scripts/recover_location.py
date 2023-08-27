@@ -64,9 +64,8 @@ for subfolder in os.listdir(datasets_path):
         if file_hash in source_hashes:
             original_name = source_hashes[file_hash]  # Debugging line
             new_file_name = os.path.basename(original_name)
-            new_file_dir = os.path.dirname(filename)
             # Construct the new path for the file
-            new_file_path = os.path.join(new_file_dir, new_file_name)
+            new_file_path = os.path.join(subfolder_path, new_file_name)
             print(f"Match found for {file_path}. Renaming to {new_file_path}.")
             # Rename the file
             os.rename(file_path, new_file_path)
