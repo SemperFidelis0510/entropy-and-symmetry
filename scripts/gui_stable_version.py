@@ -394,6 +394,7 @@ class ImageViewer:
         self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
 
     def refresh_all_images(self, np_arrays):
+        self.img_no=0
         # Ensure the length of numpy arrays matches the length of image lists
         if len(np_arrays) != len(self.List_images):
             messagebox.showerror("Mismatch in number of images and numpy arrays!")
