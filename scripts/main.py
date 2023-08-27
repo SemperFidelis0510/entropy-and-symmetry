@@ -103,13 +103,14 @@ def main():
     ent_norm = get_ent_norm()
 
     print(f'Dataset path: {os.path.abspath(folder_path)}')
+    coo_json = '../datasets/coordinates/coo_africa.json'
 
-    # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
+    random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
-    for method in ent_methods:
-        sort_folder(folder_path, method, colors, ent_norm=ent_norm, color_weight=(1 - 2 * eps, eps, eps),
-                    linearCombine=False, method_weight=None)
+    # for method in ent_methods:
+    #     sort_folder(folder_path, method, colors, ent_norm=ent_norm, color_weight=(1 - 2 * eps, eps, eps),
+    #                 linearCombine=False, method_weight=None)
 
 
 if __name__ == '__main__':
