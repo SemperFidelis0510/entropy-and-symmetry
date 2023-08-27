@@ -17,7 +17,6 @@ IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
 ENTROPY_METHODS = [
     'hist',
-    'hist_greyscale',
     'naive',
     'dft',
     'dwt',
@@ -441,7 +440,7 @@ class ImageViewer:
         self.image_window.after(0, self.preprogress_window.destroy)
         self.start_entropy_calculation()
         try:
-            img_ent = label_ent(preprocessed_images, method=method, sort=True, ent_norm=ent_norm,
+            img_ent = label_ent(preprocessed_images, methods=method, sort=True, ent_norm=ent_norm,
                                 colors=selected_color, callback=self.update_progress)
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred: {str(e)}")
