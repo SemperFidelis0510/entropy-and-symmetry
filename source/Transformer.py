@@ -15,32 +15,33 @@ class Transformer:
     def applyTransform(self, image: Image):
         for method, params in self.transformation_methods_with_params.items():
             if method == 'dft':
-                image.transformedData.append(self.apply_dft(image.preprocessedData))
+                image.transformedData[method] = self.apply_dft(image.preprocessedData)
             elif method == 'dwt':
-                image.transformedData.append(self.apply_dwt(image.preprocessedData, **params))
+                image.transformedData[method] = self.apply_dwt(image.preprocessedData, **params)
             elif method == 'naive':
-                image.transformedData.append(image.preprocessedData)
+                image.transformedData[method] = image.preprocessedData
             elif method == 'hist':
-                image.transformedData.append(self.apply_histogram(image.preprocessedData))
+                image.transformedData[method] = self.apply_histogram(image.preprocessedData)
             elif method == 'laplace':
-                image.transformedData.append(self.apply_laplacian(image.preprocessedData))
+                image.transformedData[method] = self.apply_laplacian(image.preprocessedData)
             elif method == 'joint_red_green':
-                image.transformedData.append(self.apply_joint_red_green(image.preprocessedData))
+                image.transformedData[method] = self.apply_joint_red_green(image.preprocessedData)
             elif method == 'joint_all':
-                image.transformedData.append(self.apply_joint_RGB(image.preprocessedData))
+                image.transformedData[method] = self.apply_joint_RGB(image.preprocessedData)
             elif method == 'lbp':
-                image.transformedData.append(self.apply_texture(image.preprocessedData))
+                image.transformedData[method] = self.apply_texture(image.preprocessedData)
 
             elif method == 'lbp_gabor':
-                image.transformedData.append(self.apply_texture_gabor(image.preprocessedData))
+                image.transformedData[method] = self.apply_texture_gabor(image.preprocessedData)
 
-            # elif method == 'adapt':
-
+            elif method == 'adapt':
+                image.transformedData[method] = self.apply_adaptive_estimation(image.preprocessedData, **params)
             elif method == 'RGBCM':
-                image.transformedData.append(self.apply_CM_co_occurrence(image.preprocessedData))
+                image.transformedData[method] = self.apply_CM_co_occurrence(image.preprocessedData)
 
             else:
                 raise ValueError(f"No entropy method matched for method '{method}'!!")
+            del image.preprocessedData
 
     def apply_dft(self, image):
         rank = image.ndim
@@ -220,46 +221,41 @@ class Transformer:
 
         return hist
 
-    # def apply_adaptive_estimation(self, img_arr, num_segments=100):
-    #     """
-    #         Estimate the adaptive entropy of an image by segmenting it and averaging the entropies of the segments.
-    #
-    #         Parameters:
-    #         - img_arr: 2D or 3D NumPy array representing the image.
-    #         - num_segments: Number of segments to divide the image into using the SLIC algorithm.
-    #
-    #         Returns:
-    #         - float: Adaptive entropy of the image.
-    #         """
-    #     # Convert the image to grayscale if it's a color image
-    #     if img_arr.ndim == 3:
-    #         gray_image = rgb2gray(img_arr)
-    #     else:
-    #         gray_image = img_arr
-    #
-    #     # Segment the image using SLIC
-    #     segments = slic(img_arr, n_segments=num_segments, compactness=10, sigma=1)
-    #
-    #     # Initialize list to store segment entropies
-    #     segment_entropies = []
-    #
-    #     # Loop through each unique segment
-    #     unique_segments = np.unique(segments)
-    #     for segment_idx in unique_segments:
-    #         segment_mask = (segments == segment_idx)
-    #         segment_region = gray_image[segment_mask]
-    #
-    #         # Calculate the entropy of each segment using the Shannon entropy formula
-    #         hist, _ = np.histogram(segment_region, bins=256)
-    #         prob_dist = hist / hist.sum()
-    #         segment_entropy = entropy(prob_dist)
-    #
-    #         segment_entropies.append(segment_entropy)
-    #
-    #     # Calculate adaptive entropy
-    #     adaptive_entropy = np.mean(segment_entropies)
-    #
-    #     return adaptive_entropy
+    def apply_adaptive_estimation(self, img_arr, num_segments=100):
+        """
+            Estimate the adaptive entropy of an image by segmenting it and averaging the entropies of the segments.
+
+            Parameters:
+            - img_arr: 2D or 3D NumPy array representing the image.
+            - num_segments: Number of segments to divide the image into using the SLIC algorithm.
+
+            Returns:
+            - float: Adaptive entropy of the image.
+            """
+        # Convert the image to grayscale if it's a color image
+        if img_arr.ndim == 3:
+            gray_image = rgb2gray(img_arr)
+        else:
+            gray_image = img_arr
+
+        # Segment the image using SLIC
+        segments = slic(img_arr, n_segments=num_segments, compactness=10, sigma=1)
+
+        # Initialize list to store segment entropies
+        segment = []
+
+        # Loop through each unique segment
+        unique_segments = np.unique(segments)
+        for segment_idx in unique_segments:
+            segment_mask = (segments == segment_idx)
+            segment_region = gray_image[segment_mask]
+
+            # Calculate the entropy of each segment using the Shannon entropy formula
+            hist, _ = np.histogram(segment_region, bins=256)
+            prob_dist = hist / hist.sum()
+            segment.append(prob_dist)
+
+        return segment
 
     def apply_CM_co_occurrence(self, image):
         """

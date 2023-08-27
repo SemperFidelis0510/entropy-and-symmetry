@@ -9,16 +9,20 @@ from datetime import datetime
 
 def main():
     # System Configuration
-    transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
-    transform_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
-                                     'lbp': None, 'lbp_gabor': None, 'RGBCM': None}
-    m_name = '-'.join(transform_methods_with_params.keys())
-    dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
-    postprocessor_methods = []
     datasets = {'china': "../datasets/satellite/china",
                 'usa': "../datasets/satellite/usa",
                 'argentina': "../datasets/satellite/argentina",
                 'satellite': "../datasets/satellite"}
+
+    transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
+    transform_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
+                                     'lbp': None, 'lbp_gabor': None, 'RGBCM': None}
+    transform_methods_with_params = {'joint_all': {'num_segments':100}}
+    entropy_methods_with_params = {'joint-all': None}
+
+    m_name = '-'.join(transform_methods_with_params.keys())
+    dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
+    postprocessor_methods = []
 
     # Initialize other components
     imageLoader = ImageLoader(image_directory=datasets['satellite'])
@@ -33,10 +37,10 @@ def main():
                                entropyCalculator, postprocessor, dataSaver)
 
     # Run
-    pipeline.runPipeline()
+    # pipeline.runPipeline()
 
     # Run parallel
-    # pipeline.runParallelPipeline()
+    pipeline.runParallelPipeline()
 
 if __name__ == '__main__':
     main()

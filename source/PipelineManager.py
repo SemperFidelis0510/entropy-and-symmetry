@@ -2,7 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 from utils import print_progress_bar
 from tqdm import tqdm
-
+import gc
 class PipelineManager:
     def __init__(self, imageloader, preprocessor, transformer, entropyCalculator, postprocessor, dataSaver):
         self.imageloader = imageloader

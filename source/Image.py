@@ -2,7 +2,7 @@ class Image:
     def __init__(self, rawData):
         self.rawData = rawData
         self.preprocessedData = None
-        self.transformedData = []
+        self.transformedData = {}
         self.entropyResults = []
 
     def load(self):
