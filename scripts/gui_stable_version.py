@@ -61,7 +61,7 @@ class ImageViewer:
         self.img_no = 0
         self.zoom_percent = 100
         self.is_fullscreen = False
-        self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # Grey placeholder
+        self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
 
@@ -80,16 +80,16 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
-        self.image_window.geometry(self.center_window_coordinates(600, 800))  # 800x600 is the desired initial size
+        self.image_window.geometry(self.center_window_coordinates(600, 612))  # The desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
 
-        self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
-        self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
+        #self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
+        #self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
         ...
-        self.console = Text(self.image_window, height=10, width=50)
-        self.console.grid(row=3, column=0, columnspan=4, pady=20, padx=10, sticky='ew')
+        #self.console = Text(self.image_window, height=10, width=50)
+        #self.console.grid(row=3, column=0, columnspan=2, pady=20, padx=10, sticky='ew')
 
         self.controls_frame = Frame(self.image_window)
         self.controls_frame.grid(row=1, column=1, columnspan=4, sticky='ew')
@@ -114,7 +114,7 @@ class ImageViewer:
         self.controls_frame.grid_rowconfigure(1, weight=1)
         self.controls_frame.grid_columnconfigure(1, weight=1)
 
-        sys.stdout = IORedirector(self.console)
+        #sys.stdout = IORedirector(self.console)
 
         self.center_window(self.image_window)
 
@@ -135,8 +135,11 @@ class ImageViewer:
             self.load_image_at_index(self.img_no - 1)
         self.update_image()
         self.update_buttons()
+
         self.load_visible_thumbnails()  # load visible thumbnails
+        self.scroll_to_img_no()  # Scroll to the current image
         self.update_status_bar()
+
     
     
     def center_window(self, window):
@@ -202,10 +205,9 @@ class ImageViewer:
         self.button_save.grid(row=2, column=3, sticky='ew')
 
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
-
         self.confirm_button.grid(row=2, column=2, sticky='ew')
-    
-    
+
+
     def create_image_frame(self):
         frame_image = Frame(self.image_window, width=700, height=400)
         frame_image.grid(row=0, column=1, columnspan=3, sticky='nsew')
@@ -270,16 +272,17 @@ class ImageViewer:
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
         self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60,
-                                      height=len(self.List_thumbnail_images) * 60)  # Increase height
+                                      height=len(self.List_thumbnail_images) * 68)  # Increase height
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
         for idx in range(len(self.np_array)):
-            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT,
-                                      command=lambda i=idx: self.on_select(i))
-            thumbnail_button.pack(side=TOP)
+            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT, command=lambda i=idx: self.on_select(i))
+            thumbnail_button.grid(row=idx, column=0, sticky='nsew', padx=0, pady=0, ipadx=0, ipady=0)
+            self.frame_thumbnails.rowconfigure(idx, weight=1)
+
 
         self.canvas_thumbnails.config(
-            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 60))  # Resize the scrolling area
+            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 68))  # Resize the scrolling area
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
 
@@ -311,6 +314,7 @@ class ImageViewer:
 
     def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
         self.refresh_all_images(self.np_array)
+        self.scroll_to_img_no()
         self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
     
@@ -330,6 +334,7 @@ class ImageViewer:
         self.update_image()
         self.update_buttons()
         self.load_visible_thumbnails()  # Load visible thumbnails
+        self.scroll_to_img_no()  # Scroll to the current image
         self.update_status_bar()
     
 
@@ -383,7 +388,7 @@ class ImageViewer:
 
             # Load thumbnail if not loaded
             if self.List_thumbnails[idx] is None:
-                thumb = img.resize((50, 50))
+                thumb = img.resize((60, 60))
                 self.List_thumbnails[idx] = thumb
                 self.List_thumbnail_images[idx] = ImageTk.PhotoImage(thumb)
 
@@ -413,7 +418,7 @@ class ImageViewer:
         for idx in range(start_idx, end_idx):
 
             if idx not in self.loaded_thumbnails:
-                thumbnail = Image.fromarray(self.np_array[idx]).resize((50, 50))
+                thumbnail = Image.fromarray(self.np_array[idx]).resize((60, 60))
                 thumbnail_img = ImageTk.PhotoImage(thumbnail)
                 # Update button image
                 self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
@@ -477,6 +482,8 @@ class ImageViewer:
 
     def on_select(self, idx):
         self.img_no = idx
+        self.load_visible_thumbnails()
+        self.scroll_to_img_no()
         self.update_image()
         self.update_buttons()
         self.update_status_bar()
@@ -556,6 +563,24 @@ class ImageViewer:
 
         with open(self.config_path, "w") as f:
             json.dump(settings, f)
+    
+    
+    def scroll_to_img_no(self):
+        # 计算滚动到img_no所需的fraction
+        fraction = (self.img_no) / (len(self.np_array))
+    
+        # 为了避免滚动超出范围，我们需要进行一些调整。
+        # 假设画布的高度为600像素，并且每个缩略图的高度为60像素。
+        # 那么在最后的10张图片中，我们不希望再滚动，以防止滚动出范围。
+    
+        max_scrollable_img_no = len(self.np_array) - int(self.canvas_thumbnails.winfo_height() / 68)
+    
+        # 如果img_no超过最大可滚动索引，则将其设置为该值。
+        if self.img_no > max_scrollable_img_no:
+            fraction = (max_scrollable_img_no) / (len(self.np_array))
+
+        self.canvas_thumbnails.yview_moveto(fraction)
+
     
     
     def split_images_and_entropy(self, img_ent):
@@ -645,7 +670,7 @@ class ImageViewer:
         self.List_photoimages[index] = ImageTk.PhotoImage(img)
 
         # Create and update thumbnail
-        thumbnail_size = (50, 50)  # You can adjust the size as needed
+        thumbnail_size = (60, 60)  # You can adjust the size as needed
         thumbnail = img.copy()
         thumbnail.thumbnail(thumbnail_size)
         self.List_thumbnails[index] = thumbnail
@@ -656,7 +681,7 @@ class ImageViewer:
         for widget in self.frame_thumbnails.winfo_children():
             widget.config(relief=FLAT)
         self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
-        self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
+        self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 68), 'units')
 
     
     def update_preprogress(self, text, iteration, total, start_time=None):
