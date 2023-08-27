@@ -5,20 +5,25 @@ from functions import *
 
 warnings.filterwarnings("ignore")
 
+# ent_methods = [
+#     'hist',
+#     'naive',
+#     'dft',
+#     'dwt',
+#     'laplace',
+#     'joint_red_green',
+#     'joint_all',
+#     'lbp',
+#     'lbp_gabor',
+#     'adapt',
+#     'RGBCM'
+# ]
 ent_methods = [
-    'hist',
-    'naive',
-    'dft',
-    'dwt',
-    'laplace',
-    'joint_red_green',
-    'joint_all',
     'lbp',
     'lbp_gabor',
     'adapt',
     'RGBCM'
 ]
-
 
 color_opts = ['rgb',
               'hsb',
@@ -40,6 +45,8 @@ def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None, li
         m_name = '-'.join(method)
     elif isinstance(method, dict):
         m_name = '-'.join(method.keys())
+    else:
+        return
 
     dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
@@ -87,23 +94,25 @@ def norm_ent():
 
 
 def main():
-    method = {'hist': 1 / 2, 'naive': 1 / 2}
+    # method = {'hist': 1 / 2, 'naive': 1 / 2}
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['argentina']
+    folder_path = datasets['satellite']
     sat_img_path = '../datasets/satellite'
     coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
-    ent_norm = get_ent_norm(method)
+    ent_norm = get_ent_norm()
 
     print(f'Dataset path: {os.path.abspath(folder_path)}')
+    coo_json = '../datasets/coordinates/coo_africa.json'
 
-    # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
+    random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
-    sort_folder(folder_path, method, colors, ent_norm=ent_norm, color_weight=(1 - 2 * eps, eps, eps),
-                linearCombine=False, method_weight=None)
+    # for method in ent_methods:
+    #     sort_folder(folder_path, method, colors, ent_norm=ent_norm, color_weight=(1 - 2 * eps, eps, eps),
+    #                 linearCombine=False, method_weight=None)
 
 
 if __name__ == '__main__':
