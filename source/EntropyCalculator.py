@@ -14,7 +14,6 @@ class EntropyCalculator:
             else:
                 ent = self.entropy(transformedData)
                 image.entropyResults.append(ent)
-            del image.transformedData
 
     def entropy(self, transformedData):
         arr = np.abs(transformedData)

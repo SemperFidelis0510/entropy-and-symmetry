@@ -15,32 +15,30 @@ def main():
                 'satellite': "../datasets/satellite"}
 
     transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
-    transform_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
-                                     'lbp': None, 'lbp_gabor': None, 'RGBCM': None}
-    transform_methods_with_params = {'joint_all': {'num_segments':100}}
-    entropy_methods_with_params = {'joint-all': None}
+    transform_methods_with_params = {'laplace': None, 'joint_red_green': None,
+                                     'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
+                                     'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
 
     m_name = '-'.join(transform_methods_with_params.keys())
-    dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
+    dst_folder = f'../entropy_results/m={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     postprocessor_methods = []
 
     # Initialize other components
-    imageLoader = ImageLoader(image_directory=datasets['satellite'])
+    imageLoader = ImageLoader(image_directory=datasets['satellite'], head=10)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Transformer(transform_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=(1,1,1))
     postprocessor = Postprocessor(postprocessor_methods)
-    dataSaver = DataSaver(destination=dst_folder)
+    dataSaver = DataSaver(destination=dst_folder, methods=list(transform_methods_with_params.keys()))
 
     # Initialize PipelineManager
     pipeline = PipelineManager(imageLoader, preprocessor, transformer,
                                entropyCalculator, postprocessor, dataSaver)
 
     # Run
-    # pipeline.runPipeline()
+    pipeline.runPipeline()
+    # pipeline.runParallelPipeline(batch_size=150)
 
-    # Run parallel
-    pipeline.runParallelPipeline()
 
 if __name__ == '__main__':
     main()

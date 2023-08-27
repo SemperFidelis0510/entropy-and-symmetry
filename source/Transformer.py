@@ -41,7 +41,6 @@ class Transformer:
 
             else:
                 raise ValueError(f"No entropy method matched for method '{method}'!!")
-            del image.preprocessedData
 
     def apply_dft(self, image):
         rank = image.ndim
