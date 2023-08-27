@@ -66,10 +66,7 @@ class ImageViewer:
             return
 
         self.img_ent_data = None
-        self.List_images = [None] * len(self.image_files)
-        self.List_photoimages = [None] * len(self.image_files)
-        self.List_thumbnails = [None] * len(self.image_files)
-        self.List_thumbnail_images = [None] * len(self.image_files)
+        self.initialize_all_images()
         self.img_no = 0
         self.zoom_percent = 100
         self.is_fullscreen = False
@@ -344,6 +341,13 @@ class ImageViewer:
         self.load_visible_thumbnails()  # Load visible thumbnails
         self.update_status_bar()
     
+
+    def initialize_all_images(self):
+        self.List_images = [None] * len(self.image_files)
+        self.List_photoimages = [None] * len(self.image_files)
+        self.List_thumbnails = [None] * len(self.image_files)
+        self.List_thumbnail_images = [None] * len(self.image_files)
+
     
     def load_default_directory(self):
         try:
