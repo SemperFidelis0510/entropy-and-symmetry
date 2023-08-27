@@ -45,6 +45,8 @@ def sort_folder(path, method, colors='rgb', ent_norm=None, color_weight=None, li
         m_name = '-'.join(method)
     elif isinstance(method, dict):
         m_name = '-'.join(method.keys())
+    else:
+        return
 
     dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
 
