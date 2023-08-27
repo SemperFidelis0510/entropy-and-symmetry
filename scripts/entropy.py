@@ -220,38 +220,51 @@ def calculate_CM_co_occurrence(image):
 
 def calculate_joint_entropy_red_green(img_arr):
     """
-    Calculate the joint probabilities of the red and green channels in the given image array.
+    Calculate the joint entropy of the red and green channels in the given image array.
 
     Parameters:
     - img_arr: 3D NumPy array representing the image. The first dimension is height,
                the second is width, and the third is channels (RGB).
 
     Returns:
-    - 2D NumPy array representing the joint probabilities.
+    - Scalar value representing the joint entropy.
     """
+    # Ensure the image values are integers.
+    img_arr = np.array(img_arr, dtype=np.int)
+
     # Extract red and green channels from the image array
     red_channel, green_channel = img_arr[:, :, 0], img_arr[:, :, 1]
 
     # Calculate the 2D histogram
-    joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256)
+    joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256,
+                                           range=[[0, 256], [0, 256]])
 
     # Calculate joint probabilities
     joint_probabilities = joint_histogram / joint_histogram.sum()
 
-    return joint_probabilities
+    # Filter out zero probabilities for entropy calculation
+    non_zero_probs = joint_probabilities[joint_probabilities > 0]
+
+    # Calculate joint entropy
+    joint_entropy = -np.sum(non_zero_probs * np.log2(non_zero_probs))
+
+    return joint_entropy
 
 
 def calculate_joint_RGB_entropy(rgb_image):
     """
-    Calculate the joint probabilities for the RGB channels in the given image array.
+    Calculate the joint entropy for the RGB channels in the given image array.
 
     Parameters:
     - rgb_image: 3D NumPy array representing the image. The first dimension is height,
                  the second is width, and the third is channels (RGB).
 
     Returns:
-    - 3D NumPy array representing the joint probabilities.
+    - Scalar representing the joint entropy.
     """
+    # Ensure the image values are integers.
+    rgb_image = np.array(rgb_image, dtype=np.int)
+
     # Flatten and stack the color channels
     rgb_flatten = np.vstack([rgb_image[:, :, i].ravel() for i in range(3)]).T
 
@@ -261,7 +274,13 @@ def calculate_joint_RGB_entropy(rgb_image):
     # Calculate joint probabilities
     joint_probabilities = joint_histogram / joint_histogram.sum()
 
-    return joint_probabilities
+    # Filter out zero probabilities for entropy calculation
+    non_zero_probs = joint_probabilities[joint_probabilities > 0]
+
+    # Calculate joint entropy
+    joint_entropy = -np.sum(non_zero_probs * np.log2(non_zero_probs))
+
+    return joint_entropy
 
 
 def calculate_texture_entropy(img_arr):
