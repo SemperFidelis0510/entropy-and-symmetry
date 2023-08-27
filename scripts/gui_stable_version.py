@@ -310,6 +310,7 @@ class ImageViewer:
         
 
     def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
+        self.refresh_all_images(self.np_array)
         self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
     
@@ -349,15 +350,6 @@ class ImageViewer:
     
     
     def load_all_images_to_np_arrays(self, directory):
-        """
-        Loads all images in a directory (including subdirectories) into numpy arrays.
-
-            Args:
-        - directory (str): Path to the directory containing the images.
-
-        Returns:
-        - list of numpy arrays: A list where each element is a numpy array representing an image.
-        """
         np_image_list = []
 
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -365,12 +357,19 @@ class ImageViewer:
                 if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp')):  # Add or modify extensions as needed
                     full_path = os.path.join(dirpath, filename)
                 
-                    # Load the image and convert to numpy array
+                    # Load the image
                     img = Image.open(full_path)
+
+                    # Ensure it's in RGB mode
+                    if img.mode != 'RGB':
+                        img = img.convert('RGB')
+
+                    # Convert to numpy array and append to list
                     np_img = np.array(img)
                     np_image_list.append(np_img)
-        
+
         return np_image_list
+
     
     
     def load_image_at_index(self, idx):
@@ -497,7 +496,7 @@ class ImageViewer:
         self.update_image()
         self.update_buttons()
         self.update_status_bar()
-        #self.update_all_thumbnails()
+        self.update_all_thumbnails()
 
 
     def resize_image(self, percent):
@@ -607,13 +606,13 @@ class ImageViewer:
 
     
     def update_all_thumbnails(self):
-        #for idx in range(len(self.image_files)):
-            #if self.List_images[idx] is None:
-                #self.load_image_at_index(idx)
-            #thumbnail_img = self.List_thumbnail_images[idx]
+        for idx in range(len(self.np_array)):
+            if self.List_images[idx] is None:
+                self.load_image_at_index(idx)
+            thumbnail_img = self.List_thumbnail_images[idx]
             # Update button image
-            #self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-            #self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
         pass
     
     
