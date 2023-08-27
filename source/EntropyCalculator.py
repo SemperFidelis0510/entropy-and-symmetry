@@ -5,14 +5,14 @@ class EntropyCalculator:
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
 
     def calculateEntropy(self, image: Image):
-        for method, transformedData in image.transformedData.items():
+        for method, processedData in image.processedData.items():
             if method == 'adapt':
                 segment_entropies = []
-                for segment in transformedData:
+                for segment in processedData:
                     segment_entropies.append(self.entropy(segment))
                 image.entropyResults.append(np.mean(segment_entropies))
             else:
-                ent = self.entropy(transformedData)
+                ent = self.entropy(processedData)
                 image.entropyResults.append(ent)
 
     def entropy(self, transformedData):

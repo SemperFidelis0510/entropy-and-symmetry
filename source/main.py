@@ -1,5 +1,5 @@
 from Preprocessor import Preprocessor
-from Transformer import Transformer
+from Processor import Processor
 from EntropyCalculator import EntropyCalculator
 from Postprocessor import Postprocessor
 from DataSaver import DataSaver
@@ -15,22 +15,22 @@ def main():
                 'satellite': "../datasets/satellite",
                 "classified": "../datasets/classified_pictures"}
 
-    transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
-    transform_methods_with_params = {'laplace': None, 'joint_red_green': None,
+    process_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
+    process_methods_with_params = {'laplace': None, 'joint_red_green': None,
                                      'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                                      'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
 
-    m_name = '-'.join(transform_methods_with_params.keys())
+    m_name = '-'.join(process_methods_with_params.keys())
     dst_folder = f'../entropy_results/m={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     postprocessor_methods = []
 
     # Initialize other components
-    imageLoader = ImageLoader(image_directory=datasets['classified'], head=600)
+    imageLoader = ImageLoader(image_directory=datasets['classified'], head=10)
     preprocessor = Preprocessor(crop_size=None)
-    transformer = Transformer(transform_methods_with_params)
+    transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
     postprocessor = Postprocessor(postprocessor_methods)
-    dataSaver = DataSaver(destination=dst_folder, methods=list(transform_methods_with_params.keys()))
+    dataSaver = DataSaver(destination=dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
     pipeline = PipelineManager(imageLoader, preprocessor, transformer,

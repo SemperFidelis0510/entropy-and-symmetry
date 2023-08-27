@@ -4,17 +4,17 @@ import time
 from utils import print_progress_bar, open_folder
 from tqdm import tqdm
 class PipelineManager:
-    def __init__(self, imageloader, preprocessor, transformer, entropyCalculator, postprocessor, dataSaver):
+    def __init__(self, imageloader, preprocessor, processor, entropyCalculator, postprocessor, dataSaver):
         self.imageloader = imageloader
         self.preprocessor = preprocessor
-        self.transformer = transformer
+        self.processor = processor
         self.entropyCalculator = entropyCalculator
         self.postprocessor = postprocessor
         self.dataSaver = dataSaver
 
     def process_single_image(self, image):
         self.preprocessor.applyPreprocessing(image)
-        self.transformer.applyTransform(image)
+        self.processor.applyProcessing(image)
         self.entropyCalculator.calculateEntropy(image)
         self.postprocessor.applyPostprocessing(image)
         return image
