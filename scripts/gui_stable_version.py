@@ -188,14 +188,6 @@ class ImageViewer:
             self.save_default_directory(self.default_save_directory)
 
     
-    def update_confirm_button_state(self, event=None):
-        if self.combo.get():  # If there's a value selected in the combobox
-            if self.combo_color.get():
-                self.confirm_button.config(state=NORMAL)
-        else:
-            self.confirm_button.config(state=DISABLED)
-
-    
     def choose_default_directory(self):
         directory = filedialog.askdirectory()
         if directory:
@@ -619,6 +611,14 @@ class ImageViewer:
     def update_buttons(self):
         self.button_back.config(state=NORMAL if self.img_no > 0 else DISABLED)
         self.button_forward.config(state=NORMAL if self.img_no < len(self.List_images) - 1 else DISABLED)
+    
+    
+    def update_confirm_button_state(self, event=None):
+        if self.combo.get():  # If there's a value selected in the combobox
+            if self.combo_color.get():
+                self.confirm_button.config(state=NORMAL)
+        else:
+            self.confirm_button.config(state=DISABLED)
     
     
     def update_image(self):
