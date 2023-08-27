@@ -18,6 +18,9 @@ jobs:
       with:
         python-version: '3.10'
 
+    - name: Add root to PYTHONPATH
+      run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)" >> $GITHUB_ENV
+
     - name: Cache dependencies
       uses: actions/cache@v2
       with:

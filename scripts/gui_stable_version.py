@@ -5,6 +5,7 @@ from datetime import datetime
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
+import numpy as np
 
 from PIL import ImageTk
 
@@ -53,17 +54,7 @@ class ImageViewer:
         self.config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "settings.json")
         self.default_save_directory = self.load_default_directory()
 
-        # Recursively gather all image files in the directory and its subdirectories
-        self.image_files = []
-        for dirpath, dirnames, filenames in os.walk(directory):
-            for filename in filenames:
-                if filename.endswith(IMAGE_EXTENSIONS):
-                    full_path = os.path.join(dirpath, filename)
-                    self.image_files.append(full_path)
-
-        if not self.image_files:
-            messagebox.showerror("Error", "No supported images found in the selected directory.")
-            return
+        self.np_array = self.load_all_images_to_np_arrays(directory)
 
         self.img_ent_data = None
         self.initialize_all_images()
@@ -73,13 +64,12 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (50, 50), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
-        self.original_image_files = self.image_files.copy()
 
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
         if self.img_no > 0:
             self.load_image_at_index(self.img_no - 1)
-        if self.img_no < len(self.image_files) - 1:
+        if self.img_no < len(self.np_array) - 1:
             self.load_image_at_index(self.img_no + 1)
 
         self.init_window()
@@ -283,7 +273,7 @@ class ImageViewer:
                                       height=len(self.List_thumbnail_images) * 60)  # Increase height
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
-        for idx in range(len(self.image_files)):
+        for idx in range(len(self.np_array)):
             thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT,
                                       command=lambda i=idx: self.on_select(i))
             thumbnail_button.pack(side=TOP)
@@ -331,10 +321,10 @@ class ImageViewer:
         
     
     def forward(self, event=None):
-        if self.img_no >= len(self.List_images) - 1:  # Return if it is the last image
+        if self.img_no >= len(self.np_array) - 1:  # Return if it is the last image
             return
         self.img_no += 1
-        if self.img_no < len(self.image_files) - 1:
+        if self.img_no < len(self.np_array) - 1:
             self.load_image_at_index(self.img_no + 1)
         self.update_image()
         self.update_buttons()
@@ -343,10 +333,10 @@ class ImageViewer:
     
 
     def initialize_all_images(self):
-        self.List_images = [None] * len(self.image_files)
-        self.List_photoimages = [None] * len(self.image_files)
-        self.List_thumbnails = [None] * len(self.image_files)
-        self.List_thumbnail_images = [None] * len(self.image_files)
+        self.List_images = [None] * len(self.np_array)
+        self.List_photoimages = [None] * len(self.np_array)
+        self.List_thumbnails = [None] * len(self.np_array)
+        self.List_thumbnail_images = [None] * len(self.np_array)
 
     
     def load_default_directory(self):
@@ -358,12 +348,37 @@ class ImageViewer:
             return ''
     
     
+    def load_all_images_to_np_arrays(self, directory):
+        """
+        Loads all images in a directory (including subdirectories) into numpy arrays.
+
+            Args:
+        - directory (str): Path to the directory containing the images.
+
+        Returns:
+        - list of numpy arrays: A list where each element is a numpy array representing an image.
+        """
+        np_image_list = []
+
+        for dirpath, dirnames, filenames in os.walk(directory):
+            for filename in filenames:
+                if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp')):  # Add or modify extensions as needed
+                    full_path = os.path.join(dirpath, filename)
+                
+                    # Load the image and convert to numpy array
+                    img = Image.open(full_path)
+                    np_img = np.array(img)
+                    np_image_list.append(np_img)
+        
+        return np_image_list
+    
+    
     def load_image_at_index(self, idx):
         """Load the image and thumbnail of the specified index."""
 
         try:
             # Load main image
-            img = Image.open(os.path.join(self.directory, self.image_files[idx]))
+            img = Image.fromarray(self.np_array[idx])
             self.List_images[idx] = img
             self.List_photoimages[idx] = ImageTk.PhotoImage(img)
 
@@ -376,14 +391,14 @@ class ImageViewer:
         except Exception as e:
 
             # If there's an error, show a message and remove the problematic image from the list
-            messagebox.showerror("Error", f"An error occurred while loading {self.image_files[idx]}: {str(e)}")
-            self.image_files.pop(idx)
+            messagebox.showerror("Error", f"An error occurred while loading {self.np_array[idx]}: {str(e)}")
+            self.np_array.pop(idx)
 
             # Recalculate the lists based on the updated image_files list
-            self.List_images = [None] * len(self.image_files)
-            self.List_photoimages = [None] * len(self.image_files)
-            self.List_thumbnails = [None] * len(self.image_files)
-            self.List_thumbnail_images = [None] * len(self.image_files)
+            self.List_images = [None] * len(self.np_array)
+            self.List_photoimages = [None] * len(self.np_array)
+            self.List_thumbnails = [None] * len(self.np_array)
+            self.List_thumbnail_images = [None] * len(self.np_array)
     
     
     def load_visible_thumbnails(self, event=None):
@@ -393,13 +408,13 @@ class ImageViewer:
 
         # Calculate the index range of thumbnails that should be loaded
         start_idx = max(int(top // 60) - 2, 0)
-        end_idx = min(int((top + height) // 60) + 2, len(self.image_files))
+        end_idx = min(int((top + height) // 60) + 2, len(self.np_array))
 
         # Load and update thumbnails for visible index ranges
         for idx in range(start_idx, end_idx):
 
             if idx not in self.loaded_thumbnails:
-                thumbnail = Image.open(os.path.join(self.directory, self.image_files[idx])).resize((50, 50))
+                thumbnail = Image.fromarray(self.np_array[idx]).resize((50, 50))
                 thumbnail_img = ImageTk.PhotoImage(thumbnail)
                 # Update button image
                 self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
@@ -446,18 +461,9 @@ class ImageViewer:
         # Split images and entropy
         images, entropies = self.split_images_and_entropy(img_ent)
 
-        # Sort the entropy and get the sorted index
-        sorted_indices = sorted(range(len(entropies)), key=lambda k: entropies[k])
+        self.np_array = images
 
-        # Sort the images using these indices
-        sorted_images = [images[i] for i in sorted_indices]
-
-        # Sort the original filenames using the same index
-        sorted_filenames = [self.original_image_files[i] for i in sorted_indices]
-
-        # Update the image_files list
-        self.image_files = sorted_filenames
-        self.refresh_all_images(sorted_images)
+        #self.refresh_all_images(sorted_images)
         self.image_window.after(0, self.entropy_calculation_complete)
         self.image_window.after(0, self.progress_window.destroy)
     
@@ -479,6 +485,7 @@ class ImageViewer:
 
     def refresh_all_images(self, np_arrays):
         self.img_no=0
+        self.initialize_all_images()
         # Ensure the length of numpy arrays matches the length of image lists
         if len(np_arrays) != len(self.List_images):
             messagebox.showerror("Mismatch in number of images and numpy arrays!")
@@ -489,11 +496,8 @@ class ImageViewer:
 
         self.update_image()
         self.update_buttons()
-        self.update_listbox()
-        self.load_visible_thumbnails()  # load visible thumbnails
         self.update_status_bar()
-        self.update_thumbnails_UI()
-        self.update_all_thumbnails()
+        #self.update_all_thumbnails()
 
 
     def resize_image(self, percent):
@@ -603,13 +607,14 @@ class ImageViewer:
 
     
     def update_all_thumbnails(self):
-        for idx in range(len(self.image_files)):
-            if self.List_images[idx] is None:
-                self.load_image_at_index(idx)
-            thumbnail_img = self.List_thumbnail_images[idx]
+        #for idx in range(len(self.image_files)):
+            #if self.List_images[idx] is None:
+                #self.load_image_at_index(idx)
+            #thumbnail_img = self.List_thumbnail_images[idx]
             # Update button image
-            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+            #self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            #self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+        pass
     
     
     def update_buttons(self):
@@ -646,12 +651,6 @@ class ImageViewer:
         thumbnail.thumbnail(thumbnail_size)
         self.List_thumbnails[index] = thumbnail
         self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
-
-    
-    def update_thumbnails_UI(self):
-        for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
-            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
     
 
     def update_listbox(self):
@@ -674,11 +673,12 @@ class ImageViewer:
 
 
     def update_status_bar(self):
-        file_path = os.path.join(self.directory, self.image_files[self.img_no])
-        image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
-        img = self.List_images[self.img_no]
-        info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
-        self.status_bar.config(text=info_text)
+        #file_path = os.path.join(self.directory, self.image_files[self.img_no])
+        #image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
+        #img = self.List_images[self.img_no]
+        #info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+        #self.status_bar.config(text=info_text)
+        pass
 
     
 
