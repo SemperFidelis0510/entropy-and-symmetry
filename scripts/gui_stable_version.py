@@ -89,6 +89,7 @@ class ImageViewer:
         self.init_window()
         self.console = None
 
+    
     def init_window(self):
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
@@ -131,30 +132,120 @@ class ImageViewer:
 
         self.center_window(self.image_window)
 
-    def thread_it(self, func, *args):
-        """ Pack functions into threads """
-        self.myThread = threading.Thread(target=func, args=args)
-        self.myThread.daemon = True  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
-        self.myThread.start()
+    
+    def adjust_zoom(self, delta):
+        new_zoom = self.zoom_percent + delta
+        if 10 <= new_zoom <= 400:
+            self.zoom_percent = new_zoom
+            self.resize_image(new_zoom)
+            self.scale.set(new_zoom)
+    
+    
+    def back(self, event=None):
+        if self.img_no <= 0:  # Return if it is the first image
+            return
+        self.img_no -= 1
+        if self.img_no > 0:
+            self.load_image_at_index(self.img_no - 1)
+        self.update_image()
+        self.update_buttons()
+        self.load_visible_thumbnails()  # load visible thumbnails
+        self.update_status_bar()
+    
+    
+    def center_window(self, window):
+        window.update_idletasks()  # Ensure that the window size has been 'implemented'
+    
+        # Obtain the width and height of the screen
+        screen_width = window.winfo_screenwidth()
+        screen_height = window.winfo_screenheight()
+    
+        # Obtain the width and height of the window
+        width = window.winfo_width()
+        height = window.winfo_height()
 
-    def clos_window(self):
-        ans = askyesno(title='WARNING', message='Are you sure to exit the program?\nIf yes exit, otherwise continue!')
-        if ans:
-            self.image_window.destroy()
-            sys.exit()
+        # Calculate the x and y coordinates to center the window
+        x = (screen_width // 2) - (width // 2)
+        y = (screen_height // 2) - (height // 2)
+
+        window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+
+
+    def center_window_coordinates(self, width=None, height=None):
+        if width is None:
+            width = self.image_window.winfo_reqwidth()
+        if height is None:
+            height = self.image_window.winfo_reqheight()
+        x = (self.image_window.winfo_screenwidth() // 2) - (width // 2)
+        y = (self.image_window.winfo_screenheight() // 2) - (height // 2)
+        return '{}x{}+{}+{}'.format(width, height, x, y)
+    
+
+    def choose_config_location(self):
+        directory = filedialog.askdirectory()
+        if directory:
+            self.config_path = os.path.join(directory, "settings.json")
+            # Save the current default save directory to a new location
+            self.save_default_directory(self.default_save_directory)
+
+    
+    def update_confirm_button_state(self, event=None):
+        if self.combo.get():  # If there's a value selected in the combobox
+            if self.combo_color.get():
+                self.confirm_button.config(state=NORMAL)
         else:
-            return None
+            self.confirm_button.config(state=DISABLED)
 
-    def toggle_fullscreen(self, event=None):
-        self.is_fullscreen = not self.is_fullscreen
-        self.image_window.attributes("-fullscreen", self.is_fullscreen)
-        return "break"
+    
+    def choose_default_directory(self):
+        directory = filedialog.askdirectory()
+        if directory:
+            self.save_default_directory(directory)
+            self.default_save_directory = directory
+    
+    
+    def create_calculation_buttons(self, frame):
+        method_label = Label(frame, text="Entropy Method")
+        color_label = Label(frame, text="Color Space")
+        method_label.grid(row=2, column=0, sticky='ew')
+        color_label.grid(row=1, column=0, sticky='ew')
+        # Create a Combobox and make it visible
+        self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
+        self.combo.grid(row=2, column=1)  # Set the position of the combobox
+        self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
+        self.combo_color.grid(row=1, column=1)  # Set the position of the combobox
 
-    def end_fullscreen(self, event=None):
-        self.is_fullscreen = False
-        self.image_window.attributes("-fullscreen", False)
-        return "break"
+        # Binding selection event
+        self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
+        self.combo_color.bind("<<ComboboxSelected>>", self.on_combo_color_select)
 
+        # The save button is arranged on the right side of the combobox
+        self.button_save = Button(frame, text="Save", command=self.save)
+        self.button_save.grid(row=2, column=3, sticky='ew')
+
+        self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
+
+        self.confirm_button.grid(row=2, column=2, sticky='ew')
+    
+    
+    def create_image_frame(self):
+        frame_image = Frame(self.image_window, width=700, height=400)
+        frame_image.grid(row=0, column=1, columnspan=3, sticky='nsew')
+        self.canvas_image = Canvas(frame_image, width=700, height=400)
+        self.canvas_image.grid(row=0, column=0, sticky='nsew')
+        x_scrollbar = Scrollbar(frame_image, orient="horizontal", command=self.canvas_image.xview)
+        x_scrollbar.grid(row=1, column=0, sticky='ew')
+        y_scrollbar = Scrollbar(frame_image, orient="vertical", command=self.canvas_image.yview)
+        y_scrollbar.grid(row=0, column=1, sticky='ns')
+        self.canvas_image.config(xscrollcommand=x_scrollbar.set, yscrollcommand=y_scrollbar.set)
+        self.image_on_canvas = self.canvas_image.create_image(0, 0, anchor='nw',
+                                                              image=self.List_photoimages[self.img_no])
+
+        # Set weight for frame_image to adjust canvas size
+        frame_image.grid_rowconfigure(0, weight=1)
+        frame_image.grid_columnconfigure(0, weight=1)
+    
+    
     def create_menu(self):
         menu_bar = Menu(self.image_window)
         self.image_window.config(menu=menu_bar)
@@ -176,24 +267,18 @@ class ImageViewer:
         settings_menu.add_command(label="Set Default Save Directory", command=self.choose_default_directory)
         settings_menu.add_command(label="Choose Config File Location", command=self.choose_config_location)
         menu_bar.add_cascade(label="Settings", menu=settings_menu)
+    
+    
+    def create_navigation_buttons(self, frame):
+        self.button_back = Button(frame, text="<<", command=self.back)
+        self.button_back.grid(row=1, column=2, sticky='ew')
 
+        spacer = Label(frame, text=" " * 20)
+        spacer.grid(row=1, column=0, sticky='ew')
 
-    def create_image_frame(self):
-        frame_image = Frame(self.image_window, width=700, height=400)
-        frame_image.grid(row=0, column=1, columnspan=3, sticky='nsew')
-        self.canvas_image = Canvas(frame_image, width=700, height=400)
-        self.canvas_image.grid(row=0, column=0, sticky='nsew')
-        x_scrollbar = Scrollbar(frame_image, orient="horizontal", command=self.canvas_image.xview)
-        x_scrollbar.grid(row=1, column=0, sticky='ew')
-        y_scrollbar = Scrollbar(frame_image, orient="vertical", command=self.canvas_image.yview)
-        y_scrollbar.grid(row=0, column=1, sticky='ns')
-        self.canvas_image.config(xscrollcommand=x_scrollbar.set, yscrollcommand=y_scrollbar.set)
-        self.image_on_canvas = self.canvas_image.create_image(0, 0, anchor='nw',
-                                                              image=self.List_photoimages[self.img_no])
+        self.button_forward = Button(frame, text=">>", command=self.forward)
+        self.button_forward.grid(row=1, column=3, sticky='ew')
 
-        # Set weight for frame_image to adjust canvas size
-        frame_image.grid_rowconfigure(0, weight=1)
-        frame_image.grid_columnconfigure(0, weight=1)
 
     def create_thumbnail_frame(self):
         frame_thumbnails_container = Frame(self.image_window, width=70)  # Adjust width
@@ -220,13 +305,92 @@ class ImageViewer:
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
 
-    def on_scroll(self, *args):
-        # Default scrolling behavior
-        self.canvas_thumbnails.yview(*args)
+    
+    def create_zoom_controls(self, frame):
+        spacer = Label(frame, text=" " * 20)
+        spacer.grid(row=0, column=0, sticky='ew')
+        
+        button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
+        button_zoom_in.grid(row=0, column=2, sticky='ew')
 
-        # Load visible thumbnails after scrolling
-        self.load_visible_thumbnails()
+        self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
+        self.scale.set(100)
+        self.scale.grid(row=0, column=1, sticky='ew')
+        self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
 
+        button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
+        button_zoom_out.grid(row=0, column=3, sticky='ew')
+    
+    
+    def clos_window(self):
+        ans = askyesno(title='WARNING', message='Are you sure to exit the program?\nIf yes exit, otherwise continue!')
+        if ans:
+            self.image_window.destroy()
+            sys.exit()
+        else:
+            return None
+        
+
+    def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
+        self.button_save.config(state=NORMAL)
+        self.confirm_button.config(state=NORMAL)
+    
+    
+    def end_fullscreen(self, event=None):
+        self.is_fullscreen = False
+        self.image_window.attributes("-fullscreen", False)
+        return "break"
+        
+    
+    def forward(self, event=None):
+        if self.img_no >= len(self.List_images) - 1:  # Return if it is the last image
+            return
+        self.img_no += 1
+        if self.img_no < len(self.image_files) - 1:
+            self.load_image_at_index(self.img_no + 1)
+        self.update_image()
+        self.update_buttons()
+        self.load_visible_thumbnails()  # Load visible thumbnails
+        self.update_status_bar()
+    
+    
+    def load_default_directory(self):
+        try:
+            with open(self.config_path, 'r') as file:
+                data = json.load(file)
+                return data.get('default_directory', '')
+        except FileNotFoundError:
+            return ''
+    
+    
+    def load_image_at_index(self, idx):
+        """Load the image and thumbnail of the specified index."""
+
+        try:
+            # Load main image
+            img = Image.open(os.path.join(self.directory, self.image_files[idx]))
+            self.List_images[idx] = img
+            self.List_photoimages[idx] = ImageTk.PhotoImage(img)
+
+            # Load thumbnail if not loaded
+            if self.List_thumbnails[idx] is None:
+                thumb = img.resize((50, 50))
+                self.List_thumbnails[idx] = thumb
+                self.List_thumbnail_images[idx] = ImageTk.PhotoImage(thumb)
+
+        except Exception as e:
+
+            # If there's an error, show a message and remove the problematic image from the list
+            messagebox.showerror("Error", f"An error occurred while loading {self.image_files[idx]}: {str(e)}")
+            self.image_files.pop(idx)
+
+            # Recalculate the lists based on the updated image_files list
+            self.List_images = [None] * len(self.image_files)
+            self.List_photoimages = [None] * len(self.image_files)
+            self.List_thumbnails = [None] * len(self.image_files)
+            self.List_thumbnail_images = [None] * len(self.image_files)
+    
+    
     def load_visible_thumbnails(self, event=None):
         # Get the scroll position
         top = self.canvas_thumbnails.canvasy(0)
@@ -248,54 +412,17 @@ class ImageViewer:
                 self.loaded_thumbnails.add(idx)
             if self.List_images[idx] is None:
                 self.load_image_at_index(idx)
+    
+    
+    def on_combo_color_select(self, event=None):
+        selected_color = self.combo.get()
+        self.update_confirm_button_state()
 
-    def create_zoom_controls(self, frame):
-        spacer = Label(frame, text=" " * 20)
-        spacer.grid(row=0, column=0, sticky='ew')
-        
-        button_zoom_in = Button(frame, text="Zoom In", command=lambda: self.adjust_zoom(10))
-        button_zoom_in.grid(row=0, column=2, sticky='ew')
 
-        self.scale = Scale(frame, from_=10, to=400, orient=HORIZONTAL)
-        self.scale.set(100)
-        self.scale.grid(row=0, column=1, sticky='ew')
-        self.scale.bind('<ButtonRelease-1>', lambda e: self.resize_image(self.scale.get()))
+    def on_combo_select(self, event=None):
+        selected_item = self.combo.get()
+        self.update_confirm_button_state()
 
-        button_zoom_out = Button(frame, text="Zoom Out", command=lambda: self.adjust_zoom(-10))
-        button_zoom_out.grid(row=0, column=3, sticky='ew')
-
-    def create_navigation_buttons(self, frame):
-        self.button_back = Button(frame, text="<<", command=self.back)
-        self.button_back.grid(row=1, column=2, sticky='ew')
-
-        spacer = Label(frame, text=" " * 20)
-        spacer.grid(row=1, column=0, sticky='ew')
-
-        self.button_forward = Button(frame, text=">>", command=self.forward)
-        self.button_forward.grid(row=1, column=3, sticky='ew')
-
-    def create_calculation_buttons(self, frame):
-        method_label = Label(frame, text="Entropy Method")
-        color_label = Label(frame, text="Color Space")
-        method_label.grid(row=2, column=0, sticky='ew')
-        color_label.grid(row=1, column=0, sticky='ew')
-        # Create a Combobox and make it visible
-        self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
-        self.combo.grid(row=2, column=1)  # Set the position of the combobox
-        self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
-        self.combo_color.grid(row=1, column=1)  # Set the position of the combobox
-
-        # Binding selection event
-        self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
-        self.combo_color.bind("<<ComboboxSelected>>", self.on_combo_color_select)
-
-        # The save button is arranged on the right side of the combobox
-        self.button_save = Button(frame, text="Save", command=self.save)
-        self.button_save.grid(row=2, column=3, sticky='ew')
-
-        self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
-
-        self.confirm_button.grid(row=2, column=2, sticky='ew')
 
     def on_confirm_click(self):
         self.image_window.after(0, self.start_preprocess)
@@ -338,60 +465,22 @@ class ImageViewer:
         self.refresh_all_images(sorted_images)
         self.image_window.after(0, self.entropy_calculation_complete)
         self.image_window.after(0, self.progress_window.destroy)
+    
+    
+    def on_scroll(self, *args):
+        # Default scrolling behavior
+        self.canvas_thumbnails.yview(*args)
 
-    def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
-        self.button_save.config(state=NORMAL)
-        self.confirm_button.config(state=NORMAL)
-
-    def start_preprocess(self):
-        self.button_save.config(state=DISABLED)
-        self.confirm_button.config(state=DISABLED)
-        # Create a new Toplevel window for progress bar
-        self.preprogress_window = Toplevel(self.image_window)
-        self.preprogress_window.title("Preprocessing Images...")
-
-        # Add a label for information
-        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
-
-        # Create and pack the progress bar
-        self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
-        self.preprogress.pack(pady=20)
-
-    def start_entropy_calculation(self):  # Call this when you start the entropy calculation
-        # Create a new Toplevel window for progress bar
-        self.progress_window = Toplevel(self.image_window)
-        self.progress_window.title("Calculating Entropy...")
-
-        # Add a label for information
-        Label(self.progress_window, text="Please wait while calculating entropy...").pack(pady=10)
-
-        # Create and pack the progress bar
-        self.progress = ttk.Progressbar(self.progress_window, orient="horizontal", length=200, mode="determinate")
-        self.progress.pack(pady=20)
+        # Load visible thumbnails after scrolling
+        self.load_visible_thumbnails()
 
 
-    def on_combo_select(self, event=None):
-        selected_item = self.combo.get()
-        self.update_confirm_button_state()
+    def on_select(self, idx):
+        self.img_no = idx
+        self.update_image()
+        self.update_buttons()
+        self.update_status_bar()
 
-    def on_combo_color_select(self, event=None):
-        selected_color = self.combo.get()
-        self.update_confirm_button_state()
-
-    def update_images_from_array(self, np_array, index):
-        # Convert numpy array to PIL Image
-        img = Image.fromarray(np_array)
-
-        # Update main image lists
-        self.List_images[index] = img
-        self.List_photoimages[index] = ImageTk.PhotoImage(img)
-
-        # Create and update thumbnail
-        thumbnail_size = (50, 50)  # You can adjust the size as needed
-        thumbnail = img.copy()
-        thumbnail.thumbnail(thumbnail_size)
-        self.List_thumbnails[index] = thumbnail
-        self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
 
     def refresh_all_images(self, np_arrays):
         self.img_no=0
@@ -411,64 +500,6 @@ class ImageViewer:
         self.update_thumbnails_UI()
         self.update_all_thumbnails()
 
-    def update_thumbnails_UI(self):
-        for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
-            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
-
-    def split_images_and_entropy(self, img_ent):
-        images = [entry[0] for entry in img_ent]
-        entropies = [entry[1] for entry in img_ent]
-        return images, entropies
-
-    def load_image_at_index(self, idx):
-        """Load the image and thumbnail of the specified index."""
-
-        try:
-            # Load main image
-            img = Image.open(os.path.join(self.directory, self.image_files[idx]))
-            self.List_images[idx] = img
-            self.List_photoimages[idx] = ImageTk.PhotoImage(img)
-
-            # Load thumbnail if not loaded
-            if self.List_thumbnails[idx] is None:
-                thumb = img.resize((50, 50))
-                self.List_thumbnails[idx] = thumb
-                self.List_thumbnail_images[idx] = ImageTk.PhotoImage(thumb)
-
-        except Exception as e:
-
-            # If there's an error, show a message and remove the problematic image from the list
-            messagebox.showerror("Error", f"An error occurred while loading {self.image_files[idx]}: {str(e)}")
-            self.image_files.pop(idx)
-
-            # Recalculate the lists based on the updated image_files list
-            self.List_images = [None] * len(self.image_files)
-            self.List_photoimages = [None] * len(self.image_files)
-            self.List_thumbnails = [None] * len(self.image_files)
-            self.List_thumbnail_images = [None] * len(self.image_files)
-
-    def forward(self, event=None):
-        if self.img_no >= len(self.List_images) - 1:  # Return if it is the last image
-            return
-        self.img_no += 1
-        if self.img_no < len(self.image_files) - 1:
-            self.load_image_at_index(self.img_no + 1)
-        self.update_image()
-        self.update_buttons()
-        self.load_visible_thumbnails()  # Load visible thumbnails
-        self.update_status_bar()
-
-    def back(self, event=None):
-        if self.img_no <= 0:  # Return if it is the first image
-            return
-        self.img_no -= 1
-        if self.img_no > 0:
-            self.load_image_at_index(self.img_no - 1)
-        self.update_image()
-        self.update_buttons()
-        self.load_visible_thumbnails()  # load visible thumbnails
-        self.update_status_bar()
 
     def resize_image(self, percent):
         if not self.List_images[self.img_no]:
@@ -480,53 +511,8 @@ class ImageViewer:
                                                             int(self.List_images[self.img_no].height * percent / 100)))
         self.List_photoimages[self.img_no] = ImageTk.PhotoImage(img_resized)
         self.canvas_image.itemconfig(self.image_on_canvas, image=self.List_photoimages[self.img_no])
-
-
-    def update_image(self):
-        self.canvas_image.itemconfig(self.image_on_canvas, image=self.List_photoimages[self.img_no])
-        self.canvas_image.config(scrollregion=self.canvas_image.bbox(ALL))
-        self.resize_image(self.zoom_percent)
-        self.update_listbox()
-
-    def update_buttons(self):
-        self.button_back.config(state=NORMAL if self.img_no > 0 else DISABLED)
-        self.button_forward.config(state=NORMAL if self.img_no < len(self.List_images) - 1 else DISABLED)
-
-    def adjust_zoom(self, delta):
-        new_zoom = self.zoom_percent + delta
-        if 10 <= new_zoom <= 400:
-            self.zoom_percent = new_zoom
-            self.resize_image(new_zoom)
-            self.scale.set(new_zoom)
-
-    def on_select(self, idx):
-        self.img_no = idx
-        self.update_image()
-        self.update_buttons()
-        self.update_status_bar()
-
-    def update_status_bar(self):
-        file_path = os.path.join(self.directory, self.image_files[self.img_no])
-        image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
-        img = self.List_images[self.img_no]
-        info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
-        self.status_bar.config(text=info_text)
-
-    def update_listbox(self):
-        for widget in self.frame_thumbnails.winfo_children():
-            widget.config(relief=FLAT)
-        self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
-        self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
-
-    def update_all_thumbnails(self):
-        for idx in range(len(self.image_files)):
-            if self.List_images[idx] is None:
-                self.load_image_at_index(idx)
-            thumbnail_img = self.List_thumbnail_images[idx]
-            # Update button image
-            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
-
+    
+    
     def save(self):
         # First, try to get the default save directory from settings.json
         default_save_directory = self.load_default_directory()
@@ -572,72 +558,126 @@ class ImageViewer:
 
         with open(self.config_path, "w") as f:
             json.dump(settings, f)
-
-
-    def load_default_directory(self):
-        try:
-            with open(self.config_path, 'r') as file:
-                data = json.load(file)
-                return data.get('default_directory', '')
-        except FileNotFoundError:
-            return ''
-
-
-    def choose_default_directory(self):
-        directory = filedialog.askdirectory()
-        if directory:
-            self.save_default_directory(directory)
-            self.default_save_directory = directory
-
-    def choose_config_location(self):
-        directory = filedialog.askdirectory()
-        if directory:
-            self.config_path = os.path.join(directory, "settings.json")
-            # Save the current default save directory to a new location
-            self.save_default_directory(self.default_save_directory)
-
-    def center_window(self, window):
-        window.update_idletasks()  # Ensure that the window size has been 'implemented'
     
-        # Obtain the width and height of the screen
-        screen_width = window.winfo_screenwidth()
-        screen_height = window.winfo_screenheight()
     
-        # Obtain the width and height of the window
-        width = window.winfo_width()
-        height = window.winfo_height()
-
-        # Calculate the x and y coordinates to center the window
-        x = (screen_width // 2) - (width // 2)
-        y = (screen_height // 2) - (height // 2)
-
-        window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
-
-    def center_window_coordinates(self, width=None, height=None):
-        if width is None:
-            width = self.image_window.winfo_reqwidth()
-        if height is None:
-            height = self.image_window.winfo_reqheight()
-        x = (self.image_window.winfo_screenwidth() // 2) - (width // 2)
-        y = (self.image_window.winfo_screenheight() // 2) - (height // 2)
-        return '{}x{}+{}+{}'.format(width, height, x, y)
+    def split_images_and_entropy(self, img_ent):
+        images = [entry[0] for entry in img_ent]
+        entropies = [entry[1] for entry in img_ent]
+        return images, entropies
     
-    def update_confirm_button_state(self, event=None):
-        if self.combo.get():  # If there's a value selected in the combobox
-            if self.combo_color.get():
-                self.confirm_button.config(state=NORMAL)
-        else:
-            self.confirm_button.config(state=DISABLED)
+    
+    def start_entropy_calculation(self):  # Call this when you start the entropy calculation
+        # Create a new Toplevel window for progress bar
+        self.progress_window = Toplevel(self.image_window)
+        self.progress_window.title("Calculating Entropy...")
 
+        # Add a label for information
+        Label(self.progress_window, text="Please wait while calculating entropy...").pack(pady=10)
+
+        # Create and pack the progress bar
+        self.progress = ttk.Progressbar(self.progress_window, orient="horizontal", length=200, mode="determinate")
+        self.progress.pack(pady=20)
+
+
+    def start_preprocess(self):
+        self.button_save.config(state=DISABLED)
+        self.confirm_button.config(state=DISABLED)
+        # Create a new Toplevel window for progress bar
+        self.preprogress_window = Toplevel(self.image_window)
+        self.preprogress_window.title("Preprocessing Images...")
+
+        # Add a label for information
+        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
+
+        # Create and pack the progress bar
+        self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
+        self.preprogress.pack(pady=20)
+    
+    
+    def thread_it(self, func, *args):
+        """ Pack functions into threads """
+        self.myThread = threading.Thread(target=func, args=args)
+        self.myThread.daemon = True  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread.start()
+
+    
+    def toggle_fullscreen(self, event=None):
+        self.is_fullscreen = not self.is_fullscreen
+        self.image_window.attributes("-fullscreen", self.is_fullscreen)
+        return "break"
+
+    
+    def update_all_thumbnails(self):
+        for idx in range(len(self.image_files)):
+            if self.List_images[idx] is None:
+                self.load_image_at_index(idx)
+            thumbnail_img = self.List_thumbnail_images[idx]
+            # Update button image
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+    
+    
+    def update_buttons(self):
+        self.button_back.config(state=NORMAL if self.img_no > 0 else DISABLED)
+        self.button_forward.config(state=NORMAL if self.img_no < len(self.List_images) - 1 else DISABLED)
+    
+    
+    def update_image(self):
+        self.canvas_image.itemconfig(self.image_on_canvas, image=self.List_photoimages[self.img_no])
+        self.canvas_image.config(scrollregion=self.canvas_image.bbox(ALL))
+        self.resize_image(self.zoom_percent)
+        self.update_listbox()
+    
+    
+    def update_images_from_array(self, np_array, index):
+        # Convert numpy array to PIL Image
+        img = Image.fromarray(np_array)
+
+        # Update main image lists
+        self.List_images[index] = img
+        self.List_photoimages[index] = ImageTk.PhotoImage(img)
+
+        # Create and update thumbnail
+        thumbnail_size = (50, 50)  # You can adjust the size as needed
+        thumbnail = img.copy()
+        thumbnail.thumbnail(thumbnail_size)
+        self.List_thumbnails[index] = thumbnail
+        self.List_thumbnail_images[index] = ImageTk.PhotoImage(thumbnail)
+
+    
+    def update_thumbnails_UI(self):
+        for idx, thumbnail_img in enumerate(self.List_thumbnail_images):
+            self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
+            self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+    
+
+    def update_listbox(self):
+        for widget in self.frame_thumbnails.winfo_children():
+            widget.config(relief=FLAT)
+        self.frame_thumbnails.winfo_children()[self.img_no].config(relief=SOLID)
+        self.canvas_thumbnails.yview_scroll(self.img_no - int(self.canvas_thumbnails.winfo_height() / 60), 'units')
+
+    
+    def update_preprogress(self, text, iteration, total, start_time=None):
+        percent = (iteration / float(total)) * 100
+        self.preprogress["value"] = percent
+        self.preprogress.update()
+    
+    
     def update_progress(self, text, iteration, total, start_time=None):
         percent = (iteration / float(total)) * 100
         self.progress["value"] = percent
         self.progress.update()
 
-    def update_preprogress(self, text, iteration, total, start_time=None):
-        percent = (iteration / float(total)) * 100
-        self.preprogress["value"] = percent
-        self.preprogress.update()
+
+    def update_status_bar(self):
+        file_path = os.path.join(self.directory, self.image_files[self.img_no])
+        image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
+        img = self.List_images[self.img_no]
+        info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+        self.status_bar.config(text=info_text)
+
+    
 
 
 
