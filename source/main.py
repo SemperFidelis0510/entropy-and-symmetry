@@ -12,7 +12,8 @@ def main():
     datasets = {'china': "../datasets/satellite/china",
                 'usa': "../datasets/satellite/usa",
                 'argentina': "../datasets/satellite/argentina",
-                'satellite': "../datasets/satellite"}
+                'satellite': "../datasets/satellite",
+                "classified": "../datasets/classified_pictures"}
 
     transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
     transform_methods_with_params = {'laplace': None, 'joint_red_green': None,
@@ -24,10 +25,10 @@ def main():
     postprocessor_methods = []
 
     # Initialize other components
-    imageLoader = ImageLoader(image_directory=datasets['satellite'], head=10)
+    imageLoader = ImageLoader(image_directory=datasets['classified'], head=600)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Transformer(transform_methods_with_params)
-    entropyCalculator = EntropyCalculator(color_weight=(1,1,1))
+    entropyCalculator = EntropyCalculator(color_weight=None)
     postprocessor = Postprocessor(postprocessor_methods)
     dataSaver = DataSaver(destination=dst_folder, methods=list(transform_methods_with_params.keys()))
 

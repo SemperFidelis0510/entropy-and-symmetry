@@ -5,7 +5,7 @@ from Image import Image
 import time
 from utils import print_progress_bar
 class ImageLoader:
-    def __init__(self, image_directory, image_format=('png'), head=None):
+    def __init__(self, image_directory, image_format=('png', 'bmp'), head=None):
         self.image_directory = image_directory
         self.image_format = image_format
         self.image_paths = []

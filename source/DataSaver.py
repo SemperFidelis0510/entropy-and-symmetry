@@ -46,10 +46,13 @@ class DataSaver:
                 "result": ent_value
             })
 
+        label = os.path.basename(os.path.dirname(image.path))
+
         # Add the path field of the Image object
         return {
             "path": image.path,
             "size": image.size,
             "pixel size": image.pixel_size,
+            "label": label,
             "entropy_results": ent_result_with_method
         }
