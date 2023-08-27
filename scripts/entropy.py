@@ -5,7 +5,7 @@ from skimage.feature import local_binary_pattern
 from skimage.measure import shannon_entropy
 from skimage.segmentation import slic
 
-from scripts.transforms import *
+from transforms import *
 
 
 def linearCombine_ent(images, methods, method_weight=None, sort=True, ent_norm=None, colors='rgb',
