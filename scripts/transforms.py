@@ -5,7 +5,7 @@ import pywt
 from skimage.color import rgb2gray
 from scipy.ndimage import convolve
 
-from utils import *
+from scripts.utils import *
 
 
 def dft(image):

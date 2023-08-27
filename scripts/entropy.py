@@ -5,7 +5,7 @@ from skimage.feature import local_binary_pattern
 from skimage.measure import shannon_entropy
 from skimage.segmentation import slic
 
-from transforms import *
+from scripts.transforms import *
 
 
 def linearCombine_ent(images, methods, method_weight=None, sort=True, ent_norm=None, colors='rgb',
@@ -230,7 +230,7 @@ def calculate_joint_entropy_red_green(img_arr):
     - Scalar value representing the joint entropy.
     """
     # Ensure the image values are integers.
-    img_arr = np.array(img_arr, dtype=np.int)
+    img_arr = np.array(img_arr, dtype=int)
 
     # Extract red and green channels from the image array
     red_channel, green_channel = img_arr[:, :, 0], img_arr[:, :, 1]
@@ -263,7 +263,7 @@ def calculate_joint_RGB_entropy(rgb_image):
     - Scalar representing the joint entropy.
     """
     # Ensure the image values are integers.
-    rgb_image = np.array(rgb_image, dtype=np.int)
+    rgb_image = np.array(rgb_image, dtype=int)
 
     # Flatten and stack the color channels
     rgb_flatten = np.vstack([rgb_image[:, :, i].ravel() for i in range(3)]).T
