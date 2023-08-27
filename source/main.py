@@ -10,6 +10,8 @@ from datetime import datetime
 def main():
     # System Configuration
     transform_methods_with_params = {'dft': None, 'naive': None, 'dwt': {'wavelet':'db1', 'level':1}}
+    transform_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
+                                     'lbp': None, 'lbp_gabor': None, 'RGBCM': None}
     m_name = '-'.join(transform_methods_with_params.keys())
     dst_folder = f'../processed/m={m_name}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     postprocessor_methods = []
@@ -19,7 +21,7 @@ def main():
                 'satellite': "../datasets/satellite"}
 
     # Initialize other components
-    imageLoader = ImageLoader(image_directory=datasets['argentina'])
+    imageLoader = ImageLoader(image_directory=datasets['satellite'])
     preprocessor = Preprocessor(crop_size=None)
     transformer = Transformer(transform_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=(1,1,1))
@@ -34,7 +36,7 @@ def main():
     pipeline.runPipeline()
 
     # Run parallel
-    #pipeline.runParallelPipeline()
+    # pipeline.runParallelPipeline()
 
 if __name__ == '__main__':
     main()

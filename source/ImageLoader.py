@@ -18,7 +18,7 @@ class ImageLoader:
             img_data = PILImage.open(filename).convert('RGB')
             image_object = Image(img_data)
             image_objects.append(image_object)
-            print_progress_bar('Loading Image', index, n, start_time=start_time)
+            print_progress_bar('Loading Image', index+1, n, start_time=start_time)
         print(f'\nLoading done. Please wait for entropy calculation to start.')
         return image_objects
 

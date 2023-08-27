@@ -35,7 +35,7 @@ class PipelineManager:
             self.transformer.applyTransform(image_object)
             self.entropyCalculator.calculateEntropy(image_object)
             self.postprocessor.applyPostprocessing(image_object)
-            print_progress_bar('Entropy calculation', index, n, start_time=start_time)
+            print_progress_bar('Entropy calculation', index+1, n, start_time=start_time)
         print(f'\nEntropy calculation done.')
         # Step 2: Sort the processed images based on some specification
         sorted_images = self.sortImages(image_objects)
