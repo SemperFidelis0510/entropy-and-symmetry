@@ -1,13 +1,16 @@
 import os
-import  json
+import json
 import platform
 import subprocess
+
+
 class DataSaver:
     def __init__(self, destination, methods):
         self.destination = destination
         self.methods = methods
         self.json_path = os.path.join(self.destination, 'entropy_results.json')
         self.json_file = None
+
     def save(self, index, image):
         if not os.path.exists(self.destination):
             os.makedirs(self.destination)
@@ -25,16 +28,18 @@ class DataSaver:
         # Write the entropy results to the JSON file
         with open(self.json_path, 'w') as f:
             json.dump(ent_results, f, indent=4)
+
     def save_single_ent_result(self, index, image):
-        if self.json_file is None:
-            self.json_file = open(self.json_path, 'w')
-        ent_results = {}
-        ent_results[f"image_{index}.bmp"] = self.get_ent_result(index, image)
-
-        # Write the entropy results to the JSON file
-
-        json_str = json.dumps(ent_results, indent=4)
-        self.json_file.write("\n" + json_str)
+        if not os.path.exists(self.json_path):
+            with open(self.json_path, 'w') as f:
+                j = {}
+                json.dump(j, f)
+        with open(self.json_path, 'r+') as f:
+            json_obj = json.load(f)
+            json_obj[f"image_{index}.bmp"] = self.get_ent_result(index, image)
+            f.seek(0)
+            json.dump(json_obj, f, indent=4)
+            f.truncate()
 
     def get_ent_result(self, index, image):
         # Assuming image.entropyResults is a list [value1, value2, ...]
