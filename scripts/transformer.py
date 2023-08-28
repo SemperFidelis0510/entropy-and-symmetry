@@ -1,6 +1,9 @@
+import os
+import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
 
 
 # Define the Self-Attention Layer
@@ -54,12 +57,28 @@ class TransformerBlock(nn.Module):
             nn.ReLU(),
             nn.Linear(2 * embed_size, embed_size),
         )
+        self.dropout = nn.Dropout(0.1)
+        self.batch_norm1 = nn.BatchNorm1d(embed_size)
+        self.batch_norm2 = nn.BatchNorm1d(embed_size)
 
     def forward(self, value, key, query):
         attention = self.attention(value, key, query)
-        x = self.norm1(attention + query)
+
+        # Reshape tensor before BatchNorm1d
+        reshaped_attention = attention.view(-1, attention.size(-1))
+
+        x = self.batch_norm1(self.norm1(reshaped_attention))
+        x = x.view(attention.size())  # Reshape back to original size
+        x = self.dropout(x)
+
         forward = self.feed_forward(x)
-        out = self.norm2(forward + x)
+
+        # Reshape tensor before second BatchNorm1d
+        reshaped_forward = forward.view(-1, forward.size(-1))
+
+        out = self.batch_norm2(self.norm2(reshaped_forward))
+        out = out.view(forward.size())  # Reshape back to original size
+
         return out
 
 
@@ -78,21 +97,93 @@ class Classifier(nn.Module):
         return x
 
 
-# Initialize the model, loss, and optimizer
-model = Classifier(num_classes=4)  # Assuming 4 classes
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+def train_model(dataset, epochs=100):
+    loss = None
+    possible_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
 
-# Dummy data and labels
-data = torch.randint(0, 256, (64, 10))  # 64 samples, each with a list of 10 numbers
-labels = torch.randint(0, 4, (64,))  # 64 samples, each with one label from 0 to 3
+    # Convert dataset to PyTorch tensors
+    entropies = [torch.tensor(d['entropies'], dtype=torch.long) for d in dataset]
+    labels = [possible_labels.index(d['label']) for d in dataset]
+    entropies = torch.stack(entropies)
+    labels = torch.tensor(labels, dtype=torch.long)
 
-# Training loop
-for epoch in range(100):
-    model.train()
-    optimizer.zero_grad()
-    output = model(data)
-    loss = criterion(output, labels)
-    loss.backward()
-    optimizer.step()
-    print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
+    # Create DataLoader
+    train_data = TensorDataset(entropies, labels)
+    train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+
+    # Initialize the model, loss, and optimizer
+    num_classes = len(possible_labels)
+    model = Classifier(num_classes=num_classes)
+
+    # Xavier Initialization
+    for m in model.modules():
+        if isinstance(m, nn.Linear):
+            nn.init.xavier_uniform_(m.weight)
+
+    criterion = nn.CrossEntropyLoss()
+
+    # Initialize the model, loss, and optimizer
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, factor=0.5)
+
+    # Training loop
+    for epoch in range(epochs):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            model.train()
+            optimizer.zero_grad()
+            output = model(data)
+            loss = criterion(output, target)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1)
+            optimizer.step()
+        scheduler.step(loss.item())
+        print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
+
+    return model
+
+
+def predict(model, numbers):
+    possible_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
+    model.eval()
+    with torch.no_grad():
+        numbers = torch.tensor(numbers, dtype=torch.long).unsqueeze(0)
+        output_ = model(numbers)
+        predicted_label_idx = torch.argmax(output_, dim=1).item()
+        return possible_labels[predicted_label_idx]
+
+
+def main():
+    path = "../entropy_results/m=2023-08-28_01-16-07/entropy_results.json"
+    test_part = 0.1
+    stats = {'test_samples': 0, 'right_predictions': 0}
+
+    with open(path, 'r') as f:
+        metadata = json.load(f)
+    dataset = []
+
+    for name, entry in metadata.items():
+        dataset.append({'entropies': [s['result'] for s in entry['entropy_results']], 'label': entry['label']})
+
+    i = int(test_part * len(dataset))
+    test_set = dataset[-i:]
+    dataset = dataset[:-i]
+
+    trained_model = train_model(dataset, epochs=100)
+    print('Model trained.')
+
+    for test in test_set:
+        stats['test_samples'] += 1
+        predicted_label = predict(trained_model, test['entropies'])
+        if predicted_label == test["label"]:
+            stats['right_predictions'] += 1
+            print(f'Predicted label: {predicted_label}.  Real label: {test["label"]}. Prediction correct!')
+        else:
+            print(f'Predicted label: {predicted_label}.  Real label: {test["label"]}. False prediction.')
+
+    stats['success_rate'] = 100 * stats['right_predictions'] / stats['test_samples']
+    print(f"{stats['right_predictions']} samples out of {stats['test_samples']} were predicted correctly.\n"
+          f"The models success rate is: {stats['success_rate']}%")
+
+
+if __name__ == "__main__":
+    main()
