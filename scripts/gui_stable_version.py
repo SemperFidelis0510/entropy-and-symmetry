@@ -276,6 +276,8 @@ class ImageViewer:
             gap = 8
         if self.os_name == 'Linux':
             gap = 6
+        if self.os_name == 'Windows':
+            gap = 8
         
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
@@ -717,9 +719,6 @@ class ImageViewer:
         self.status_bar.config(text=info_text)
 
     
-
-
-
 def choose_directory():
     try:
         directory = filedialog.askdirectory()
