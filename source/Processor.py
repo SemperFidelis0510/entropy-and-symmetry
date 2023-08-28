@@ -1,5 +1,5 @@
 import numpy as np
-from Image import Image
+from source.Image import Image
 import pywt
 from skimage.color import rgb2gray
 from scipy.ndimage import convolve
@@ -8,36 +8,36 @@ from skimage.feature import local_binary_pattern
 from scipy.signal import convolve2d
 from skimage.segmentation import slic
 
-class Transformer:
-    def __init__(self, transformation_methods_with_params = None):
-        self.transformation_methods_with_params = transformation_methods_with_params
+class Processor:
+    def __init__(self, processing_methods_with_params = None):
+        self.processing_methods_with_params = processing_methods_with_params
 
-    def applyTransform(self, image: Image):
-        for method, params in self.transformation_methods_with_params.items():
+    def applyProcessing(self, image: Image):
+        for method, params in self.processing_methods_with_params.items():
             if method == 'dft':
-                image.transformedData[method] = self.apply_dft(image.preprocessedData)
+                image.processedData[method] = self.apply_dft(image.preprocessedData)
             elif method == 'dwt':
-                image.transformedData[method] = self.apply_dwt(image.preprocessedData, **params)
+                image.processedData[method] = self.apply_dwt(image.preprocessedData, **params)
             elif method == 'naive':
-                image.transformedData[method] = image.preprocessedData
+                image.processedData[method] = image.preprocessedData
             elif method == 'hist':
-                image.transformedData[method] = self.apply_histogram(image.preprocessedData)
+                image.processedData[method] = self.apply_histogram(image.preprocessedData)
             elif method == 'laplace':
-                image.transformedData[method] = self.apply_laplacian(image.preprocessedData)
+                image.processedData[method] = self.apply_laplacian(image.preprocessedData)
             elif method == 'joint_red_green':
-                image.transformedData[method] = self.apply_joint_red_green(image.preprocessedData)
+                image.processedData[method] = self.apply_joint_red_green(image.preprocessedData)
             elif method == 'joint_all':
-                image.transformedData[method] = self.apply_joint_RGB(image.preprocessedData)
+                image.processedData[method] = self.apply_joint_RGB(image.preprocessedData)
             elif method == 'lbp':
-                image.transformedData[method] = self.apply_texture(image.preprocessedData)
+                image.processedData[method] = self.apply_texture(image.preprocessedData)
 
             elif method == 'lbp_gabor':
-                image.transformedData[method] = self.apply_texture_gabor(image.preprocessedData)
+                image.processedData[method] = self.apply_texture_gabor(image.preprocessedData)
 
             elif method == 'adapt':
-                image.transformedData[method] = self.apply_adaptive_estimation(image.preprocessedData, **params)
+                image.processedData[method] = self.apply_adaptive_estimation(image.preprocessedData, **params)
             elif method == 'RGBCM':
-                image.transformedData[method] = self.apply_CM_co_occurrence(image.preprocessedData)
+                image.processedData[method] = self.apply_CM_co_occurrence(image.preprocessedData)
 
             else:
                 raise ValueError(f"No entropy method matched for method '{method}'!!")
@@ -58,6 +58,13 @@ class Transformer:
             raise ValueError("Array must be 1D, 2D, or 3D")
 
     def apply_dwt(self, image, wavelet='db1', level=None):
+        result = []
+        if level != 'all':
+            result.append(self.compute_dwt(image, wavelet=wavelet, level=level))
+        else:
+            result = self.compute_dwt(image, wavelet=wavelet, level=None)
+        return result
+    def compute_dwt(self, image, wavelet='db1', level=None):
         rank = image.ndim
 
         # Handle 1D arrays
@@ -72,9 +79,12 @@ class Transformer:
 
         # Handle 3D arrays
         elif rank == 3:
-            result = [np.abs(pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)[level]).flatten()
-                      for i in range(image.shape[2])]
-            return np.vstack(result)
+            result = []
+            for i in range(image.shape[2]):
+                temp = pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)
+                result.append(temp)
+
+            return result
 
         else:
             raise ValueError("Array must be 1D, 2D, or 3D")

@@ -47,12 +47,13 @@ class DataSaver:
             })
 
         label = os.path.basename(os.path.dirname(image.path))
-
+        location = os.path.basename(image.path).split('_')[-2:-4:-1]
         # Add the path field of the Image object
         return {
             "path": image.path,
             "size": image.size,
             "pixel size": image.pixel_size,
+            "location": location,
             "label": label,
             "entropy_results": ent_result_with_method
         }
