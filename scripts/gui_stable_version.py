@@ -277,7 +277,7 @@ class ImageViewer:
         if self.os_name == 'Linux':
             gap = 6
         if self.os_name == 'Windows':
-            gap = 8
+            gap = 6
         
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
