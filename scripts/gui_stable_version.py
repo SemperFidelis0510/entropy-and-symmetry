@@ -1,4 +1,5 @@
 import json
+import platform
 import sys
 import threading
 from datetime import datetime
@@ -17,13 +18,6 @@ CONFIG_FILE = "settings.json"
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
 ENTROPY_METHODS = [
-    'hist',
-    'naive',
-    'dft',
-    'dwt',
-    'laplace',
-    'joint_red_green',
-    'joint_all',
     'lbp',
     'lbp_gabor',
     'adapt',
@@ -56,6 +50,7 @@ class ImageViewer:
 
         self.np_array = self.load_all_images_to_np_arrays(directory)
 
+        self.os_name = platform.system()
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
@@ -64,6 +59,7 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
+        self.entropies_calculated = 0
 
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
@@ -80,13 +76,13 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
-        self.image_window.geometry(self.center_window_coordinates(600, 612))  # The desired initial size
+        self.image_window.geometry(self.center_window_coordinates(600, 632))  # The desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
 
-        #self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
-        #self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
+        self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
+        self.status_bar.grid(row=3, column=0, columnspan=4, sticky='ew')
         ...
         #self.console = Text(self.image_window, height=10, width=50)
         #self.console.grid(row=3, column=0, columnspan=2, pady=20, padx=10, sticky='ew')
@@ -117,6 +113,9 @@ class ImageViewer:
         #sys.stdout = IORedirector(self.console)
 
         self.center_window(self.image_window)
+
+        self.forward()
+        self.back()
 
     
     def adjust_zoom(self, delta):
@@ -207,7 +206,7 @@ class ImageViewer:
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
         self.confirm_button.grid(row=2, column=2, sticky='ew')
 
-
+ 
     def create_image_frame(self):
         frame_image = Frame(self.image_window, width=700, height=400)
         frame_image.grid(row=0, column=1, columnspan=3, sticky='nsew')
@@ -269,10 +268,17 @@ class ImageViewer:
         scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
         scrollbar.config(command=self.on_scroll)
 
+        if self.os_name == 'Darwin':
+            gap = 8
+        if self.os_name == 'Linux':
+            gap = 6
+        if self.os_name == 'Windows':
+            gap = 6
+        
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
         self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60,
-                                      height=len(self.List_thumbnail_images) * 68)  # Increase height
+                                      height=len(self.List_thumbnail_images) * (60+gap))  # Increase height
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
         for idx in range(len(self.np_array)):
@@ -282,7 +288,7 @@ class ImageViewer:
 
 
         self.canvas_thumbnails.config(
-            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 68))  # Resize the scrolling area
+            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * (60+gap)))  # Resize the scrolling area
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
 
@@ -315,8 +321,11 @@ class ImageViewer:
     def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
         self.refresh_all_images(self.np_array)
         self.scroll_to_img_no()
+        self.entropies_calculated = 1
         self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
+        self.forward()
+        self.back()
     
     
     def end_fullscreen(self, event=None):
@@ -359,7 +368,7 @@ class ImageViewer:
 
         for dirpath, dirnames, filenames in os.walk(directory):
             for filename in filenames:
-                if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp')):  # Add or modify extensions as needed
+                if filename.endswith(IMAGE_EXTENSIONS):  # Add or modify extensions as needed
                     full_path = os.path.join(dirpath, filename)
                 
                     # Load the image
@@ -466,6 +475,7 @@ class ImageViewer:
         images, entropies = self.split_images_and_entropy(img_ent)
 
         self.np_array = images
+        self.entropies = entropies
 
         #self.refresh_all_images(sorted_images)
         self.image_window.after(0, self.entropy_calculation_complete)
@@ -487,6 +497,10 @@ class ImageViewer:
         self.update_image()
         self.update_buttons()
         self.update_status_bar()
+        
+        if self.img_no != len(self.np_array) - 1:
+            self.forward()
+            self.back()
 
 
     def refresh_all_images(self, np_arrays):
@@ -566,16 +580,16 @@ class ImageViewer:
     
     
     def scroll_to_img_no(self):
-        # 计算滚动到img_no所需的fraction
+        # Calculate the fraction needed to scroll to img_no
         fraction = (self.img_no) / (len(self.np_array))
     
-        # 为了避免滚动超出范围，我们需要进行一些调整。
-        # 假设画布的高度为600像素，并且每个缩略图的高度为60像素。
-        # 那么在最后的10张图片中，我们不希望再滚动，以防止滚动出范围。
+        # To avoid scrolling out of bounds, we need to make some adjustments.
+        # Let's say the canvas has a height of 600 pixels and each thumbnail has a height of 60 pixels.
+        # Then in the last 10 images we don't want any more scrolling to prevent scrolling out of bounds.
     
         max_scrollable_img_no = len(self.np_array) - int(self.canvas_thumbnails.winfo_height() / 68)
     
-        # 如果img_no超过最大可滚动索引，则将其设置为该值。
+        # If img_no exceeds the maximum scrollable index, it is set to that value.
         if self.img_no > max_scrollable_img_no:
             fraction = (max_scrollable_img_no) / (len(self.np_array))
 
@@ -700,14 +714,13 @@ class ImageViewer:
         #file_path = os.path.join(self.directory, self.image_files[self.img_no])
         #image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
         #img = self.List_images[self.img_no]
-        #info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
-        #self.status_bar.config(text=info_text)
-        pass
+        if self.entropies_calculated == 0:
+            info_text = f"Try to calculate the entropy!"
+        else:
+            info_text = f"Entropy: {self.entropies[self.img_no]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+        self.status_bar.config(text=info_text)
 
     
-
-
-
 def choose_directory():
     try:
         directory = filedialog.askdirectory()
