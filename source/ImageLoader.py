@@ -1,9 +1,9 @@
 import numpy as np
 from PIL import Image as PILImage
 import os
-from Image import Image
+from source.Image import Image
 import time
-from utils import print_progress_bar
+from source.utils import print_progress_bar
 class ImageLoader:
     def __init__(self, image_directory, image_format=('png', 'bmp'), head=None):
         self.image_directory = image_directory

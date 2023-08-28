@@ -1,4 +1,4 @@
-from Image import Image
+from source.Image import Image
 import numpy as np
 class Preprocessor:
     def __init__(self, crop_size=None):
