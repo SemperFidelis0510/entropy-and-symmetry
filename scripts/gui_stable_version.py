@@ -206,7 +206,7 @@ class ImageViewer:
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
         self.confirm_button.grid(row=2, column=2, sticky='ew')
 
-
+ 
     def create_image_frame(self):
         frame_image = Frame(self.image_window, width=700, height=400)
         frame_image.grid(row=0, column=1, columnspan=3, sticky='nsew')
