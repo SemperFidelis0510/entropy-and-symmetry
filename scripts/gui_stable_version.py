@@ -1,4 +1,5 @@
 import json
+import platform
 import sys
 import threading
 from datetime import datetime
@@ -56,6 +57,7 @@ class ImageViewer:
 
         self.np_array = self.load_all_images_to_np_arrays(directory)
 
+        self.os_name = platform.system()
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
@@ -270,10 +272,15 @@ class ImageViewer:
         scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
         scrollbar.config(command=self.on_scroll)
 
+        if self.os_name == 'Darwin':
+            gap = 8
+        if self.os_name == 'Linux':
+            gap = 6
+        
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
         self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60,
-                                      height=len(self.List_thumbnail_images) * 68)  # Increase height
+                                      height=len(self.List_thumbnail_images) * (60+gap))  # Increase height
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
         for idx in range(len(self.np_array)):
@@ -283,7 +290,7 @@ class ImageViewer:
 
 
         self.canvas_thumbnails.config(
-            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * 68))  # Resize the scrolling area
+            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * (60+gap)))  # Resize the scrolling area
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
 
