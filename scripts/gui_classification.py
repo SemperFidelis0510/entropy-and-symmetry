@@ -13,11 +13,23 @@ class ImageBrowser:
 
         # Create a button to select folder
         self.btn_select_folder = tk.Button(root, text="Select Folder", command=self.load_folder)
-        self.btn_select_folder.pack()
+        self.btn_select_folder.pack(pady=10)
+
+        # Create a frame to hold the canvas and scrollbar
+        frame = tk.Frame(root)
+        frame.pack(fill=tk.BOTH, expand=True)
 
         # Create a canvas to hold the thumbnails
-        self.canvas = tk.Canvas(root)
-        self.canvas.pack(fill=tk.BOTH, expand=True)
+        self.canvas = tk.Canvas(frame, bg='white')
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Add a scrollbar to the canvas
+        scrollbar = tk.Scrollbar(frame, orient="vertical", command=self.canvas.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.config(yscrollcommand=scrollbar.set)
+
+        # Update the scroll region on canvas configure
+        self.canvas.bind('<Configure>', self.on_canvas_configure)
 
     def load_folder(self):
         folder_path = filedialog.askdirectory()
@@ -51,6 +63,9 @@ class ImageBrowser:
                 img_label.image = photo
                 self.canvas.create_window((idx * 150 + 75, jdx * 160 + 100), window=img_label, anchor=tk.N)
 
+        self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
+
+    def on_canvas_configure(self, event):
         self.canvas.config(scrollregion=self.canvas.bbox(tk.ALL))
 
 
