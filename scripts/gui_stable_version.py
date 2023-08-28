@@ -375,7 +375,7 @@ class ImageViewer:
 
         for dirpath, dirnames, filenames in os.walk(directory):
             for filename in filenames:
-                if filename.endswith(('.jpg', '.jpeg', '.png', '.bmp')):  # Add or modify extensions as needed
+                if filename.endswith(IMAGE_EXTENSIONS):  # Add or modify extensions as needed
                     full_path = os.path.join(dirpath, filename)
                 
                     # Load the image
