@@ -93,21 +93,45 @@ def norm_ent():
         json.dump(N, file)
 
 
+def check_norm():
+    path = '../datasets/fixed_noise.bmp'
+    ent_norm = get_ent_norm()
+    ent_for_img(path, ent_methods, ent_norm)
+
+
+def sort_images():
+    method = 'lbp'
+    colors = 'YCbCr'
+    path = '../datasets/satellite/more'
+    dst_folder = f'../processed/m={method}_t={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
+    img_arrays, paths = preprocess(path)
+    img_arrays = label_ent(img_arrays, method, sort=False, colors=colors)
+
+    if not os.path.exists(dst_folder):
+        os.makedirs(dst_folder)
+    for i in range(len(paths)):
+        file_path = os.path.join(dst_folder, f"s={img_arrays[i][1]}_{os.path.basename(paths[i])}")
+        Image.fromarray(img_arrays[i][0], 'RGB').save(file_path)
+
+    os.startfile(os.path.join(os.getcwd(), dst_folder))
+
+
 def main():
     # method = {'hist': 1 / 2, 'naive': 1 / 2}
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['satellite']
-    sat_img_path = '../datasets/satellite'
-    coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
-
     ent_norm = get_ent_norm()
+
+    folder_path = datasets['satellite']
+    sat_img_path = '../datasets/satellite/agriculture'
+    coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
     print(f'Dataset path: {os.path.abspath(folder_path)}')
     coo_json = '../datasets/coordinates/coo_africa.json'
 
-    random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=25)
+    # check_norm()
+    # random_satellite_img(coo_json, 14, save_path=sat_img_path, n_pics=100)
     # for c in coo:
     #     get_google_map_image(c, 14, 500, 500, sat_img_path)
     # for method in ent_methods:

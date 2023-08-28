@@ -150,10 +150,11 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
     url = "https://maps.googleapis.com/maps/api/staticmap"
     # api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     api_key = 'AIzaSyAnFhz63LUhs9BGZfU_MW5EATc-s9r7epQ'
+    cut = 50
     params = {
         "center": location,
         "zoom": zoom_level,
-        "size": f"{width}x{height}",
+        "size": f"{width}x{height + cut}",
         "maptype": "satellite",
         "key": api_key,
         "scale": 2
@@ -162,7 +163,7 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
 
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
-        image = image.crop((0, 0, image.width, image.height - 22))
+        image = image.crop((0, 0, image.width, image.height - cut))
 
         if save:
             if not os.path.exists(save):
@@ -214,19 +215,22 @@ def parse_coordinate(coordinate_str):
     :return: Tuple of (latitude, longitude) as floating-point numbers. Latitude is in the range -90 to 90,
              and longitude is in the range -180 to 180.
     """
-    if ", " in coordinate_str:
-        latitude, longitude = coordinate_str.split(", ")
+    if "N" in coordinate_str or "S" in coordinate_str:
+        if ", " in coordinate_str:
+            latitude, longitude = coordinate_str.split(", ")
+        else:
+            latitude, longitude = coordinate_str.split(",")
+        lat_value, lat_dir = float(latitude[:-1]), latitude[-1]
+        lon_value, lon_dir = float(longitude[:-1]), longitude[-1]
+
+        if lat_dir == 'S':
+            lat_value = -lat_value
+        if lon_dir == 'W':
+            lon_value = -lon_value
+
+        return lat_value, lon_value
     else:
-        latitude, longitude = coordinate_str.split(",")
-    lat_value, lat_dir = float(latitude[:-1]), latitude[-1]
-    lon_value, lon_dir = float(longitude[:-1]), longitude[-1]
-
-    if lat_dir == 'S':
-        lat_value = -lat_value
-    if lon_dir == 'W':
-        lon_value = -lon_value
-
-    return lat_value, lon_value
+        return tuple(map(float, coordinate_str.split(", ")))
 
 
 def random_point_in_rectangle(coo):
@@ -251,10 +255,10 @@ def random_point_in_rectangle(coo):
     return coordinates_str
 
 
-def ent_for_img(path, methods):
+def ent_for_img(path, methods, ent_norm=None):
     img_arr = np.array(Image.open(path))
     for ent in methods:
-        s = calc_ent(img_arr, ent)
+        s = calc_ent(img_arr, ent, ent_norm)
         print(f'Entropy: {s},  Method: {ent}')
 
 
