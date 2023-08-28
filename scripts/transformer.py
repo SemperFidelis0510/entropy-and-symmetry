@@ -109,7 +109,7 @@ def train_model(dataset, epochs=100):
 
     # Create DataLoader
     train_data = TensorDataset(entropies, labels)
-    train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+    train_loader = DataLoader(train_data, batch_size=128, shuffle=True)
 
     # Initialize the model, loss, and optimizer
     num_classes = len(possible_labels)
