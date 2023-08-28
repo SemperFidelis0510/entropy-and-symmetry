@@ -121,6 +121,9 @@ class ImageViewer:
 
         self.center_window(self.image_window)
 
+        self.forward()
+        self.back()
+
     
     def adjust_zoom(self, delta):
         new_zoom = self.zoom_percent + delta
@@ -328,6 +331,8 @@ class ImageViewer:
         self.entropies_calculated = 1
         self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
+        self.forward()
+        self.back()
     
     
     def end_fullscreen(self, event=None):
@@ -499,6 +504,8 @@ class ImageViewer:
         self.update_image()
         self.update_buttons()
         self.update_status_bar()
+        self.forward()
+        self.back()
 
 
     def refresh_all_images(self, np_arrays):
