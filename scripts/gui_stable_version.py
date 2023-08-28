@@ -18,13 +18,6 @@ CONFIG_FILE = "settings.json"
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
 
 ENTROPY_METHODS = [
-    'hist',
-    'naive',
-    'dft',
-    'dwt',
-    'laplace',
-    'joint_red_green',
-    'joint_all',
     'lbp',
     'lbp_gabor',
     'adapt',
@@ -504,8 +497,10 @@ class ImageViewer:
         self.update_image()
         self.update_buttons()
         self.update_status_bar()
-        self.forward()
-        self.back()
+        
+        if self.img_no != len(self.np_array) - 1:
+            self.forward()
+            self.back()
 
 
     def refresh_all_images(self, np_arrays):
