@@ -156,7 +156,7 @@ def predict(model, numbers1, numbers2):
 
 # Main function
 def main():
-    path = "../entropy_results/m=2023-08-28_01-16-07/entropy_results.json"
+    path = "../entropy_results/m=2023-08-28_20-04-34/entropy_results.json"
     test_part = 0.1
     stats = {'test_samples': 0, 'right_predictions': 0}
 
@@ -165,11 +165,9 @@ def main():
     dataset = []
 
     for name, entry in metadata.items():
-        dataset.append({
-            'entropies': [s['result'] for s in entry['entropy_results']],
-            'dwt': entry['dwt'],
-            'label': entry['label']
-        })
+        entropies = [s['result'] for s in entry['entropy_results'] if s['method'] != 'dwt']
+        dwt_entropies = next((s['result'] for s in entry['entropy_results'] if s['method'] == 'dwt'), None)
+        dataset.append({'entropies': entropies, 'dwt': dwt_entropies, 'label': entry['label']})
 
     i = int(test_part * len(dataset))
     test_set = dataset[-i:]
