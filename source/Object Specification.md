@@ -21,6 +21,7 @@ After that, postprocess is done. The output will be images and json file which c
 - image_format: a tuple, default is ('png', 'bmp')
 - image_paths: contains all image that will be loaded to memory
 - head: how many images want to be loaded and process
+- registry: default is 'registry.json', 
 #### Methods:
 - load_images: To load all images from image_paths, return list of image object
 - load_batch_images: To batch load images from disk and return list of image object

@@ -1,5 +1,5 @@
 import numpy as np
-from Image import Image
+from source.Image import Image
 import pywt
 from skimage.color import rgb2gray
 from scipy.ndimage import convolve
@@ -58,6 +58,13 @@ class Processor:
             raise ValueError("Array must be 1D, 2D, or 3D")
 
     def apply_dwt(self, image, wavelet='db1', level=None):
+        result = []
+        if level != 'all':
+            result.append(self.compute_dwt(image, wavelet=wavelet, level=level))
+        else:
+            result = self.compute_dwt(image, wavelet=wavelet, level=None)
+        return result
+    def compute_dwt(self, image, wavelet='db1', level=None):
         rank = image.ndim
 
         # Handle 1D arrays
@@ -72,9 +79,12 @@ class Processor:
 
         # Handle 3D arrays
         elif rank == 3:
-            result = [np.abs(pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)[level]).flatten()
-                      for i in range(image.shape[2])]
-            return np.vstack(result)
+            result = []
+            for i in range(image.shape[2]):
+                temp = pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)
+                result.append(temp)
+
+            return result
 
         else:
             raise ValueError("Array must be 1D, 2D, or 3D")

@@ -1,7 +1,7 @@
 import gc
 from concurrent.futures import ThreadPoolExecutor
 import time
-from utils import print_progress_bar, open_folder
+from source.utils import print_progress_bar, open_folder
 from tqdm import tqdm
 class PipelineManager:
     def __init__(self, imageloader, preprocessor, processor, entropyCalculator, postprocessor, dataSaver):
@@ -15,7 +15,9 @@ class PipelineManager:
     def process_single_image(self, image):
         self.preprocessor.applyPreprocessing(image)
         self.processor.applyProcessing(image)
+        del image.preprocessedData
         self.entropyCalculator.calculateEntropy(image)
+        del image.processedData
         self.postprocessor.applyPostprocessing(image)
         return image
 
@@ -44,30 +46,6 @@ class PipelineManager:
         self.dataSaver.save_ent_result(sorted_images)
 
         open_folder(self.dataSaver.destination)
-        # start_time = time.time()
-        # total_images = len(self.imageloader.image_paths)  # Assuming image_paths is initialized
-        # processed_images = 0
-        #
-        # for image_objects in self.imageloader.load_batch_images(batch_size):
-        #     n = len(image_objects)
-        #     for index, image_object in enumerate(image_objects):
-        #         self.process_single_image(image_object)
-        #         processed_images += 1
-        #         print_progress_bar('Entropy calculation', processed_images, total_images, start_time=start_time)
-        #
-        #     print(f'\nBatch entropy calculation done.')
-        #
-        #     # Step 2: Sort the processed images based on some specification
-        #     sorted_images = self.sortImages(image_objects)
-        #
-        #     # Step 3: Save the sorted images
-        #     for index, image_object in enumerate(sorted_images):
-        #         self.dataSaver.save(index, image_object)
-        #
-        #     self.dataSaver.save_ent_result(sorted_images)
-        #
-        # print(f'\nAll entropy calculations done.')
-        # open_folder(self.dataSaver.destination)
     def process_and_save_single_image(self, image, index):
         # Step 1: Process the image
         self.process_single_image(image)
