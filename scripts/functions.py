@@ -6,9 +6,8 @@ from io import BytesIO
 
 import requests
 
-from entropy import *
-from img_utils import *
-import json
+from scripts.entropy import *
+from scripts.img_utils import *
 
 
 def save_img(folder_path, images_arr):

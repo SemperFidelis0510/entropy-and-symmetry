@@ -98,11 +98,11 @@ def main():
     colors = 'YCbCr'
     eps = 0.2
 
-    folder_path = datasets['satellite']
-    sat_img_path = '../datasets/satellite'
-    coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
-
     ent_norm = get_ent_norm()
+
+    folder_path = datasets['satellite']
+    sat_img_path = '../datasets/satellite/agriculture'
+    coo = ['-33.1338, -68.7773', '-33.0785, -68.4561']
 
     print(f'Dataset path: {os.path.abspath(folder_path)}')
     coo_json = '../datasets/coordinates/coo_africa.json'
