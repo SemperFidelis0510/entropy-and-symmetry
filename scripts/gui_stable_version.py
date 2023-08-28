@@ -64,6 +64,7 @@ class ImageViewer:
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
         self.loaded_thumbnails = set()
         self.status_bar = None
+        self.entropies_calculated = 0
 
         # Preload current, previous and next images and thumbnails
         self.load_image_at_index(self.img_no)
@@ -85,8 +86,8 @@ class ImageViewer:
         self.create_image_frame()
         self.create_thumbnail_frame()
 
-        #self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
-        #self.status_bar.grid(row=2, column=0, columnspan=4, sticky='ew')
+        self.status_bar = Label(self.image_window, text="", bd=1, relief=SUNKEN, anchor=W)
+        self.status_bar.grid(row=3, column=0, columnspan=4, sticky='ew')
         ...
         #self.console = Text(self.image_window, height=10, width=50)
         #self.console.grid(row=3, column=0, columnspan=2, pady=20, padx=10, sticky='ew')
@@ -315,6 +316,7 @@ class ImageViewer:
     def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
         self.refresh_all_images(self.np_array)
         self.scroll_to_img_no()
+        self.entropies_calculated = 1
         self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
     
@@ -466,6 +468,7 @@ class ImageViewer:
         images, entropies = self.split_images_and_entropy(img_ent)
 
         self.np_array = images
+        self.entropies = entropies
 
         #self.refresh_all_images(sorted_images)
         self.image_window.after(0, self.entropy_calculation_complete)
@@ -700,9 +703,11 @@ class ImageViewer:
         #file_path = os.path.join(self.directory, self.image_files[self.img_no])
         #image_size = os.path.getsize(file_path) / (1024 * 1024)  # Convert to MB
         #img = self.List_images[self.img_no]
-        #info_text = f"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
-        #self.status_bar.config(text=info_text)
-        pass
+        if self.entropies_calculated == 0:
+            info_text = f"Try to calculate the entropy!"
+        else:
+            info_text = f"Entropy: {self.entropies[self.img_no]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+        self.status_bar.config(text=info_text)
 
     
 
