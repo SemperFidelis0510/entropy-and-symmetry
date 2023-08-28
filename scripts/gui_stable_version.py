@@ -83,7 +83,7 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
-        self.image_window.geometry(self.center_window_coordinates(600, 612))  # The desired initial size
+        self.image_window.geometry(self.center_window_coordinates(600, 632))  # The desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
@@ -585,16 +585,16 @@ class ImageViewer:
     
     
     def scroll_to_img_no(self):
-        # 计算滚动到img_no所需的fraction
+        # Calculate the fraction needed to scroll to img_no
         fraction = (self.img_no) / (len(self.np_array))
     
-        # 为了避免滚动超出范围，我们需要进行一些调整。
-        # 假设画布的高度为600像素，并且每个缩略图的高度为60像素。
-        # 那么在最后的10张图片中，我们不希望再滚动，以防止滚动出范围。
+        # To avoid scrolling out of bounds, we need to make some adjustments.
+        # Let's say the canvas has a height of 600 pixels and each thumbnail has a height of 60 pixels.
+        # Then in the last 10 images we don't want any more scrolling to prevent scrolling out of bounds.
     
         max_scrollable_img_no = len(self.np_array) - int(self.canvas_thumbnails.winfo_height() / 68)
     
-        # 如果img_no超过最大可滚动索引，则将其设置为该值。
+        # If img_no exceeds the maximum scrollable index, it is set to that value.
         if self.img_no > max_scrollable_img_no:
             fraction = (max_scrollable_img_no) / (len(self.np_array))
 
