@@ -2,6 +2,20 @@ import time
 import platform
 import os
 import subprocess
+import tensorflow as tf
+
+def print_gpu_info(run_on_gpu=True):
+    gpus = tf.config.list_physical_devices('GPU')
+    if len(gpus) == 0:
+        print("No GPUs available.")
+    else:
+        if not run_on_gpu:
+            print("GPU is available, you are running on cpu instead of gpu.")
+        print("Num GPUs Available: ", len(gpus))
+        for i, gpu in enumerate(gpus):
+            print(f"GPU {i + 1}: {gpu.name}, Memory: {gpu.memory_limit // (1024 * 1024)} MB")
+
+
 def print_progress_bar(text, iteration, total, start_time=None, length=50):
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
