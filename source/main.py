@@ -34,7 +34,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     postprocessor_methods = []
 
     # Initialize other components
-    imageLoader = ImageLoader(image_directory=src_folder, head=15)
+    imageLoader = ImageLoader(image_directory=src_folder, head=None)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
@@ -47,7 +47,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
                                entropyCalculator, postprocessor, dataSaver)
 
     # Run
-    pipeline.runAutoSavePipeline(max_queue_size=10)
+    pipeline.runAutoSavePipeline(max_queue_size=50)
     # pipeline.runPipeline()
     # pipeline.runParallelPipeline(batch_size=150) # Don't use this
 

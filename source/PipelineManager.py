@@ -74,6 +74,7 @@ class PipelineManager:
                 self.dataSaver.save(base_index + queue_index, image_object)
                 print_progress_bar('Saving last queue', queue_index + 1, size, start_time=start_time)
             self.dataSaver.auto_save_ent_result(base_index, queue_images)
+        self.dataSaver.prettify_json_file()
         print(f'\nEntropy calculation done.')
         open_folder(self.dataSaver.destination)
 

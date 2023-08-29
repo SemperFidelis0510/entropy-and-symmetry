@@ -16,7 +16,7 @@ class DataSaver:
         # Initialize the JSON file if it doesn't exist
         if auto_save and not os.path.exists(self.json_path):
             with open(self.json_path, 'w') as f:
-                f.write("{}")
+                f.write("[]")
 
     def save(self, index, image):
         if not os.path.exists(self.destination):
@@ -63,7 +63,7 @@ class DataSaver:
                     f.write(b',')
 
             # Add the closing '}'
-            f.write(b'}')
+            f.write(b']')
 
     def save_single_ent_result(self, index, image):  # Do not use this
         if self.json_file is None:
@@ -96,3 +96,14 @@ class DataSaver:
             "label": label,
             "entropy_results": ent_result_with_method
         }
+
+    def prettify_json_file(self):
+        try:
+            with open(self.json_path, 'r') as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            print("JSON Decode Error")
+            return
+
+        with open(self.json_path, 'w') as f:
+            json.dump(data, f, indent=4)
