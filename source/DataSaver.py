@@ -25,6 +25,41 @@ class DataSaver:
         # Write the entropy results to the JSON file
         with open(self.json_path, 'w') as f:
             json.dump(ent_results, f, indent=4)
+
+    
+    def auto_save_ent_result(self, index, images):
+        # Create a dictionary to hold the entropy results
+        ent_results = {}
+
+        
+        # Write the entropy results to the JSON file
+        with open(self.json_path, 'w') as f:
+            json.dump(ent_results, f, indent=4)
+        # Append new image object data
+        with open(self.json_file_path, 'rb+') as f:
+            # Move pointer to the position just before the last character (i.e., before the closing ']')
+            f.seek(-1, os.SEEK_END)
+            
+            # If file is not empty, add a comma
+            if f.tell() > 1:
+                f.write(b',')
+                
+            # Loop through the images and collect their entropy results
+            for index, image in enumerate(images):
+                ent_results[f"image_{index}.bmp"] = self.get_ent_result(index, image)
+
+            # Append new data
+            for i, image_object in enumerate(image_object_list, start=start_index):
+                f.write(json.dumps(entry).encode('utf-8'))
+                
+                # Add a comma except for the last item
+                if i < len(image_object_list) + start_index - 1:
+                    f.write(b',')
+            
+            # Add the closing ']'
+            f.write(b']')
+
+    
     def save_single_ent_result(self, index, image):
         if self.json_file is None:
             self.json_file = open(self.json_path, 'w')
