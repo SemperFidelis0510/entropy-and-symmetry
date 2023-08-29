@@ -3,11 +3,15 @@ import  json
 import platform
 import subprocess
 class DataSaver:
-    def __init__(self, destination, methods):
+    def __init__(self, destination, methods, auto_save=False):
         self.destination = destination
         self.methods = methods
         self.json_path = os.path.join(self.destination, 'entropy_results.json')
         self.json_file = None
+        # Initialize the JSON file if it doesn't exist
+        if auto_save and not os.path.exists(self.json_file_path):
+            with open(self.json_file_path, 'w') as f:
+                f.write("{}")
     def save(self, index, image):
         if not os.path.exists(self.destination):
             os.makedirs(self.destination)
@@ -58,7 +62,7 @@ class DataSaver:
             f.write(b'}')
 
     
-    def save_single_ent_result(self, index, image):
+    def save_single_ent_result(self, index, image): #Do not use this
         if self.json_file is None:
             self.json_file = open(self.json_path, 'w')
         ent_results = {}
