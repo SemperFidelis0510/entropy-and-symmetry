@@ -39,14 +39,16 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
     postprocessor = Postprocessor(postprocessor_methods)
-    dataSaver = DataSaver(destination=dst_folder, methods=list(process_methods_with_params.keys()))
+    dataSaver = DataSaver(destination=dst_folder, methods=list(process_methods_with_params.keys())
+                         , auto_save=True)
 
     # Initialize PipelineManager
     pipeline = PipelineManager(imageLoader, preprocessor, transformer,
                                entropyCalculator, postprocessor, dataSaver)
 
     # Run
-    pipeline.runPipeline()
+    pipeline.runAutoSavePipeline()
+    # pipeline.runPipeline()
     # pipeline.runParallelPipeline(batch_size=150)
 
 
