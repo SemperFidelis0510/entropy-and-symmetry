@@ -65,8 +65,16 @@ class PipelineManager:
                 self.dataSaver.auto_save_ent_result(base_index, queue_images)
                 queue_images = []
             print_progress_bar('Entropy calculation', index+1, n, start_time=start_time)
+        size = len(queue_images)
+        if size: # last queue
+            start_time = time.time()
+            base_index = n-max_queue_size+1
+            for queue_index, image_object in enumerate(queue_images):
+                self.dataSaver.save(base_index + queue_index, image_object)
+                print_progress_bar('Saving last queue', queue_index+1, size, start_time=start_time)
+            self.dataSaver.auto_save_ent_result(base_index, queue_images)
         print(f'\nEntropy calculation done.')
-
+        open_folder(self.dataSaver.destination)
         
     def process_and_save_single_image(self, image, index):
         # Step 1: Process the image
