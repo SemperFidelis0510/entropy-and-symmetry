@@ -27,17 +27,12 @@ class DataSaver:
             json.dump(ent_results, f, indent=4)
 
     
-    def auto_save_ent_result(self, index, images):
+    def auto_save_ent_result(self, start_index, images):
         # Create a dictionary to hold the entropy results
         ent_results = {}
-
-        
-        # Write the entropy results to the JSON file
-        with open(self.json_path, 'w') as f:
-            json.dump(ent_results, f, indent=4)
         # Append new image object data
         with open(self.json_file_path, 'rb+') as f:
-            # Move pointer to the position just before the last character (i.e., before the closing ']')
+            # Move pointer to the position just before the last character (i.e., before the closing '}')
             f.seek(-1, os.SEEK_END)
             
             # If file is not empty, add a comma
@@ -46,18 +41,21 @@ class DataSaver:
                 
             # Loop through the images and collect their entropy results
             for index, image in enumerate(images):
-                ent_results[f"image_{index}.bmp"] = self.get_ent_result(index, image)
+                real_index = index+start_index
+                ent_results[f"image_{real_index}.bmp"] = self.get_ent_result(real_index, image)
 
-            # Append new data
-            for i, image_object in enumerate(image_object_list, start=start_index):
-                f.write(json.dumps(entry).encode('utf-8'))
-                
-                # Add a comma except for the last item
-                if i < len(image_object_list) + start_index - 1:
-                    f.write(b',')
             
-            # Add the closing ']'
-            f.write(b']')
+            # Iterate through the ent_results dictionary
+            for i, (key, value) in enumerate(ent_results.items()):
+                record = {key: value}
+                f.write(json.dumps(record).encode('utf-8'))
+            
+                # Add a comma except for the last item
+                if i < len(ent_results) - 1:
+                    f.write(b',')
+        
+            # Add the closing '}'
+            f.write(b'}')
 
     
     def save_single_ent_result(self, index, image):
