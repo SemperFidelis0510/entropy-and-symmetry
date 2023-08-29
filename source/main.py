@@ -47,9 +47,9 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
                                entropyCalculator, postprocessor, dataSaver)
 
     # Run
-    pipeline.runAutoSavePipeline()
+    pipeline.runAutoSavePipeline(max_queue_size=50)
     # pipeline.runPipeline()
-    # pipeline.runParallelPipeline(batch_size=150)
+    # pipeline.runParallelPipeline(batch_size=150) # Don't use this
 
 
 if __name__ == '__main__':
