@@ -1,81 +1,72 @@
 import gc
 from concurrent.futures import ThreadPoolExecutor
 import time
+from datetime import datetime
 from source.utils import print_progress_bar, open_folder
 from tqdm import tqdm
-
-
-class PipelineManager:
-    def __init__(self, imageloader, preprocessor, processor, entropyCalculator, postprocessor, dataSaver):
-        self.imageloader = imageloader
+from source.ImageLoader import ImageLoader
+from source.Logger import Logger
+class PipelineManager(Logger):
+    def __init__(self, systemInitializer, preprocessor, processor, entropyCalculator, dataSaver):
+        self.systemInitializer = systemInitializer
         self.preprocessor = preprocessor
         self.processor = processor
         self.entropyCalculator = entropyCalculator
-        self.postprocessor = postprocessor
         self.dataSaver = dataSaver
 
+
     def process_single_image(self, image):
+        self.log_message(f'process {image.path}')
         self.preprocessor.applyPreprocessing(image)
+        del image.rawData
         self.processor.applyProcessing(image)
         del image.preprocessedData
         self.entropyCalculator.calculateEntropy(image)
         del image.processedData
-        self.postprocessor.applyPostprocessing(image)
         return image
 
-    def sortImages(self, images):
-        # Implement your sorting logic here.
-        sorted_images = sorted(images, key=lambda x: x.entropyResults)
-        return sorted_images
-
-    def runPipeline(self, batch_size=100):
-        image_objects = self.imageloader.load_images()
-
-        # Step 1: Apply preprocessing, transformations, and entropy calculations on all images
+    def run_single_batch_process(self, curr_batch, batch_size, total_batch, images_path, max_queue_size, save_queue):
+        start = curr_batch * batch_size
+        end = (curr_batch + 1) * batch_size
+        base_index = len(self.systemInitializer.already_processed_paths) + start
+        print(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
+        self.log_message(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
+        image_objects = ImageLoader.load_images(images_path[start:end], base_index)
         n = len(image_objects)
         start_time = time.time()
         for index, image_object in enumerate(image_objects):
             self.process_single_image(image_object)
+            save_queue.append(image_object)
+            if len(save_queue) == max_queue_size:
+                for queue_index, image_object in enumerate(save_queue):
+                    self.dataSaver.save(image_object)
+                self.dataSaver.auto_save_ent_result(save_queue)
+                save_queue.clear()
             print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
-        print(f'\nEntropy calculation done.')
-        # Step 2: Sort the processed images based on some specification
-        sorted_images = self.sortImages(image_objects)
-
-        # Step 3: Save the sorted images
-        for index, image_object in enumerate(sorted_images):
-            self.dataSaver.save(index, image_object)
-
-        self.dataSaver.save_ent_result(sorted_images)
-
-        open_folder(self.dataSaver.destination)
-
-    def runAutoSavePipeline(self, max_queue_size=30):  # Saved result when the queue is full
-        image_objects = self.imageloader.load_images()
-
-        # Step 1: Apply preprocessing, transformations, and entropy calculations on all images
-        n = len(image_objects)
-        start_time = time.time()
-        queue_images = []
-        for index, image_object in enumerate(image_objects):
-            self.process_single_image(image_object)
-            queue_images.append(image_object)
-            if len(queue_images) == max_queue_size:
-                base_index = index - max_queue_size + 1
-                for queue_index, image_object in enumerate(queue_images):
-                    self.dataSaver.save(base_index + queue_index, image_object)
-                self.dataSaver.auto_save_ent_result(base_index, queue_images)
-                queue_images = []
-            print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
-        size = len(queue_images)
+        self.dataSaver.prettify_json_file()
+        print(f'Batch Process {curr_batch} Done.')
+        self.log_message(f'Batch Process {curr_batch} Done.')
+    def runPipeline(self):
+        self.log_message("program start")
+        self.systemInitializer.initSystemState()
+        images_path = self.systemInitializer.need_to_process_paths
+        total_batch = self.systemInitializer.total_batch
+        batch_size = self.systemInitializer.single_batch_size
+        max_queue_size = self.systemInitializer.max_queue_size
+        save_queue = []
+        for curr_batch in range(total_batch):
+            self.run_single_batch_process(curr_batch, batch_size, total_batch,
+                                          images_path, max_queue_size, save_queue)
+        # Saving result
+        size = len(save_queue)
         if size:  # last queue
             start_time = time.time()
-            base_index = n - max_queue_size + 1
-            for queue_index, image_object in enumerate(queue_images):
-                self.dataSaver.save(base_index + queue_index, image_object)
-                print_progress_bar('Saving last queue', queue_index + 1, size, start_time=start_time)
-            self.dataSaver.auto_save_ent_result(base_index, queue_images)
+            for queue_index, image_object in enumerate(save_queue):
+                self.dataSaver.save(image_object)
+                print_progress_bar('Saving result in the queue', queue_index + 1, size, start_time=start_time)
+            self.dataSaver.auto_save_ent_result(save_queue)
         self.dataSaver.prettify_json_file()
-        print(f'\nEntropy calculation done.')
+
         open_folder(self.dataSaver.destination)
 
     def process_and_save_single_image(self, image, index):
@@ -90,14 +81,29 @@ class PipelineManager:
         del image
         gc.collect()
 
-    def runParallelPipeline(self, batch_size=300):
-        images = self.imageloader.load_images()
-        num_images = len(images)
+from source.Preprocessor import Preprocessor
+from source.Processor import Processor
+from source.EntropyCalculator import EntropyCalculator
+from source.DataSaver import DataSaver
+from source.SystemInitializer import SystemInitializer
+import warnings
+warnings.filterwarnings("ignore")
+if __name__ == '__main__':
+    print('Test systeminitializer class')
+    src_folder = "../datasets/classified_pictures"
+    dst_folder = "../tests/data/test_pipelineManager"
+    process_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
+                               'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
+                               'dft': None, 'naive': None, 'dwt': {'wavelet': 'haar', 'level': 'all'}}
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=4, max_queue_size=4, single_batch_size=100)
+    preprocessor = Preprocessor(crop_size=None)
+    transformer = Processor(process_methods_with_params)
+    entropyCalculator = EntropyCalculator(color_weight=None)
+    dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
-        # Process and save images in batches
-        with ThreadPoolExecutor() as executor:
-            for i in range(0, num_images, batch_size):
-                batch = images[i:i + batch_size]
-                batch_indices = range(i, i + len(batch))
-                list(tqdm(executor.map(self.process_and_save_single_image, batch, batch_indices), total=len(batch)))
-        open_folder(self.dataSaver.destination)
+    # Initialize PipelineManager
+    pipeline = PipelineManager(systemInitializer, preprocessor, transformer,
+                               entropyCalculator, dataSaver)
+
+    # Run
+    pipeline.runPipeline()

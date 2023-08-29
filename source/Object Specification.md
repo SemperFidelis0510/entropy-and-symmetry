@@ -2,10 +2,11 @@
 ## Description
 We want to reorgnize the code into object-oriented program style. This will benifit for maintence and speed up development.
 ## Program pipeline
-When the program is executed, raw images are loaded from the disk and go through the preprocessor.
-And then transformations are applied to images, entropy is computed.
-After that, postprocess is done. The output will be images and json file which contains all metadata.
+When the program is executed, first we will analyze system state, then batch images are loaded from the disk and go through the preprocessor.
+And then different processed methods are applied to images, entropy is computed. When an image is finished, it will be added to the save queue.
+After the queue is full, the results will be saved. Along the program, log will be produced to track the running procedure.
 ## Object
+- **SystemInitializer**: To analyze the system state.
 - **ImageLoader**: To load image from a given path
 - **Image**: To represent each image and its attributes.
 - **Preprocessor**: To handle all preprocessing tasks on images.
