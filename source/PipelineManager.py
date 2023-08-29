@@ -59,9 +59,10 @@ class PipelineManager:
             self.process_single_image(image_object)
             queue_images.append(image_object)
             if len(queue) == max_queue_size:
-                for index, image_object in enumerate(queue_images):
-                    self.dataSaver.save(index, image_object)
-                self.dataSaver.auto_save_ent_result(index, queue_images)
+                base_index = index-max_queue_size+1
+                for queue_index, image_object in enumerate(queue_images):
+                    self.dataSaver.save(base_index + queue_index, image_object)
+                self.dataSaver.auto_save_ent_result(base_index, queue_images)
                 queue_images = []
             print_progress_bar('Entropy calculation', index+1, n, start_time=start_time)
         print(f'\nEntropy calculation done.')
