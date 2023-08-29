@@ -10,3 +10,5 @@ requests
 tk
 geopandas
 shapely
+torch
+tqdm

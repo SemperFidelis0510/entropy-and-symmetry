@@ -111,7 +111,7 @@ def preprocess(img_path, crop_size=None, callback=None):
             img_arr = np.stack([img_arr] * 3, axis=-1)
 
         images_arr.append(img_arr)
-        
+
         # Check if callback is provided
         if callback:
             callback('Preprocessed', i, n, start_time)
@@ -150,10 +150,11 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
     url = "https://maps.googleapis.com/maps/api/staticmap"
     # api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     api_key = 'AIzaSyAnFhz63LUhs9BGZfU_MW5EATc-s9r7epQ'
+    cut = 50
     params = {
         "center": location,
         "zoom": zoom_level,
-        "size": f"{width}x{height}",
+        "size": f"{width}x{height + cut}",
         "maptype": "satellite",
         "key": api_key,
         "scale": 2
@@ -162,7 +163,7 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
 
     if response.status_code == 200:
         image = Image.open(BytesIO(response.content))
-        image = image.crop((0, 0, image.width, image.height - 22))
+        image = image.crop((0, 0, image.width, image.height - cut))
 
         if save:
             if not os.path.exists(save):
@@ -178,7 +179,19 @@ def get_google_map_image(location, zoom_level, width=500, height=500, save=False
         raise Exception(f"Error retrieving image: {response.text}")
 
 
-def random_satellite_img(file_path, zoom_level, n_pics=10, save_path=f"../datasets/satellite"):
+def random_satellite_img(file_path, zoom_level=14, n_pics=10, save_path=f"../datasets/satellite"):
+    """
+    Generates random satellite images based on given rectangular coordinates.
+
+    Parameters:
+    - file_path (str): The path to the JSON file containing the rectangular coordinates.
+    - zoom_level (int, optional): The zoom level for the satellite images. Default is 14.
+    - n_pics (int, optional): The number of pictures to generate for each rectangle. Default is 10.
+    - save_path (str, optional): The path where the generated images will be saved. Default is "../datasets/satellite".
+
+    Returns:
+    None
+    """
     with open(file_path, 'r') as f:
         rects = json.load(f)
 
@@ -202,19 +215,22 @@ def parse_coordinate(coordinate_str):
     :return: Tuple of (latitude, longitude) as floating-point numbers. Latitude is in the range -90 to 90,
              and longitude is in the range -180 to 180.
     """
-    if ", " in coordinate_str:
-        latitude, longitude = coordinate_str.split(", ")
+    if "N" in coordinate_str or "S" in coordinate_str:
+        if ", " in coordinate_str:
+            latitude, longitude = coordinate_str.split(", ")
+        else:
+            latitude, longitude = coordinate_str.split(",")
+        lat_value, lat_dir = float(latitude[:-1]), latitude[-1]
+        lon_value, lon_dir = float(longitude[:-1]), longitude[-1]
+
+        if lat_dir == 'S':
+            lat_value = -lat_value
+        if lon_dir == 'W':
+            lon_value = -lon_value
+
+        return lat_value, lon_value
     else:
-        latitude, longitude = coordinate_str.split(",")
-    lat_value, lat_dir = float(latitude[:-1]), latitude[-1]
-    lon_value, lon_dir = float(longitude[:-1]), longitude[-1]
-
-    if lat_dir == 'S':
-        lat_value = -lat_value
-    if lon_dir == 'W':
-        lon_value = -lon_value
-
-    return lat_value, lon_value
+        return tuple(map(float, coordinate_str.split(", ")))
 
 
 def random_point_in_rectangle(coo):
@@ -239,20 +255,29 @@ def random_point_in_rectangle(coo):
     return coordinates_str
 
 
-def ent_for_img(path, methods):
+def ent_for_img(path, methods, ent_norm=None):
     img_arr = np.array(Image.open(path))
     for ent in methods:
-        s = calc_ent(img_arr, ent)
+        s = calc_ent(img_arr, ent, ent_norm)
         print(f'Entropy: {s},  Method: {ent}')
 
 
-def get_ent_norm(method):
+def get_ent_norm(method=None):
     with open('data/ent_norm.json', 'r') as file:
         ent_norm = json.load(file)
-    if method not in ent_norm:
-        fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
-        ent_norm[method] = calc_ent(fixed_noise, method)
-        with open('data/ent_norm.json', 'w') as file:
-            json.dump(ent_norm, file)
+    if isinstance(method, str):
+        method = [method]
+
+    if method is not None:
+        for met in method:
+            if met not in ent_norm:
+                fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
+                ent_norm[met] = calc_ent(fixed_noise, met)
+                with open('data/ent_norm.json', 'w') as file:
+                    json.dump(ent_norm, file)
 
     return ent_norm
+
+
+def norm_weights(methods):
+    pass
