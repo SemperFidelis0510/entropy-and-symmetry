@@ -45,7 +45,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
         m_name = '-'.join(process_methods_with_params.keys())
         dst_folder = f'../processed/results'
 
-    systemInitializer = SystemInitializer(src_folder, dst_folder, head=None, max_queue_size=30, single_batch_size=1000)
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=None, max_queue_size=40, single_batch_size=1000)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)

@@ -32,8 +32,8 @@ class PipelineManager(Logger):
             end = len(self.systemInitializer.need_to_process_paths)
 
         base_index = len(self.systemInitializer.already_processed_paths) + start
-        print(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
-        self.log_message(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
+        print(f'Batch Process ({curr_batch+1}/{total_batch}) {start+1}-{end}')
+        self.log_message(f'Batch Process ({curr_batch+1}/{total_batch}) {start+1}-{end}')
         image_objects = ImageLoader.load_images(images_path[start:end], base_index)
         n = len(image_objects)
         start_time = time.time()
@@ -45,10 +45,11 @@ class PipelineManager(Logger):
                     self.dataSaver.save(image_object)
                 self.dataSaver.auto_save_ent_result(save_queue)
                 save_queue.clear()
-            print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
+            if index%5 == 0:
+                print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
         self.dataSaver.prettify_json_file()
-        print(f'Batch Process {curr_batch} Done.')
-        self.log_message(f'Batch Process {curr_batch} Done.')
+        print(f'\nBatch Process {curr_batch+1} Done.')
+        self.log_message(f'Batch Process {curr_batch+1} Done.')
     def runPipeline(self):
         self.log_message("program start")
         self.systemInitializer.initSystemState()
