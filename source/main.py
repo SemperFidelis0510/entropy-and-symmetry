@@ -35,7 +35,7 @@ def reset_ent_norm():
                                entropyCalculator, dataSaver)
     pipeline.runPipeline()
     print('please check the result and rename to entropy_norm.json')
-def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
+def main(dst_folder=None, src_folder=None, process_methods_with_params=None, head=None, max_queue_size=None, single_batch_size=None):
     # System Configuration
     if process_methods_with_params is None:
         process_methods_with_params = all_methods_with_params
@@ -44,8 +44,15 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     if dst_folder is None:
         m_name = '-'.join(process_methods_with_params.keys())
         dst_folder = f'../processed/results'
+    if head is None:
+        head = None
+    if max_queue_size is None:
+        max_queue_size = 40
+    if single_batch_size is None:
+        single_batch_size = 1000
 
-    systemInitializer = SystemInitializer(src_folder, dst_folder, head=None, max_queue_size=40, single_batch_size=1000)
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=head,
+                                          max_queue_size=max_queue_size, single_batch_size=single_batch_size)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
