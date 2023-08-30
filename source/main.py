@@ -4,6 +4,7 @@ from source.EntropyCalculator import EntropyCalculator
 from source.DataSaver import DataSaver
 from source.PipelineManager import PipelineManager
 from source.SystemInitializer import SystemInitializer
+from source.ImageLoader import ImageLoader
 from datetime import datetime
 import warnings
 
@@ -24,6 +25,7 @@ def reset_ent_norm():
     print('reset entropy norm')
     src_folder = datasets["fix_noise"]
     dst_folder = "data"
+    imageLoader = ImageLoader()
     systemInitializer = SystemInitializer(src_folder, dst_folder, head=None)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(all_methods_with_params)
@@ -31,11 +33,12 @@ def reset_ent_norm():
     dataSaver = DataSaver(dst_folder, methods=list(all_methods_with_params.keys()))
 
     # Initialize PipelineManager
-    pipeline = PipelineManager(systemInitializer, preprocessor, transformer,
-                               entropyCalculator, dataSaver)
+    pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor,
+                               transformer,entropyCalculator, dataSaver)
     pipeline.runPipeline()
     print('please check the result and rename to entropy_norm.json')
-def main(dst_folder=None, src_folder=None, process_methods_with_params=None, head=None, max_queue_size=None, single_batch_size=None):
+def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
+         head=None, max_queue_size=None, single_batch_size=None, callback=None):
     # System Configuration
     if process_methods_with_params is None:
         process_methods_with_params = all_methods_with_params
@@ -53,14 +56,15 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None, hea
 
     systemInitializer = SystemInitializer(src_folder, dst_folder, head=head,
                                           max_queue_size=max_queue_size, single_batch_size=single_batch_size)
+    imageLoader = ImageLoader(callback=callback)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
-    pipeline = PipelineManager(systemInitializer, preprocessor, transformer,
-                               entropyCalculator, dataSaver)
+    pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor,
+                               transformer,entropyCalculator, dataSaver)
     pipeline.runPipeline()
 
 if __name__ == '__main__':

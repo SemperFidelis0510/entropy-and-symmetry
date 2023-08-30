@@ -3,16 +3,18 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 from datetime import datetime
 from source.utils import print_progress_bar, open_folder
-from tqdm import tqdm
 from source.ImageLoader import ImageLoader
 from source.Logger import Logger
 class PipelineManager(Logger):
-    def __init__(self, systemInitializer, preprocessor, processor, entropyCalculator, dataSaver):
+    def __init__(self, systemInitializer, imageLoader, preprocessor, processor,
+                 entropyCalculator, dataSaver, callback=print_progress_bar):
+        self.imageLoader = imageLoader
         self.systemInitializer = systemInitializer
         self.preprocessor = preprocessor
         self.processor = processor
         self.entropyCalculator = entropyCalculator
         self.dataSaver = dataSaver
+        self.print_progress_bar = callback
 
 
     def process_single_image(self, image):
@@ -34,7 +36,7 @@ class PipelineManager(Logger):
         base_index = len(self.systemInitializer.already_processed_paths) + start
         print(f'Batch Process ({curr_batch+1}/{total_batch}) {start+1}-{end}')
         self.log_message(f'Batch Process ({curr_batch+1}/{total_batch}) {start+1}-{end}')
-        image_objects = ImageLoader.load_images(images_path[start:end], base_index)
+        image_objects = self.imageLoader.load_images(images_path[start:end], base_index)
         n = len(image_objects)
         start_time = time.time()
         for index, image_object in enumerate(image_objects):
@@ -45,8 +47,7 @@ class PipelineManager(Logger):
                     self.dataSaver.save(image_object)
                 self.dataSaver.auto_save_ent_result(save_queue)
                 save_queue.clear()
-            if index%5 == 0:
-                print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
+            self.print_progress_bar('Entropy calculation', index + 1, n, start_time=start_time)
         self.dataSaver.prettify_json_file()
         print(f'\nBatch Process {curr_batch+1} Done.')
         self.log_message(f'Batch Process {curr_batch+1} Done.')
@@ -100,13 +101,14 @@ if __name__ == '__main__':
                                'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                                'dft': None, 'naive': None, 'dwt': {'wavelet': 'haar', 'level': 'all'}}
     systemInitializer = SystemInitializer(src_folder, dst_folder, head=4, max_queue_size=4, single_batch_size=2)
+    imageLoader = ImageLoader()
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
-    pipeline = PipelineManager(systemInitializer, preprocessor, transformer,
+    pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor, transformer,
                                entropyCalculator, dataSaver)
 
     # Run

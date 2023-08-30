@@ -4,14 +4,13 @@ import os
 from source.Image import Image
 import time
 from source.utils import print_progress_bar
-
+from utils import print_progress_bar
 
 class ImageLoader:
-    def __init__(self):
-        pass
+    def __init__(self, callback=print_progress_bar):
+        self.print_progress_bar = callback
 
-    @staticmethod
-    def load_images(image_paths, base_index):
+    def load_images(self, image_paths, base_index):
         image_objects = []
         start_time = time.time()
         n = len(image_paths)
@@ -20,7 +19,7 @@ class ImageLoader:
             image_index = index + base_index
             image_object = Image(img_data, filename, image_index)
             image_objects.append(image_object)
-            print_progress_bar('Loading Image', index + 1, n, start_time=start_time)
+            self.print_progress_bar('Loading Image', index + 1, n, start_time=start_time)
         print(f'\nLoading done. Please wait for entropy calculation to start.')
         return image_objects
 
