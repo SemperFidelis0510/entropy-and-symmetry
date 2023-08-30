@@ -23,7 +23,10 @@ class DataSaver:
             os.makedirs(self.destination)
         srcpath = os.path.relpath(image.path, self.destination)
         newpath = os.path.join(self.destination, os.path.basename(image.path))
-        os.symlink(srcpath, newpath)
+        try:
+            os.symlink(srcpath, newpath)
+        except FileExistsError:
+            return
 
     def save_ent_result(self, images):
         # Create a dictionary to hold the entropy results

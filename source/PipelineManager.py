@@ -28,6 +28,9 @@ class PipelineManager(Logger):
     def run_single_batch_process(self, curr_batch, batch_size, total_batch, images_path, max_queue_size, save_queue):
         start = curr_batch * batch_size
         end = (curr_batch + 1) * batch_size
+        if end > len(self.systemInitializer.need_to_process_paths):
+            end = len(self.systemInitializer.need_to_process_paths)
+
         base_index = len(self.systemInitializer.already_processed_paths) + start
         print(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
         self.log_message(f'Batch Process ({curr_batch}/{total_batch}) {start+1}-{end}')
@@ -95,7 +98,7 @@ if __name__ == '__main__':
     process_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
                                'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                                'dft': None, 'naive': None, 'dwt': {'wavelet': 'haar', 'level': 'all'}}
-    systemInitializer = SystemInitializer(src_folder, dst_folder, head=4, max_queue_size=4, single_batch_size=100)
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=4, max_queue_size=4, single_batch_size=2)
     preprocessor = Preprocessor(crop_size=None)
     transformer = Processor(process_methods_with_params)
     entropyCalculator = EntropyCalculator(color_weight=None)
