@@ -1,5 +1,7 @@
 from source.Image import Image
 import numpy as np
+
+
 class Preprocessor:
     def __init__(self, crop_size=None):
         self.crop_size = crop_size

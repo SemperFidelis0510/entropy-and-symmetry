@@ -8,8 +8,9 @@ from skimage.feature import local_binary_pattern
 from scipy.signal import convolve2d
 from skimage.segmentation import slic
 
+
 class Processor:
-    def __init__(self, processing_methods_with_params = None):
+    def __init__(self, processing_methods_with_params=None):
         self.processing_methods_with_params = processing_methods_with_params
 
     def applyProcessing(self, image: Image):
@@ -64,6 +65,7 @@ class Processor:
         else:
             result = self.compute_dwt(image, wavelet=wavelet, level=None)
         return result
+
     def compute_dwt(self, image, wavelet='db1', level=None):
         rank = image.ndim
 
