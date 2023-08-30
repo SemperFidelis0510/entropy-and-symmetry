@@ -15,7 +15,7 @@ from functions import *
 
 CONFIG_FILE = "settings.json"
 
-IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif')
+IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif', '.gif')
 
 ENTROPY_METHODS = [
     'lbp',
@@ -40,6 +40,69 @@ class IORedirector(object):
 
     def flush(self):
         pass
+
+
+class ClassViewer(object):
+    def __init__(self, directory):
+        self.directory = directory
+        self.img_dict = self.get_image_paths_from_subfolders(directory)
+        self.init_window()
+
+    
+    def init_window(self):
+        self.image_window = Toplevel()
+        self.image_window.title("Image Viewer")
+        self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
+        self.image_window.geometry()  # The desired initial size
+        self.create_folder_name_frame()
+        self.init_load_images(self)
+
+
+    def clos_window(self):
+        ans = askyesno(title='WARNING', message='Are you sure to close the window?')
+        if ans:
+            self.image_window.destroy()
+            sys.exit()
+        else:
+            return None
+        
+
+    def create_folder_name_frame():
+        pass
+    
+    
+    def get_image_paths_from_subfolders(directory):
+        """Return a dictionary with subfolder names as keys and lists of image paths as values."""
+        valid_image_extensions = IMAGE_EXTENSIONS
+        image_dict = {}
+
+        for subdir, _, files in os.walk(directory):
+            if subdir == directory:  # skip the main directory
+                continue
+            image_paths = [os.path.join(subdir, file) for file in files if os.path.splitext(file)[1].lower() in valid_image_extensions]
+            if image_paths:  # only add to dictionary if there are valid images in the subfolder
+                folder_name = os.path.basename(subdir)
+                image_dict[folder_name] = image_paths
+
+        return image_dict
+
+    
+    def init_load_images(self):
+        for folder_name, image_paths in self.img_dict.items():
+            self.init_load_folder_name(self)
+            for path in image_paths:
+                print(f"Image Path: {path}")
+
+    
+    def init_load_folder_name(self):
+        pass
+
+    
+    def thread_it(self, func, *args):
+        """ Pack functions into threads """
+        self.myThread = threading.Thread(target=func, args=args)
+        self.myThread.daemon = True  # When the main thread exits, the sub-threads will follow and exit directly, regardless of whether the operation is completed or not.
+        self.myThread.start()
 
 
 class ImageViewer:
@@ -96,7 +159,7 @@ class ImageViewer:
         self.update_buttons()
         self.update_listbox()
         self.update_confirm_button_state()
-        self.button_save.config(state=DISABLED)  # Disable save button until entropy calculation is complete
+        self.button_save.config(state=DISABLED)# Disable save button until entropy calculation is complete
 
         self.image_window.bind('<Right>', self.forward)
         self.image_window.bind('<Left>', self.back)
@@ -489,6 +552,7 @@ class ImageViewer:
         self.update_status_bar()
         self.update_all_thumbnails()
 
+
     def resize_image(self, percent):
         if not self.List_images[self.img_no]:
             print("Image not loaded or None")
@@ -683,8 +747,21 @@ def choose_directory():
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
 
+def  choose_directory_class():
+    try:
+        directory = filedialog.askdirectory()
+        if directory:
+            ClassViewer(directory)
+    except FileNotFoundError:
+        messagebox.showerror("Error", "The image file was not found.")
+    except Exception as e:
+        messagebox.showerror("Error", f"An error occurred: {str(e)}")
+
+
 root = Tk()
 root.title("Main Menu")
-choose_button = Button(root, text="Choose Directory", command=choose_directory)
-choose_button.pack()
+choose_button = Button(root, text="Choose Directory for Entropy Caluculate", command=choose_directory)
+#choose_button_class = Button(root, text="Choose Directory for Classification", command=choose_directory_class)
+choose_button.grid(row=0, column=0)
+#choose_button_class.grid(row=1, column=0)
 root.mainloop()
