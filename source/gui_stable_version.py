@@ -674,10 +674,10 @@ class ImageViewer:
         self.confirm_button.config(state=DISABLED)
         # Create a new Toplevel window for progress bar
         self.preprogress_window = Toplevel(self.image_window)
-        self.preprogress_window.title("Preprocessing Images...")
+        self.preprogress_window.title("Calculating")
 
         # Add a label for information
-        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
+        Label(self.preprogress_window, text="Please wait ...").pack(pady=10)
 
         # Create and pack the progress bar
         self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
