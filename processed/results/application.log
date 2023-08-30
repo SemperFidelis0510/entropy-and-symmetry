@@ -1,0 +1,1234 @@
+2023-08-30 07:00:23,914 - process_logger - INFO - program start
+2023-08-30 07:00:23,926 - process_logger - INFO - System State
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Image Data Path: ../datasets/classified_pictures
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Total Image: 4437
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Already Process: 420
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Image To Process: 4017
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Total Batch: 5
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Single Batch Size: 1000
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Auto Save: for every 30
+2023-08-30 07:00:23,926 - process_logger - INFO -  * Output folder: ../processed/results
+2023-08-30 07:01:55,793 - process_logger - INFO - program start
+2023-08-30 07:01:55,805 - process_logger - INFO - System State
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Image Data Path: ../datasets/classified_pictures
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Total Image: 4437
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Already Process: 420
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Image To Process: 4017
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Total Batch: 5
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Single Batch Size: 1000
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Auto Save: for every 30
+2023-08-30 07:01:55,805 - process_logger - INFO -  * Output folder: ../processed/results
+2023-08-30 07:07:07,899 - process_logger - INFO - program start
+2023-08-30 07:07:07,914 - process_logger - INFO - System State
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Image Data Path: ../datasets/classified_pictures
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Total Image: 4437
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Already Process: 420
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Image To Process: 4017
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Total Batch: 5
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Single Batch Size: 1000
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Auto Save: for every 30
+2023-08-30 07:07:07,914 - process_logger - INFO -  * Output folder: ../processed/results
+2023-08-30 07:07:07,914 - process_logger - INFO - Batch Process (0/5) 1-1000
+2023-08-30 07:07:14,009 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.8376_ 108.2946_20230821155406.png
+2023-08-30 07:07:14,750 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.2758_ -122.2022_20230821154931.png
+2023-08-30 07:07:15,487 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-35.3283_ -58.2752_20230821155709.png
+2023-08-30 07:07:16,206 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.8709_ -93.0585_20230821154757.png
+2023-08-30 07:07:16,932 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.6283_ 24.7091_20230827184923.png
+2023-08-30 07:07:17,660 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.3968_ 45.2018_20230827185140.png
+2023-08-30 07:07:18,419 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.5615_ 6.9711_20230827183253.png
+2023-08-30 07:07:19,158 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.0481_ 10.1723_20230827185253.png
+2023-08-30 07:07:19,882 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8694_ 116.4245_20230827174109.png
+2023-08-30 07:07:20,637 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0266_ 110.4810_20230827202546.png
+2023-08-30 07:07:21,388 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.8989_ 84.1597_20230827202703.png
+2023-08-30 07:07:22,116 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_41.9234_ -72.8963_20230827221906.png
+2023-08-30 07:07:22,868 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_32.1220_ -111.6970_20230821154745.png
+2023-08-30 07:07:23,624 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.7644_ -85.1609_20230827221208.png
+2023-08-30 07:07:24,371 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.4774_ 4.4547_20230827124902.png
+2023-08-30 07:07:25,110 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.3970_ -110.9171_20230821154720.png
+2023-08-30 07:07:25,859 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0579_ 113.1731_20230827175514.png
+2023-08-30 07:07:26,609 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8242_ 119.9053_20230827173853.png
+2023-08-30 07:07:27,352 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6950_ 35.3622_20230827205947.png
+2023-08-30 07:07:28,094 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.7353_ -104.1992_20230821154948.png
+2023-08-30 07:07:28,835 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8267_ 24.8735_20230827182900.png
+2023-08-30 07:07:29,571 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.1090_ -91.0283_20230821154827.png
+2023-08-30 07:07:30,299 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.0494_ -93.1826_20230827221447.png
+2023-08-30 07:07:31,049 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7163_ 84.2883_20230827202706.png
+2023-08-30 07:07:31,790 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_14.4733_ 26.1363_20230827183524.png
+2023-08-30 07:07:32,525 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.3972_ 29.4120_20230827185119.png
+2023-08-30 07:07:33,270 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.7893_ 106.1597_20230821155510.png
+2023-08-30 07:07:34,011 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.1265_ 45.1734_20230827183626.png
+2023-08-30 07:07:34,755 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.2574_ -110.9451_20230821154654.png
+2023-08-30 07:07:35,503 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_5.7823_ 28.8976_20230827185114.png
+2023-08-30 07:07:36,246 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.9943_ 45.0384_20230827185557.png
+2023-08-30 07:07:37,009 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.4790_ 109.5973_20230821155351.png
+2023-08-30 07:07:37,785 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_17.7964_ -7.6490_20230827125144.png
+2023-08-30 07:07:38,530 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0333_ 113.5983_20230827174141.png
+2023-08-30 07:07:39,276 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.6976_ 110.5388_20230827202232.png
+2023-08-30 07:07:40,021 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-34.2164_ -58.1550_20230821155712.png
+2023-08-30 07:07:40,726 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.3860_ 47.3385_20230827124835.png
+2023-08-30 07:07:41,455 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8637_ 116.4616_20230827175347.png
+2023-08-30 07:07:42,184 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.0709_ 30.8400_20230827183058.png
+2023-08-30 07:07:42,907 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7747_ 119.9132_20230827175043.png
+2023-08-30 07:07:43,631 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.6976_ 111.0388_20230821155359.png
+2023-08-30 07:07:44,342 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.2412_ 102.1817_20230827172556.png
+2023-08-30 07:07:45,045 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.1167_ -87.8716_20230827221228.png
+2023-08-30 07:07:45,764 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.9515_ 24.8313_20230827130136.png
+2023-08-30 07:07:46,467 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_30.9529_ 31.7519_20230827210239.png
+2023-08-30 07:07:47,180 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7866_ 119.9837_20230827173847.png
+2023-08-30 07:07:47,902 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4501_ 84.8930_20230827202628.png
+2023-08-30 07:07:48,609 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.1716_ -82.8984_20230827222157.png
+2023-08-30 07:07:49,322 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.4792_ -91.5499_20230821154846.png
+2023-08-30 07:07:50,042 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.5590_ -105.3752_20230821155031.png
+2023-08-30 07:07:50,759 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.0140384477991775_map_image_52.8667_ 0.7661_20230828182939.png
+2023-08-30 07:07:51,466 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.6981_ 24.8460_20230827184908.png
+2023-08-30 07:07:52,170 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1822_ 121.4304_20230827172639.png
+2023-08-30 07:07:52,896 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8122_ 29.8647_20230827183148.png
+2023-08-30 07:07:53,607 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_37.8392_ -122.4813_20230827221602.png
+2023-08-30 07:07:54,327 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.3843_ -91.9042_20230821154803.png
+2023-08-30 07:07:55,035 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.3899_ -109.8495_20230827221342.png
+2023-08-30 07:07:55,746 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_33.5036_ -88.4656_20230821154514.png
+2023-08-30 07:07:56,464 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.7962_ 24.8462_20230827130139.png
+2023-08-30 07:07:57,169 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.8741_ -73.0217_20230827221909.png
+2023-08-30 07:07:57,884 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.1764_ -86.6742_20230821154551.png
+2023-08-30 07:07:58,613 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.6407_ -81.1221_20230827222151.png
+2023-08-30 07:07:59,337 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.5946_ 35.0665_20230827205946.png
+2023-08-30 07:08:00,081 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.2478_ -83.4469_20230827222223.png
+2023-08-30 07:08:00,818 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.3469_ -107.2760_20230827221758.png
+2023-08-30 07:08:01,550 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.5571_ 99.5614_20230821155610.png
+2023-08-30 07:08:02,276 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.6973_ 47.0420_20230827125830.png
+2023-08-30 07:08:02,996 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_27.0711_ 119.3793_20230821153220.png
+2023-08-30 07:08:03,710 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.1384_ 4.1990_20230827130221.png
+2023-08-30 07:08:04,423 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.9007_ 30.7043_20230827210227.png
+2023-08-30 07:08:05,134 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6743_ 35.2826_20230827205943.png
+2023-08-30 07:08:05,860 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-1.7837_ 21.6608_20230827130147.png
+2023-08-30 07:08:06,565 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7725_ 24.4677_20230827125011.png
+2023-08-30 07:08:07,279 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.8585_ 113.8755_20230827175448.png
+2023-08-30 07:08:08,001 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7422_ 119.9212_20230827172452.png
+2023-08-30 07:08:08,721 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_41.5901_ -72.8003_20230827221934.png
+2023-08-30 07:08:09,436 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.4368_ 1.5086_20230827183541.png
+2023-08-30 07:08:10,136 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.7631_ 45.8947_20230827125158.png
+2023-08-30 07:08:10,853 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6065_ -86.5566_20230821154514.png
+2023-08-30 07:08:11,571 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_29.6561_ 100.8930_20230821155619.png
+2023-08-30 07:08:12,287 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.9615_ 119.4454_20230821153217.png
+2023-08-30 07:08:12,994 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.9476_ -110.8518_20230821154730.png
+2023-08-30 07:08:13,718 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_22.3025_ 16.9061_20230827125142.png
+2023-08-30 07:08:14,419 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8378_ 110.4634_20230827202445.png
+2023-08-30 07:08:15,136 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.1621_ 3.3854_20230827185508.png
+2023-08-30 07:08:15,837 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8455_ 116.3701_20230827175315.png
+2023-08-30 07:08:16,562 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.7034_ -123.8535_20230821154926.png
+2023-08-30 07:08:17,283 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.2910_ 95.9790_20230821155553.png
+2023-08-30 07:08:18,001 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.4826_ -92.1836_20230821154831.png
+2023-08-30 07:08:18,714 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.8903_ 34.8806_20230827210029.png
+2023-08-30 07:08:19,429 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.5980_ -85.9670_20230821154508.png
+2023-08-30 07:08:20,159 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2568_ 121.5397_20230827175233.png
+2023-08-30 07:08:20,902 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.7960_ 4.1741_20230827183321.png
+2023-08-30 07:08:21,635 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.221484649351852_map_image_53.2485_ 90.2546_20230828183309.png
+2023-08-30 07:08:22,363 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.2630_ 32.9834_20230827210106.png
+2023-08-30 07:08:23,098 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3515_ 43.9777_20230827185222.png
+2023-08-30 07:08:23,819 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.7334_ 34.9894_20230827205938.png
+2023-08-30 07:08:24,541 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1220_ 121.2763_20230827174002.png
+2023-08-30 07:08:25,261 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.3397_ -111.2720_20230821154738.png
+2023-08-30 07:08:25,981 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.5257_ -121.3683_20230827221626.png
+2023-08-30 07:08:26,702 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.9343_ 82.8886_20230827202641.png
+2023-08-30 07:08:27,405 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7163_ 110.5584_20230827202507.png
+2023-08-30 07:08:28,124 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_34.7608_ 110.2869_20230821155439.png
+2023-08-30 07:08:28,836 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8762_ 116.3687_20230827175334.png
+2023-08-30 07:08:29,560 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-18.0159_ 46.8595_20230827185616.png
+2023-08-30 07:08:30,275 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1762_ 110.4539_20230827202211.png
+2023-08-30 07:08:30,995 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_17.5557_ 3.9682_20230827185512.png
+2023-08-30 07:08:31,698 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_4.0571_ 25.1904_20230827185133.png
+2023-08-30 07:08:32,410 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.8958_ -72.6684_20230821155148.png
+2023-08-30 07:08:33,129 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9628_ 113.2328_20230827175417.png
+2023-08-30 07:08:33,853 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.0007_ 95.5531_20230821155555.png
+2023-08-30 07:08:34,561 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.7076_ 35.0371_20230827205923.png
+2023-08-30 07:08:35,280 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2091_ -75.0788_20230821155237.png
+2023-08-30 07:08:35,979 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-1.3453_ 27.9922_20230827125703.png
+2023-08-30 07:08:36,698 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8139_ 24.4031_20230827182825.png
+2023-08-30 07:08:37,405 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-33.0249_ -60.6865_20230821155734.png
+2023-08-30 07:08:38,122 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.5660_ 35.1302_20230827210001.png
+2023-08-30 07:08:38,837 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_1.7539_ 26.5003_20230827184938.png
+2023-08-30 07:08:39,551 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.8199_ 35.0788_20230827210059.png
+2023-08-30 07:08:40,272 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_32.9343_ -113.7461_20230821154729.png
+2023-08-30 07:08:40,985 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9659_ 31.8571_20230827210236.png
+2023-08-30 07:08:41,712 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.4694_ -109.9582_20230827221346.png
+2023-08-30 07:08:42,452 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.6458_ 85.5819_20230827202855.png
+2023-08-30 07:08:43,180 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_40.2318_ -102.0820_20230821155008.png
+2023-08-30 07:08:43,908 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.126933834579991_map_image_33.8214_ 81.8181_20230828183539.png
+2023-08-30 07:08:44,627 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.6640_ -2.8313_20230827183428.png
+2023-08-30 07:08:45,320 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_5.1899_ 28.5519_20230827183122.png
+2023-08-30 07:08:46,020 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.9235_ 4.3517_20230827125752.png
+2023-08-30 07:08:46,734 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.3292_ -72.4403_20230827221935.png
+2023-08-30 07:08:47,459 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1125_ 121.3619_20230827175107.png
+2023-08-30 07:08:48,191 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8926_ 116.3847_20230827174131.png
+2023-08-30 07:08:48,924 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_40.2428_ 99.3253_20230821155448.png
+2023-08-30 07:08:49,653 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4069_ 82.8976_20230827202612.png
+2023-08-30 07:08:50,411 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_13.3840_ 3.1535_20230827125152.png
+2023-08-30 07:08:51,148 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8098_ 27.6656_20230827183024.png
+2023-08-30 07:08:51,872 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.4547_ -75.2237_20230827222039.png
+2023-08-30 07:08:52,594 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.9107041563752514_map_image_51.6034_ -4.9789_20230828182950.png
+2023-08-30 07:08:53,305 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-18.9231_ 45.5474_20230827185545.png
+2023-08-30 07:08:54,026 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.6847_ -4.4849_20230827185424.png
+2023-08-30 07:08:54,725 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-35.0289_ -58.8380_20230821155710.png
+2023-08-30 07:08:55,446 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7765_ 24.5046_20230827125637.png
+2023-08-30 07:08:56,162 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.9390_ -75.0807_20230821155234.png
+2023-08-30 07:08:56,859 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.9829_ 108.3104_20230821155433.png
+2023-08-30 07:08:57,571 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7730_ 24.4884_20230827182805.png
+2023-08-30 07:08:58,294 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.14902149840682_map_image_27.3848_ 78.1503_20230828183645.png
+2023-08-30 07:08:59,013 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8225_ 110.4045_20230827202157.png
+2023-08-30 07:08:59,741 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9914_ 44.2038_20230827185210.png
+2023-08-30 07:09:00,473 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.211554037344019_map_image_31.5304_ 78.3812_20230828183522.png
+2023-08-30 07:09:01,225 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.9034_ -108.7791_20230821155035.png
+2023-08-30 07:09:01,945 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.8709_ -110.1243_20230821154739.png
+2023-08-30 07:09:02,671 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9043_ 44.4091_20230827183204.png
+2023-08-30 07:09:03,468 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.8253_ 4.9643_20230827132416.png
+2023-08-30 07:09:04,261 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.6507_ -75.7220_20230821155225.png
+2023-08-30 07:09:05,016 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_24.1676_ 110.5914_20230827202207.png
+2023-08-30 07:09:05,767 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_4.8920_ 25.6142_20230827130155.png
+2023-08-30 07:09:06,501 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.7905_ 31.6519_20230827210242.png
+2023-08-30 07:09:07,227 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.5798_ 35.2754_20230827210004.png
+2023-08-30 07:09:07,947 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.7425_ 96.7585_20230827172438.png
+2023-08-30 07:09:08,681 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.6052_ 45.9174_20230827131943.png
+2023-08-30 07:09:09,409 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.7962_ 4.6696_20230827130230.png
+2023-08-30 07:09:10,115 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.6690_ -91.6554_20230827221526.png
+2023-08-30 07:09:10,834 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-17.8491_ 47.2360_20230827132454.png
+2023-08-30 07:09:11,557 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7406_ 110.4684_20230827202424.png
+2023-08-30 07:09:12,289 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.5508_ -91.4639_20230827221532.png
+2023-08-30 07:09:13,015 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2711_ 82.8505_20230827202920.png
+2023-08-30 07:09:13,737 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7834_ 24.4757_20230827182846.png
+2023-08-30 07:09:14,460 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.196667674544324_map_image_22.4575_ 80.2137_20230828183527.png
+2023-08-30 07:09:15,192 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.1523_ 115.3519_20230821155348.png
+2023-08-30 07:09:15,917 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.0234_ 7.5094_20230827183308.png
+2023-08-30 07:09:16,640 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_38.7616_ -75.5575_20230821155159.png
+2023-08-30 07:09:17,367 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8609_ 110.2367_20230827202536.png
+2023-08-30 07:09:18,096 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.5721_ -117.6068_20230827221620.png
+2023-08-30 07:09:18,812 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.0197_ -87.0944_20230827221222.png
+2023-08-30 07:09:19,541 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.5833_ 34.9680_20230827205919.png
+2023-08-30 07:09:20,275 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.9489_ -3.6196_20230827183416.png
+2023-08-30 07:09:20,990 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_35.1261_ 33.2825_20230827210155.png
+2023-08-30 07:09:21,717 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.3488_ -84.1105_20230827222231.png
+2023-08-30 07:09:22,440 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8028_ 119.8602_20230827175027.png
+2023-08-30 07:09:23,165 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.3701_ -116.8550_20230821154945.png
+2023-08-30 07:09:23,896 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.6888_ -72.9703_20230821155136.png
+2023-08-30 17:48:01,862 - process_logger - INFO - program start
+2023-08-30 17:48:01,876 - process_logger - INFO - System State
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Image Data Path: ../datasets/classified_pictures
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Total Image: 4437
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Already Process: 570
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Image To Process: 3867
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Total Batch: 4
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Single Batch Size: 1000
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Auto Save: for every 30
+2023-08-30 17:48:01,876 - process_logger - INFO -  * Output folder: ../processed/results
+2023-08-30 17:48:01,876 - process_logger - INFO - Batch Process (0/4) 1-1000
+2023-08-30 17:48:08,412 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8664_ 116.4141_20230827174058.png
+2023-08-30 17:48:31,580 - process_logger - INFO - program start
+2023-08-30 17:48:31,594 - process_logger - INFO - System State
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Image Data Path: ../datasets/classified_pictures
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Total Image: 4437
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Already Process: 570
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Image To Process: 3867
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Total Batch: 4
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Single Batch Size: 1000
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Auto Save: for every 30
+2023-08-30 17:48:31,594 - process_logger - INFO -  * Output folder: ../processed/results
+2023-08-30 17:48:31,594 - process_logger - INFO - Batch Process (0/4) 1-1000
+2023-08-30 17:48:38,033 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.1426_ 31.2755_20230827210245.png
+2023-08-30 17:48:40,610 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.7129_ -94.3724_20230821154807.png
+2023-08-30 17:48:43,075 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.7759_ 107.1021_20230827172418.png
+2023-08-30 17:48:45,561 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1174_ 113.1690_20230827174226.png
+2023-08-30 17:48:48,042 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.5109_ -113.7708_20230821154707.png
+2023-08-30 17:48:50,280 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8459_ 119.9872_20230827173846.png
+2023-08-30 17:48:52,562 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.6929_ 34.0356_20230827134516.png
+2023-08-30 17:48:54,837 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.6476_ 25.0801_20230827184904.png
+2023-08-30 17:48:57,093 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.4836_ 43.9512_20230827210340.png
+2023-08-30 17:48:59,369 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.6683_ -93.6581_20230827221521.png
+2023-08-30 17:49:01,661 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1431_ 110.4096_20230827202413.png
+2023-08-30 17:49:03,961 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.7230_ -104.4683_20230827221756.png
+2023-08-30 17:49:06,241 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-18.3555_ 46.7991_20230827185549.png
+2023-08-30 17:49:08,491 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.5183_ -93.2230_20230821154754.png
+2023-08-30 17:49:10,730 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=0.4070990301712961_map_image_42.0198_ 38.7038_20230828183714.png
+2023-08-30 17:49:13,034 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.8612_ -115.5191_20230827221643.png
+2023-08-30 17:49:15,347 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_15.7768_ 13.6471_20230827183458.png
+2023-08-30 17:49:17,757 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.8874_ -105.3507_20230827221713.png
+2023-08-30 17:49:20,163 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.0512_ -119.5702_20230821154906.png
+2023-08-30 17:49:22,407 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.9908_ -109.4264_20230821154705.png
+2023-08-30 17:49:24,737 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7785_ 24.4413_20230827182836.png
+2023-08-30 17:49:27,082 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_33.3316_ 115.7493_20230821155339.png
+2023-08-30 17:49:29,318 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=1.5307445474609107_map_image_44.3423_ 38.4274_20230828183727.png
+2023-08-30 17:49:31,526 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.6830_ 35.1690_20230827205957.png
+2023-08-30 17:49:33,817 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.3820_ 7.3152_20230827130231.png
+2023-08-30 17:49:36,047 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_22.6521_ -3.8270_20230827185510.png
+2023-08-30 17:49:38,262 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7438_ 119.8772_20230827172459.png
+2023-08-30 17:49:40,568 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_36.4306_ -119.7407_20230827221619.png
+2023-08-30 17:49:42,850 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.3748483759808585_map_image_42.3665_ 41.5500_20230828183824.png
+2023-08-30 17:49:45,125 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_6.4268_ 26.6115_20230827185100.png
+2023-08-30 17:49:47,413 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.7636_ 44.8439_20230827183155.png
+2023-08-30 17:49:49,776 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.9412_ -103.8194_20230821155042.png
+2023-08-30 17:49:52,021 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.1383_ -75.7449_20230821155247.png
+2023-08-30 17:49:54,352 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_36.1495_ -89.7810_20230827221510.png
+2023-08-30 17:49:56,574 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.1034_ 108.4594_20230827172356.png
+2023-08-30 17:49:58,816 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8822_ 34.7922_20230827210054.png
+2023-08-30 17:50:01,097 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.4642_ 45.6864_20230827185157.png
+2023-08-30 17:50:03,364 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.9477_ -87.9220_20230821154542.png
+2023-08-30 17:50:05,551 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.6690_ -108.5487_20230827221823.png
+2023-08-30 17:50:07,825 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6132_ -87.3896_20230828173018.png
+2023-08-30 17:50:10,065 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.9589_ 110.5036_20230827202552.png
+2023-08-30 17:50:12,326 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.5097_ 108.4476_20230821155358.png
+2023-08-30 17:50:14,509 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.2252_ 31.7298_20230827210213.png
+2023-08-30 17:50:16,744 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7330_ 119.9698_20230827175032.png
+2023-08-30 17:50:19,007 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_61.2679_ -147.1570_20230821154619.png
+2023-08-30 17:50:21,169 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.9152_ -75.2307_20230827222044.png
+2023-08-30 17:50:23,327 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.9008_ -5.8158_20230827183354.png
+2023-08-30 17:50:25,530 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1361_ 110.5802_20230827202353.png
+2023-08-30 17:50:27,839 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-32.7645_ -60.6430_20230821155742.png
+2023-08-30 17:50:30,083 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.5275_ 12.5949_20230827183259.png
+2023-08-30 17:50:32,327 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_42.9041_ 108.0712_20230821155508.png
+2023-08-30 17:50:34,527 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_29.4636_ 114.1480_20230821155538.png
+2023-08-30 17:50:36,729 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_36.0498_ -91.4623_20230821154801.png
+2023-08-30 17:50:38,939 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0907_ 113.5473_20230827175447.png
+2023-08-30 17:50:41,244 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.7761_ 45.1841_20230827210359.png
+2023-08-30 17:50:43,506 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_10.4557_ 28.3822_20230827185122.png
+2023-08-30 17:50:45,818 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7975_ 24.4476_20230827182847.png
+2023-08-30 17:50:48,061 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9944_ 30.7287_20230827210220.png
+2023-08-30 17:50:50,335 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-33.0785_ -68.4561_20230821155730.png
+2023-08-30 17:50:52,563 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.8535_ -1.6977_20230827131920.png
+2023-08-30 17:50:54,784 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_24.1655_ 110.5873_20230827202404.png
+2023-08-30 17:50:57,099 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_26.1097_ 116.1308_20230821155530.png
+2023-08-30 17:50:59,313 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.6336_ 83.9192_20230827202944.png
+2023-08-30 17:51:01,546 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.872646580065149_map_image_52.7541_ -2.6261_20230828182923.png
+2023-08-30 17:51:03,785 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.9202_ 83.0206_20230827202840.png
+2023-08-30 17:51:05,991 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.9052_ 110.3992_20230827202553.png
+2023-08-30 17:51:08,257 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_33.5169_ -112.2105_20230821154654.png
+2023-08-30 17:51:10,455 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9893_ 31.5556_20230827210253.png
+2023-08-30 17:51:12,703 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.0667_ -75.5004_20230821155251.png
+2023-08-30 17:51:14,886 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_21.9139_ 40.9870_20230827210409.png
+2023-08-30 17:51:17,133 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.7142_ 34.9362_20230827210046.png
+2023-08-30 17:51:19,426 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-18.0879_ 46.8347_20230827124937.png
+2023-08-30 17:51:21,696 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.3634_ -89.7631_20230821154828.png
+2023-08-30 17:51:23,916 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.3744_ -4.7626_20230827132426.png
+2023-08-30 17:51:26,101 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_61.3044_ -153.0225_20230827221327.png
+2023-08-30 17:51:28,328 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8637_ 7.3400_20230827134546.png
+2023-08-30 17:51:30,560 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.9224_ -93.7193_20230821154759.png
+2023-08-30 17:51:32,767 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.2887_ -72.5204_20230821155137.png
+2023-08-30 17:51:34,976 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0520_ 113.9117_20230827174207.png
+2023-08-30 17:51:37,273 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.4489_ 47.2248_20230827124939.png
+2023-08-30 17:51:39,520 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.9392_ -108.2458_20230827221732.png
+2023-08-30 17:51:41,785 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_4.1649_ 33.5343_20230827131831.png
+2023-08-30 17:51:44,101 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.7804_ -75.6131_20230821155234.png
+2023-08-30 17:51:46,306 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.8391_ -6.9774_20230827183436.png
+2023-08-30 17:51:48,517 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_0.7785_ 24.4413_20230827182836.png
+2023-08-30 17:51:50,780 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3664_ 46.6799_20230827183214.png
+2023-08-30 17:51:53,099 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.4688_ -109.9459_20230827221418.png
+2023-08-30 17:51:55,414 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7484_ 110.3348_20230827202300.png
+2023-08-30 17:51:57,678 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.7273_ -87.3562_20230821154535.png
+2023-08-30 17:51:59,878 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.0448_ 96.2462_20230821155443.png
+2023-08-30 17:52:02,088 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.4508_ 2.4145_20230827183339.png
+2023-08-30 17:52:04,327 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8126_ 24.4034_20230827184832.png
+2023-08-30 17:52:06,590 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.8818_ -117.2252_20230821154922.png
+2023-08-30 17:52:08,780 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_10.2712_ 28.4880_20230827130206.png
+2023-08-30 17:52:11,069 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.291799230552616_map_image_44.6129_ 50.6618_20230828183748.png
+2023-08-30 17:52:13,264 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_1.8564_ 19.3706_20230827131811.png
+2023-08-30 17:52:15,505 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7766_ 24.4658_20230827184743.png
+2023-08-30 17:52:17,744 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6962_ 35.3377_20230827205950.png
+2023-08-30 17:52:20,064 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_65.2598_ -164.8162_20230821154617.png
+2023-08-30 17:52:22,274 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.8191_ -75.4311_20230821155245.png
+2023-08-30 17:52:24,478 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.1333_ 30.5287_20230827185041.png
+2023-08-30 17:52:26,747 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.8010_ -108.9125_20230821155021.png
+2023-08-30 17:52:28,962 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.0232_ 85.0960_20230827202859.png
+2023-08-30 17:52:31,215 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.230839339389865_map_image_42.2916_ 88.7833_20230828183321.png
+2023-08-30 17:52:33,484 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.1171_ 85.5139_20230827202622.png
+2023-08-30 17:52:35,740 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.7541_ -85.1084_20230827222208.png
+2023-08-30 17:52:37,979 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.9759811630792807_map_image_52.7052_ -0.9976_20230828182842.png
+2023-08-30 17:52:40,227 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.6383_ 108.8805_20230821155336.png
+2023-08-30 17:52:42,417 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_42.7025_ 88.6284_20230821153214.png
+2023-08-30 17:52:44,600 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.7833_ 82.7963_20230827202754.png
+2023-08-30 17:52:46,805 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_42.0190_ -72.8865_20230821155124.png
+2023-08-30 17:52:48,997 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_28.5268_ 42.4041_20230827210339.png
+2023-08-30 17:52:51,223 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.4790_ 109.5973_20230821155351.png
+2023-08-30 17:52:53,416 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.7694_ -114.8059_20230827221618.png
+2023-08-30 17:52:55,675 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7327_ 119.8637_20230827174947.png
+2023-08-30 17:52:57,950 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.0068_ 33.4956_20230827210139.png
+2023-08-30 17:53:00,222 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.0617_ -87.5054_20230827221131.png
+2023-08-30 17:53:02,470 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.2707_ 33.6319_20230827210151.png
+2023-08-30 17:53:04,748 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-34.9537_ -58.3095_20230821155701.png
+2023-08-30 17:53:06,932 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1409_ 121.3823_20230827175229.png
+2023-08-30 17:53:09,233 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.1019_ -114.8633_20230821154911.png
+2023-08-30 17:53:11,519 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.8168_ -72.4385_20230827221930.png
+2023-08-30 17:53:13,863 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.5943_ 42.5608_20230827210258.png
+2023-08-30 17:53:16,127 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.7764_ -6.2141_20230827125807.png
+2023-08-30 17:53:18,356 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.9643_ 31.3518_20230827210241.png
+2023-08-30 17:53:20,637 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.5270_ -72.3408_20230821155142.png
+2023-08-30 17:53:22,866 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.7819_ -90.7260_20230821154814.png
+2023-08-30 17:53:25,107 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2837_ 84.5315_20230827202645.png
+2023-08-30 17:53:27,381 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.6543_ -115.7880_20230821154856.png
+2023-08-30 17:53:29,618 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.5850_ 110.3517_20230827202453.png
+2023-08-30 17:53:31,931 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8596_ 116.3652_20230827175343.png
+2023-08-30 17:53:34,284 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.4535_ 43.4166_20230827130215.png
+2023-08-30 17:53:36,604 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_36.6635_ -115.9780_20230827221608.png
+2023-08-30 17:53:38,899 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8595_ 98.8947_20230827172446.png
+2023-08-30 17:53:41,229 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8591_ 116.4653_20230827174047.png
+2023-08-30 17:53:43,581 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_43.6252_ 123.8223_20230821155425.png
+2023-08-30 17:53:45,832 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.6818_ 98.5254_20230821155606.png
+2023-08-30 17:53:48,065 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-0.0931_ 20.0892_20230827184943.png
+2023-08-30 17:53:50,311 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.3567_ 110.1779_20230827172534.png
+2023-08-30 17:53:52,621 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8517_ 116.4760_20230827175313.png
+2023-08-30 17:53:54,954 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_35.2915_ 33.1608_20230827210109.png
+2023-08-30 17:53:57,265 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.012704736891939_map_image_52.3995_ 86.1946_20230828183316.png
+2023-08-30 17:53:59,533 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.1477_ 43.3090_20230827125106.png
+2023-08-30 17:54:01,885 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.1723_ 83.0601_20230827202833.png
+2023-08-30 17:54:04,128 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8724_ 116.4579_20230827175236.png
+2023-08-30 17:54:06,460 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_0.8250_ 24.4506_20230827184758.png
+2023-08-30 17:54:08,753 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.6165_ 12.6022_20230827131855.png
+2023-08-30 17:54:10,982 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-32.7139_ -60.7522_20230821155740.png
+2023-08-30 17:54:13,223 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.1531_ -71.9690_20230821155128.png
+2023-08-30 17:54:15,432 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.3604_ 42.2723_20230827210437.png
+2023-08-30 17:54:17,639 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_25.9287_ 95.6630_20230821155613.png
+2023-08-30 17:54:19,878 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-19.1609_ 46.7466_20230827125203.png
+2023-08-30 17:54:22,167 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.085569896938594_map_image_42.1191_ 91.4674_20230828183324.png
+2023-08-30 17:54:24,374 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8388_ 120.0019_20230827175024.png
+2023-08-30 17:54:26,657 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8704_ 116.4337_20230827174040.png
+2023-08-30 17:54:28,953 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-34.5711_ -58.9693_20230821155702.png
+2023-08-30 17:54:31,162 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.6285_ -2.3747_20230827183404.png
+2023-08-30 17:54:33,349 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_27.4922_ 113.3120_20230821155529.png
+2023-08-30 17:54:35,532 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.7887_ 31.3150_20230827210219.png
+2023-08-30 17:54:37,791 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.8930_ -89.7291_20230827221523.png
+2023-08-30 17:54:40,025 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.8856_ -68.5136_20230821155723.png
+2023-08-30 17:54:42,217 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.7382_ -107.4211_20230821155028.png
+2023-08-30 17:54:44,419 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8375_ 24.4072_20230827184818.png
+2023-08-30 17:54:46,658 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8135_ 120.0039_20230827173928.png
+2023-08-30 17:54:48,944 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.0736_ -75.1722_20230827222048.png
+2023-08-30 17:54:51,109 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.250020554945777_map_image_37.3184_ 31.5685_20230828183110.png
+2023-08-30 17:54:53,436 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.2181_ 121.1589_20230827175106.png
+2023-08-30 17:54:55,702 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.7193_ -106.6069_20230827221718.png
+2023-08-30 17:54:58,007 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_6.7995_ 33.4103_20230827185111.png
+2023-08-30 17:55:00,277 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.8846620671575307_map_image_52.6070_ -1.5455_20230828183033.png
+2023-08-30 17:55:02,501 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8346_ 119.8878_20230827173904.png
+2023-08-30 17:55:04,781 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.1383_ 47.6814_20230827185546.png
+2023-08-30 17:55:07,056 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8093_ 24.9052_20230827184900.png
+2023-08-30 17:55:09,275 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.4788_ -3.3819_20230827185353.png
+2023-08-30 17:55:11,501 - process_logger - INFO - process ../datasets/classified_pictures/villages/s=2.8877115606056547_map_image_51.7213_ -1.4917_20230828183032.png
+2023-08-30 17:55:13,727 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-32.7689_ -60.6302_20230821155746.png
+2023-08-30 17:55:15,931 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.2126_ 27.9183_20230827134513.png
+2023-08-30 17:55:18,230 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.2239908296525_map_image_43.1945_ 53.4641_20230828183903.png
+2023-08-30 17:55:20,488 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.9845_ -72.5144_20230821155105.png
+2023-08-30 17:55:22,695 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.6412_ 45.9831_20230827185205.png
+2023-08-30 17:55:24,995 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.257421864647621_map_image_43.6239_ 54.1479_20230828183738.png
+2023-08-30 17:55:27,354 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_21.0636_ -9.4037_20230827134606.png
+2023-08-30 17:55:29,630 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.8602_ 85.5104_20230827202948.png
+2023-08-30 17:55:31,879 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9302_ 112.8666_20230827174140.png
+2023-08-30 17:55:34,159 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.5466_ 46.8031_20230827124945.png
+2023-08-30 17:55:36,432 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.2232_ 108.8157_20230821155436.png
+2023-08-30 17:55:38,637 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.4252_ -93.4531_20230821154804.png
+2023-08-30 17:55:40,840 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.7887_ -108.5807_20230821155004.png
+2023-08-30 17:55:43,051 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.5244_ 46.7600_20230827183241.png
+2023-08-30 17:55:45,355 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.9082_ -68.5617_20230821155719.png
+2023-08-30 17:55:47,551 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.5177_ 96.3607_20230821155622.png
+2023-08-30 17:55:49,753 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.8867_ 82.8928_20230827202646.png
+2023-08-30 17:55:51,977 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.0844_ -5.3341_20230827130233.png
+2023-08-30 17:55:54,170 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.2156_ 44.9675_20230827124839.png
+2023-08-30 17:55:56,466 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.0307_ -113.2862_20230821154655.png
+2023-08-30 17:55:58,686 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.6454_ -71.8599_20230821155100.png
+2023-08-30 17:56:00,887 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.1523_ 115.3519_20230821155348.png
+2023-08-30 17:56:03,093 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.126109292897935_map_image_48.4371_ 88.4193_20230828183415.png
+2023-08-30 17:56:05,375 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1808_ 110.2637_20230827202402.png
+2023-08-30 17:56:07,645 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8237_ 24.3982_20230827182811.png
+2023-08-30 17:56:09,879 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.8201_ -114.6965_20230827221341.png
+2023-08-30 17:56:12,152 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-34.6095_ -58.4387_20230821153908.png
+2023-08-30 17:56:14,374 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.0799_ 109.0939_20230821155336.png
+2023-08-30 17:56:16,576 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.8757_ -85.1060_20230821154533.png
+2023-08-30 17:56:18,772 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.1803_ 113.2953_20230827175442.png
+2023-08-30 17:56:21,039 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.1845_ -4.4233_20230827130243.png
+2023-08-30 17:56:23,217 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.9229_ -83.2809_20230827222217.png
+2023-08-30 17:56:25,477 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.7838_ -108.8934_20230821155040.png
+2023-08-30 17:56:27,689 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.7437_ 24.8291_20230827131757.png
+2023-08-30 17:56:29,896 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8670_ 46.4481_20230827134531.png
+2023-08-30 17:56:32,172 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8962_ 44.6340_20230827185151.png
+2023-08-30 17:56:34,547 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=0.23228107094079217_map_image_52.9303_ 0.3880_20230828182845.png
+2023-08-30 17:56:36,749 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.4915_ 6.7583_20230827185257.png
+2023-08-30 17:56:38,952 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9691_ 43.3357_20230827183211.png
+2023-08-30 17:56:41,259 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.8260_ 1.8847_20230827185251.png
+2023-08-30 17:56:43,472 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.3283_ -92.7782_20230827221456.png
+2023-08-30 17:56:45,728 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.4208_ -73.0717_20230821155141.png
+2023-08-30 17:56:47,931 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.2517_ 31.0962_20230827210212.png
+2023-08-30 17:56:50,196 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.1560420546988617_map_image_46.5931_ 91.0192_20230828183424.png
+2023-08-30 17:56:52,422 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.7985_ -87.9201_20230821154449.png
+2023-08-30 17:56:54,626 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.2797_ -85.9067_20230828173020.png
+2023-08-30 17:56:56,898 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.0911_ -81.4948_20230827222236.png
+2023-08-30 17:56:59,163 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3163_ 121.2584_20230827175124.png
+2023-08-30 17:57:01,467 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.7568_ -74.9814_20230821155239.png
+2023-08-30 17:57:03,653 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_5.9685_ 32.3451_20230827185044.png
+2023-08-30 17:57:05,864 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.2553_ -108.2141_20230827221740.png
+2023-08-30 17:57:08,133 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3782_ 31.0365_20230827210224.png
+2023-08-30 17:57:10,387 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8963_ 116.3718_20230827175320.png
+2023-08-30 17:57:12,676 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8972_ 10.2753_20230827130227.png
+2023-08-30 17:57:14,929 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9590_ 44.5120_20230827132411.png
+2023-08-30 17:57:17,220 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8273_ 24.4068_20230827184835.png
+2023-08-30 17:57:19,458 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.7751_ 45.4337_20230827183240.png
+2023-08-30 17:57:21,733 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.0847_ -85.2896_20230821154518.png
+2023-08-30 17:57:23,930 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7937_ 120.0014_20230827174944.png
+2023-08-30 17:57:26,218 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7785_ 24.4967_20230827184744.png
+2023-08-30 17:57:28,471 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.1663_ -119.0483_20230821154930.png
+2023-08-30 17:57:30,677 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.1604_ -6.6401_20230827183409.png
+2023-08-30 17:57:32,871 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.1623_ 83.4904_20230827202714.png
+2023-08-30 17:57:35,119 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.4798_ 100.6526_20230821153148.png
+2023-08-30 17:57:37,299 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0297_ 110.5252_20230827202505.png
+2023-08-30 17:57:39,571 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3433_ 31.8291_20230827210221.png
+2023-08-30 17:57:41,853 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_27.3090_ 113.7894_20230821155541.png
+2023-08-30 17:57:44,072 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.5496_ -5.8397_20230827185355.png
+2023-08-30 17:57:46,247 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.8665_ 112.5190_20230821155407.png
+2023-08-30 17:57:48,433 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.0837_ 85.6262_20230827202951.png
+2023-08-30 17:57:50,659 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.4038_ -81.0837_20230827222142.png
+2023-08-30 17:57:52,930 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_26.6052_ -0.6744_20230827183533.png
+2023-08-30 17:57:55,139 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.1893_ -86.0311_20230821154532.png
+2023-08-30 17:57:57,332 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.169837026848536_map_image_50.2452_ 89.9634_20230828183342.png
+2023-08-30 17:57:59,597 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.8005_ 83.9314_20230827202715.png
+2023-08-30 17:58:01,810 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_30.7905_ 31.6519_20230827210242.png
+2023-08-30 17:58:04,088 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.4386_ 45.2034_20230827183222.png
+2023-08-30 17:58:06,386 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.0414_ 85.1727_20230827202708.png
+2023-08-30 17:58:08,624 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_21.1461_ 22.2211_20230827130303.png
+2023-08-30 17:58:10,799 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.5904_ 3.9129_20230827131858.png
+2023-08-30 17:58:12,992 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.7832_ 3.7049_20230827124852.png
+2023-08-30 17:58:15,228 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.5510_ 45.6950_20230827131850.png
+2023-08-30 17:58:17,497 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.7868_ -85.6823_20230821154550.png
+2023-08-30 17:58:19,697 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.2139_ 47.5915_20230827183637.png
+2023-08-30 17:58:21,961 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-32.9140_ -68.8738_20230821153913.png
+2023-08-30 17:58:24,172 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7829_ 110.3405_20230827202448.png
+2023-08-30 17:58:26,442 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-33.0472_ -68.4992_20230821155728.png
+2023-08-30 17:58:28,636 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7921_ 119.8831_20230827172628.png
+2023-08-30 17:58:30,908 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7489_ 110.3440_20230827202423.png
+2023-08-30 17:58:33,170 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.9096_ -68.6717_20230821153911.png
+2023-08-30 17:58:35,371 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8883_ 116.4099_20230827175352.png
+2023-08-30 17:58:37,654 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-33.0506_ -68.7195_20230821155727.png
+2023-08-30 17:58:39,820 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3225_ 43.4721_20230827183215.png
+2023-08-30 17:58:42,052 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_29.7741_ 99.2561_20230821155602.png
+2023-08-30 17:58:44,221 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.8548_ 110.1846_20230827172354.png
+2023-08-30 17:58:46,457 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_63.7013_ -141.2596_20230827221259.png
+2023-08-30 17:58:48,661 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.6408_ -75.5350_20230821155248.png
+2023-08-30 17:58:50,854 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.4453474743697905_map_image_57.4150_ 87.9613_20230828183356.png
+2023-08-30 17:58:53,023 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.6950_ 35.3622_20230827205947.png
+2023-08-30 17:58:55,311 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.5969_ 46.4298_20230827185543.png
+2023-08-30 17:58:57,563 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8313_ 119.8985_20230827175008.png
+2023-08-30 17:58:59,847 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-16.9976_ 45.5485_20230827130311.png
+2023-08-30 17:59:02,102 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.2366_ 33.0915_20230827210124.png
+2023-08-30 17:59:04,379 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.3793_ 9.9418_20230827185315.png
+2023-08-30 17:59:06,560 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.3272_ -87.0929_20230827221150.png
+2023-08-30 17:59:08,826 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9427_ 113.9785_20230827174228.png
+2023-08-30 17:59:11,123 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7903_ 24.4509_20230827182822.png
+2023-08-30 17:59:13,376 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_67.9065_ -164.8447_20230821154610.png
+2023-08-30 17:59:15,572 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.5875_ -72.3763_20230821155119.png
+2023-08-30 17:59:17,767 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_66.1370_ -137.1887_20230821154558.png
+2023-08-30 17:59:19,968 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.1737_ -72.3186_20230821155110.png
+2023-08-30 17:59:22,135 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2985_ 121.4151_20230827173954.png
+2023-08-30 17:59:24,434 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.7544_ 115.6160_20230821155449.png
+2023-08-30 17:59:26,632 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-34.1399_ -58.6951_20230821153909.png
+2023-08-30 17:59:28,845 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4174_ 82.8027_20230827202909.png
+2023-08-30 17:59:31,067 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.3477_ -86.8221_20230821154517.png
+2023-08-30 17:59:33,260 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.7642_ -108.5355_20230827221737.png
+2023-08-30 17:59:35,540 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-1.4469_ 24.7997_20230827183041.png
+2023-08-30 17:59:37,774 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_36.4341_ -90.6073_20230821154747.png
+2023-08-30 17:59:39,975 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8767_ 116.4565_20230827175250.png
+2023-08-30 17:59:42,269 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7012_ 110.2320_20230827202249.png
+2023-08-30 17:59:44,521 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8787_ 116.3726_20230827175351.png
+2023-08-30 17:59:46,818 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.9563_ -114.2567_20230821154912.png
+2023-08-30 17:59:49,000 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.6578_ -71.9775_20230821155111.png
+2023-08-30 17:59:51,192 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.213895596697152_map_image_57.0582_ 86.7760_20230828183257.png
+2023-08-30 17:59:53,472 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.4375_ -107.0303_20230827221726.png
+2023-08-30 17:59:55,824 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.723892905451884_map_image_33.8394_ 80.6297_20230828183622.png
+2023-08-30 17:59:58,108 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.4821_ -86.1277_20230821154518.png
+2023-08-30 18:00:00,329 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.6890_ 8.9535_20230827125118.png
+2023-08-30 18:00:02,522 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.8932_ -102.6354_20230821155010.png
+2023-08-30 18:00:04,716 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.8263_ -86.4413_20230827221200.png
+2023-08-30 18:00:07,015 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_26.5566_ 24.5077_20230827183517.png
+2023-08-30 18:00:09,230 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_21.1436_ -5.7194_20230827183459.png
+2023-08-30 18:00:11,443 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.7881_ -75.5033_20230821155227.png
+2023-08-30 18:00:13,663 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.5381_ -118.3555_20230821154925.png
+2023-08-30 18:00:15,855 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.0074284453144164_map_image_52.2200_ -2.3295_20230828182916.png
+2023-08-30 18:00:18,094 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_42.6661_ 108.8741_20230821153204.png
+2023-08-30 18:00:20,293 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_47.1981_ 101.5146_20230821155411.png
+2023-08-30 18:00:22,494 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_42.7875_ 122.1329_20230827172541.png
+2023-08-30 18:00:24,743 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.11013672670565_map_image_30.7106_ 78.5336_20230828183700.png
+2023-08-30 18:00:26,972 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.5692_ -87.3308_20230827222136.png
+2023-08-30 18:00:29,121 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.9141_ -120.6982_20230827221634.png
+2023-08-30 18:00:31,352 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.4433_ 3.3659_20230827132445.png
+2023-08-30 18:00:33,579 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.3918_ -88.1278_20230821154454.png
+2023-08-30 18:00:35,749 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-18.3294_ 47.5007_20230827183622.png
+2023-08-30 18:00:37,989 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.3786_ 43.9111_20230827210332.png
+2023-08-30 18:00:40,213 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7260_ 35.2174_20230827210051.png
+2023-08-30 18:00:42,520 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.1901_ -110.5731_20230827221344.png
+2023-08-30 18:00:44,798 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.8181_ 30.7935_20230827210208.png
+2023-08-30 18:00:47,067 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.9172_ 96.0108_20230821155617.png
+2023-08-30 18:00:49,245 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.4207_ -114.7338_20230821154914.png
+2023-08-30 18:00:51,414 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.5368_ 110.5107_20230827202323.png
+2023-08-30 18:00:53,668 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.7013_ 46.2614_20230827185217.png
+2023-08-30 18:00:55,920 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.7168_ -103.5458_20230821154958.png
+2023-08-30 18:00:58,116 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7892_ 24.4668_20230827182823.png
+2023-08-30 18:01:00,362 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_43.4542_ 129.0324_20230821155414.png
+2023-08-30 18:01:02,567 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.8460_ -107.3655_20230821155047.png
+2023-08-30 18:01:04,768 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.9824_ 5.9830_20230827185330.png
+2023-08-30 18:01:07,004 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_38.6408_ -75.5350_20230821155248.png
+2023-08-30 18:01:09,186 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.9475_ -85.3800_20230827221217.png
+2023-08-30 18:01:11,430 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.4834_ -75.6208_20230821155243.png
+2023-08-30 18:01:13,595 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.9988314120360267_map_image_51.6619_ -1.4040_20230828183030.png
+2023-08-30 18:01:15,806 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8928_ 24.7505_20230827182858.png
+2023-08-30 18:01:18,027 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8731_ 24.7365_20230827184910.png
+2023-08-30 18:01:20,261 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_68.0878_ -144.6108_20230821154617.png
+2023-08-30 18:01:22,434 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.6268_ -73.0611_20230821155116.png
+2023-08-30 18:01:24,621 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.5877_ 10.5686_20230827125124.png
+2023-08-30 18:01:26,827 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.5218_ -110.4582_20230821154736.png
+2023-08-30 18:01:29,034 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8954_ 35.0386_20230827210056.png
+2023-08-30 18:01:31,324 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_40.1571_ -103.2670_20230821155020.png
+2023-08-30 18:01:33,507 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.1604_ 44.7727_20230827185221.png
+2023-08-30 18:01:35,790 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.6040_ 46.9519_20230827125729.png
+2023-08-30 18:01:38,075 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9881_ 113.9291_20230827174136.png
+2023-08-30 18:01:40,368 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.3256_ 114.8298_20230821155402.png
+2023-08-30 18:01:42,558 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.5486_ -75.3502_20230821155235.png
+2023-08-30 18:01:44,753 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.175405944762286_map_image_37.3562_ 26.7023_20230828183133.png
+2023-08-30 18:01:46,948 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.4484_ 33.0614_20230827131839.png
+2023-08-30 18:01:49,209 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_41.7500_ -71.3228_20230827221924.png
+2023-08-30 18:01:51,488 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.5096_ -75.3149_20230821155250.png
+2023-08-30 18:01:53,677 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_67.9885_ -150.3174_20230821154633.png
+2023-08-30 18:01:55,876 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_7.8675_ 43.3720_20230827185144.png
+2023-08-30 18:01:58,170 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.3522_ -113.7525_20230821154708.png
+2023-08-30 18:02:00,361 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.2260_ 100.5925_20230827172553.png
+2023-08-30 18:02:02,608 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.6482_ -86.1364_20230827221224.png
+2023-08-30 18:02:04,869 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.9728_ -103.8109_20230821155019.png
+2023-08-30 18:02:07,074 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.7493_ -60.7901_20230821155740.png
+2023-08-30 18:02:09,314 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.7839_ 5.9725_20230827125141.png
+2023-08-30 18:02:11,587 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1320_ 110.5911_20230827202359.png
+2023-08-30 18:02:13,853 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1589_ 121.4155_20230827174037.png
+2023-08-30 18:02:16,143 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1466_ 121.4170_20230827173946.png
+2023-08-30 18:02:18,439 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8509_ 116.4885_20230827175239.png
+2023-08-30 18:02:20,738 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_35.2667_ -114.0122_20230827221446.png
+2023-08-30 18:02:23,003 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9109_ 113.0963_20230827175515.png
+2023-08-30 18:02:25,291 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8908_ 116.4495_20230827174113.png
+2023-08-30 18:02:27,571 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.6963_ -75.5030_20230827221955.png
+2023-08-30 18:02:29,825 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.7467_ -102.6437_20230821155035.png
+2023-08-30 18:02:31,998 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.9234_ 35.0677_20230827210052.png
+2023-08-30 18:02:34,275 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.5077_ 2.8427_20230827134538.png
+2023-08-30 18:02:36,512 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.6737_ -87.3070_20230821154522.png
+2023-08-30 18:02:38,687 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.218671533333776_map_image_49.8359_ 86.9067_20230828183313.png
+2023-08-30 18:02:40,927 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.7253_ 43.6372_20230827185139.png
+2023-08-30 18:02:43,210 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.3463_ 1.0497_20230827185301.png
+2023-08-30 18:02:45,399 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.6815_ 5.1902_20230827183326.png
+2023-08-30 18:02:47,602 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_18.3576_ -5.0577_20230827132439.png
+2023-08-30 18:02:49,829 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.3608_ -4.7301_20230827125140.png
+2023-08-30 18:02:52,001 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9395_ 31.1103_20230827210209.png
+2023-08-30 18:02:54,244 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4192_ 82.7579_20230827202734.png
+2023-08-30 18:02:56,442 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.8665_ 112.5190_20230821155407.png
+2023-08-30 18:02:58,611 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8108_ 119.9582_20230827173924.png
+2023-08-30 18:03:00,879 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.5004_ -112.0792_20230821154725.png
+2023-08-30 18:03:03,077 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.7755_ 34.4614_20230827183123.png
+2023-08-30 18:03:05,353 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.0662_ 31.6040_20230827210218.png
+2023-08-30 18:03:07,610 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.0234_ 32.9891_20230827210113.png
+2023-08-30 18:03:09,914 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7145_ 119.8693_20230827175049.png
+2023-08-30 18:03:12,183 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-17.9807_ 46.1924_20230827134617.png
+2023-08-30 18:03:14,440 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.8594_ -60.8532_20230821155743.png
+2023-08-30 18:03:16,673 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_6.0697_ 28.0343_20230827130159.png
+2023-08-30 18:03:18,932 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1023_ 110.4198_20230827202514.png
+2023-08-30 18:03:21,194 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.7017_ 44.1983_20230827185206.png
+2023-08-30 18:03:23,494 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_32.9729_ -85.8462_20230827221229.png
+2023-08-30 18:03:25,733 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_25.2872_ 19.6988_20230827131930.png
+2023-08-30 18:03:27,888 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.2823_ -116.7033_20230821154913.png
+2023-08-30 18:03:30,086 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.5673_ -5.1640_20230827183446.png
+2023-08-30 18:03:32,282 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.9603_ 8.8368_20230827185302.png
+2023-08-30 18:03:34,481 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.0084_ 83.3889_20230827202642.png
+2023-08-30 18:03:36,719 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.4627_ -75.5584_20230821155241.png
+2023-08-30 18:03:38,913 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.2938_ -110.1921_20230827221337.png
+2023-08-30 18:03:41,199 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7815_ 24.4583_20230827182838.png
+2023-08-30 18:03:43,446 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.7661_ -75.0330_20230821155155.png
+2023-08-30 18:03:45,616 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_29.8206_ 119.2471_20230821155544.png
+2023-08-30 18:03:47,804 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.7917_ 35.2266_20230827205928.png
+2023-08-30 18:03:50,099 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.1432_ 33.1469_20230827210121.png
+2023-08-30 18:03:52,357 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.5796_ 35.0102_20230827210006.png
+2023-08-30 18:03:54,632 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.7353_ -110.8435_20230821154733.png
+2023-08-30 18:03:56,814 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.9683_ 84.5264_20230827202610.png
+2023-08-30 18:03:59,007 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.8546_ -5.1256_20230827185414.png
+2023-08-30 18:04:01,189 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.5789_ -75.0995_20230821155226.png
+2023-08-30 18:04:03,373 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.5934_ 106.9484_20230821153211.png
+2023-08-30 18:04:05,567 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_67.4901_ -160.4925_20230827221253.png
+2023-08-30 18:04:07,798 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8281_ 25.0488_20230827184918.png
+2023-08-30 18:04:10,058 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.7279_ -72.5263_20230821155116.png
+2023-08-30 18:04:12,263 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_33.5954_ -86.7707_20230827221231.png
+2023-08-30 18:04:14,562 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.8175_ 24.4435_20230827130118.png
+2023-08-30 18:04:16,825 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.2364_ -73.2639_20230821155120.png
+2023-08-30 18:04:19,032 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_36.3256_ -93.9698_20230827221538.png
+2023-08-30 18:04:21,280 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-1.6643_ 24.3900_20230827125037.png
+2023-08-30 18:04:23,628 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-34.6588_ -58.8054_20230821155713.png
+2023-08-30 18:04:25,853 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.5194_ -113.7633_20230821154729.png
+2023-08-30 18:04:28,050 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.7663_ -73.0292_20230821155103.png
+2023-08-30 18:04:30,231 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_38.9072_ -75.4185_20230827222056.png
+2023-08-30 18:04:32,494 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2818_ 121.2227_20230827175115.png
+2023-08-30 18:04:34,779 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8427_ 119.8948_20230827173910.png
+2023-08-30 18:04:37,035 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.057154742400481_map_image_46.3248_ 42.7655_20230828183808.png
+2023-08-30 18:04:39,290 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-33.0182_ -60.6892_20230821153922.png
+2023-08-30 18:04:41,467 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.1301_ -119.3293_20230821154944.png
+2023-08-30 18:04:43,638 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6034_ 35.2409_20230827205936.png
+2023-08-30 18:04:45,855 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.7053_ -75.4413_20230827222035.png
+2023-08-30 18:04:48,110 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.1298_ 101.6634_20230821153210.png
+2023-08-30 18:04:50,280 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9589_ 30.6938_20230827210223.png
+2023-08-30 18:04:52,535 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_38.9212_ -75.5853_20230821155204.png
+2023-08-30 18:04:54,740 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.9944_ 30.7287_20230827210220.png
+2023-08-30 18:04:56,986 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8491_ 116.4785_20230827174044.png
+2023-08-30 18:04:59,276 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-3.0555_ 24.2839_20230827131814.png
+2023-08-30 18:05:01,526 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.206660015213853_map_image_45.6926_ 54.5237_20230828183723.png
+2023-08-30 18:05:03,746 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0854_ 110.3780_20230827202433.png
+2023-08-30 18:05:06,021 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.5909_ -3.2951_20230827183442.png
+2023-08-30 18:05:08,204 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.4923_ -6.0958_20230827130245.png
+2023-08-30 18:05:10,395 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.6593_ -92.5345_20230827221546.png
+2023-08-30 18:05:12,657 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.8059_ 24.4378_20230827182851.png
+2023-08-30 18:05:14,895 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-34.9119_ -59.0978_20230821155704.png
+2023-08-30 18:05:17,063 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.1849_ -71.7973_20230821155136.png
+2023-08-30 18:05:19,220 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.2959_ -6.5743_20230827185403.png
+2023-08-30 18:05:21,405 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.8651_ -102.7736_20230821154952.png
+2023-08-30 18:05:23,573 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-33.1338_ -68.7773_20230821155715.png
+2023-08-30 18:05:25,778 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.7616_ -75.5575_20230821155159.png
+2023-08-30 18:05:27,955 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.6621_ -83.1912_20230821155313.png
+2023-08-30 18:05:30,178 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.5400_ 30.5725_20230827185038.png
+2023-08-30 18:05:32,465 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.0972_ 121.3904_20230827174028.png
+2023-08-30 18:05:34,816 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.023542663717576_map_image_39.6605_ 32.4119_20230828183200.png
+2023-08-30 18:05:37,052 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9989_ 44.7694_20230827132405.png
+2023-08-30 18:05:39,339 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_41.4356_ -73.1947_20230821155109.png
+2023-08-30 18:05:41,515 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_22.9122_ 113.1166_20230827175439.png
+2023-08-30 18:05:43,777 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.0623_ -75.2677_20230827221940.png
+2023-08-30 18:05:45,928 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=2.1008640484161774_map_image_57.6090_ 89.1287_20230828183440.png
+2023-08-30 18:05:48,089 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_30.4283_ -86.1969_20230821154500.png
+2023-08-30 18:05:50,249 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.1727_ -106.4997_20230827221809.png
+2023-08-30 18:05:52,521 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.2857_ 100.4178_20230821155621.png
+2023-08-30 18:05:54,700 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.7505_ 34.7813_20230827210037.png
+2023-08-30 18:05:56,934 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.1941_ 111.8778_20230827172608.png
+2023-08-30 18:05:59,178 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.6939_ 109.0860_20230821155455.png
+2023-08-30 18:06:01,356 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.1999_ -91.0886_20230821154842.png
+2023-08-30 18:06:03,534 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-32.8689_ -60.6266_20230821155748.png
+2023-08-30 18:06:05,704 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7744_ 24.5061_20230827182818.png
+2023-08-30 18:06:07,925 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.6728_ 35.3423_20230827205942.png
+2023-08-30 18:06:10,178 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_28.4750_ -80.7305_20230827222107.png
+2023-08-30 18:06:12,371 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.7677_ 24.7126_20230827125026.png
+2023-08-30 18:06:14,593 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.5899_ -110.5335_20230821154724.png
+2023-08-30 18:06:16,767 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.9454_ -4.8880_20230827185425.png
+2023-08-30 18:06:18,984 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.9092_ 13.5385_20230827134603.png
+2023-08-30 18:06:21,137 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.6173_ -88.1998_20230821154452.png
+2023-08-30 18:06:23,314 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4212_ 84.5000_20230827202730.png
+2023-08-30 18:06:25,524 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.9343_ -117.8989_20230827221628.png
+2023-08-30 18:06:27,753 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.8394_ -93.6417_20230821154805.png
+2023-08-30 18:06:29,926 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.8784_ 11.4346_20230827185249.png
+2023-08-30 18:06:32,121 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.3029_ 101.8876_20230821153225.png
+2023-08-30 18:06:34,291 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8946_ 116.3990_20230827174133.png
+2023-08-30 18:06:36,622 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.8776_ -84.4183_20230827222235.png
+2023-08-30 18:06:38,873 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.073102265158887_map_image_52.2573_ 0.8736_20230828182847.png
+2023-08-30 18:06:41,108 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7480_ 83.6788_20230827202626.png
+2023-08-30 18:06:43,349 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_22.7314_ -6.3103_20230827132443.png
+2023-08-30 18:06:45,532 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.2872_ 6.6007_20230827125119.png
+2023-08-30 18:06:47,723 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.8159_ -75.0296_20230821155202.png
+2023-08-30 18:06:49,881 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.8033_ 117.8190_20230827172528.png
+2023-08-30 18:06:52,121 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8815_ 116.3797_20230827175341.png
+2023-08-30 18:06:54,416 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1969_ 11.5439_20230827183333.png
+2023-08-30 18:06:56,643 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.8277_ -60.7788_20230821155743.png
+2023-08-30 18:06:58,815 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-32.7610_ -60.6116_20230821155735.png
+2023-08-30 18:07:00,999 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_63.2195_ -139.7819_20230827221256.png
+2023-08-30 18:07:03,257 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_36.6922_ -111.4973_20230821154649.png
+2023-08-30 18:07:05,437 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.6006_ -72.5566_20230821155143.png
+2023-08-30 18:07:07,607 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_29.2385_ -82.8681_20230821155314.png
+2023-08-30 18:07:09,778 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.3063_ 5.0128_20230827124856.png
+2023-08-30 18:07:11,952 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.6082_ 27.1986_20230827185058.png
+2023-08-30 18:07:14,172 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.2538_ -117.4844_20230827221621.png
+2023-08-30 18:07:16,339 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.2839_ 32.8880_20230827185118.png
+2023-08-30 18:07:18,580 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.8489_ 45.5966_20230827210349.png
+2023-08-30 18:07:20,791 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.0485_ 45.7334_20230827132407.png
+2023-08-30 18:07:23,079 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_43.0951_ 118.2421_20230821155424.png
+2023-08-30 18:07:25,268 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8370_ 119.9008_20230827175100.png
+2023-08-30 18:07:27,540 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.5945_ 110.4498_20230827202315.png
+2023-08-30 18:07:29,792 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0041_ 110.3152_20230827202551.png
+2023-08-30 18:07:32,044 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.1382_ -112.4577_20230827221339.png
+2023-08-30 18:07:34,307 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.0543_ 47.8801_20230827125826.png
+2023-08-30 18:07:36,565 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-19.1609_ 46.7466_20230827125203.png
+2023-08-30 18:07:38,830 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.3618_ 105.2436_20230821155350.png
+2023-08-30 18:07:41,015 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.4961_ 114.0416_20230827172531.png
+2023-08-30 18:07:43,281 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-32.9096_ -68.6717_20230821153911.png
+2023-08-30 18:07:45,488 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.8104_ -85.6962_20230827221205.png
+2023-08-30 18:07:47,741 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.192477503473868_map_image_15.9591_ 78.5623_20230828183541.png
+2023-08-30 18:07:49,999 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.6262_ -75.2420_20230821155230.png
+2023-08-30 18:07:52,181 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.5690_ -81.4183_20230827222226.png
+2023-08-30 18:07:54,437 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_69.8095_ -148.0032_20230821154615.png
+2023-08-30 18:07:56,620 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3018_ 121.4596_20230827175155.png
+2023-08-30 18:07:58,911 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.6194_ -5.3986_20230827183527.png
+2023-08-30 18:08:01,096 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_38.7818_ 85.1046_20230827202817.png
+2023-08-30 18:08:03,294 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.5301_ 110.2657_20230827202222.png
+2023-08-30 18:08:05,569 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.8564_ -121.3943_20230821154910.png
+2023-08-30 18:08:07,758 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.5070_ -105.6895_20230821154950.png
+2023-08-30 18:08:09,952 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_41.6130_ -73.1296_20230827221920.png
+2023-08-30 18:08:12,203 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_32.0309_ -111.1317_20230827221411.png
+2023-08-30 18:08:14,488 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8496_ 119.9538_20230827175014.png
+2023-08-30 18:08:16,766 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.7994_ -81.1595_20230827222244.png
+2023-08-30 18:08:19,013 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_20.7200_ 16.3785_20230827134608.png
+2023-08-30 18:08:21,249 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-34.4181_ -58.5343_20230821155702.png
+2023-08-30 18:08:23,425 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.0905_ -90.6338_20230821154753.png
+2023-08-30 18:08:25,593 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8296_ 119.9259_20230827172630.png
+2023-08-30 18:08:27,868 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_27.2631_ 115.6491_20230827172604.png
+2023-08-30 18:08:30,120 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3007_ 31.5202_20230827210243.png
+2023-08-30 18:08:32,368 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.0129939990410977_map_image_45.3619_ 45.4065_20230828183745.png
+2023-08-30 18:08:34,574 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2526_ 83.9490_20230827202832.png
+2023-08-30 18:08:36,795 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-32.7781_ -60.6972_20230821155746.png
+2023-08-30 18:08:38,970 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.0002_ 31.1433_20230827183143.png
+2023-08-30 18:08:41,232 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-33.0249_ -60.6865_20230821155734.png
+2023-08-30 18:08:43,411 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.1461351098074197_map_image_52.6701_ -3.9690_20230828183038.png
+2023-08-30 18:08:45,646 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.4783_ 46.2001_20230827185605.png
+2023-08-30 18:08:47,939 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.1730_ 106.5637_20230821155357.png
+2023-08-30 18:08:50,152 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.152132447469078_map_image_25.5894_ 79.1069_20230828183512.png
+2023-08-30 18:08:52,411 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_59.1535_ -157.8359_20230821154603.png
+2023-08-30 18:08:54,592 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_38.6978_ -121.7689_20230821154912.png
+2023-08-30 18:08:56,781 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7523_ 110.4678_20230827202529.png
+2023-08-30 18:08:59,024 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.8105_ -75.3213_20230827222028.png
+2023-08-30 18:09:01,290 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3727_ 43.5751_20230827183236.png
+2023-08-30 18:09:03,597 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3185_ 121.3825_20230827175152.png
+2023-08-30 18:09:05,887 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.2318_ 30.9304_20230827210203.png
+2023-08-30 18:09:08,167 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.3324_ -2.6347_20230827185431.png
+2023-08-30 18:09:10,329 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.1940_ 121.1988_20230827172505.png
+2023-08-30 18:09:12,603 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.1280_ 82.7728_20230827202654.png
+2023-08-30 18:09:14,840 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.7322_ -117.5746_20230821154943.png
+2023-08-30 18:09:17,041 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.6701_ -86.4390_20230821154457.png
+2023-08-30 18:09:19,238 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2038_ 121.2129_20230827175227.png
+2023-08-30 18:09:21,520 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_36.2535_ -94.3194_20230821154757.png
+2023-08-30 18:09:23,710 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_33.3132_ -86.3586_20230821154545.png
+2023-08-30 18:09:25,901 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.6061_ -112.2976_20230821154716.png
+2023-08-30 18:09:28,076 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.3845_ 112.7488_20230821155452.png
+2023-08-30 18:09:30,243 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.8063_ 84.0476_20230827202903.png
+2023-08-30 18:09:32,466 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-34.2956_ -58.9899_20230821155711.png
+2023-08-30 18:09:34,638 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_66.0130_ -160.8656_20230821154557.png
+2023-08-30 18:09:36,825 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.7835_ -85.8027_20230827221202.png
+2023-08-30 18:09:39,249 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.8636_ 119.8869_20230827172455.png
+2023-08-30 18:09:41,502 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.0915_ 84.1228_20230827202942.png
+2023-08-30 18:09:43,721 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.7205_ -1.6075_20230827183359.png
+2023-08-30 18:09:45,943 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.3583_ 83.0488_20230827202657.png
+2023-08-30 18:09:48,157 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.9662_ -112.8579_20230827221424.png
+2023-08-30 18:09:50,435 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7260_ 119.8675_20230827175055.png
+2023-08-30 18:09:52,687 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_27.5686_ -81.7285_20230827222139.png
+2023-08-30 18:09:54,947 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3564_ 46.9899_20230827183235.png
+2023-08-30 18:09:57,252 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.3585_ -6.5652_20230827183406.png
+2023-08-30 18:09:59,527 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.3424_ -93.7240_20230827221453.png
+2023-08-30 18:10:01,805 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3691_ 31.0592_20230827210204.png
+2023-08-30 18:10:04,096 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0865_ 7.8188_20230827183507.png
+2023-08-30 18:10:06,372 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1231_ 30.7506_20230827210206.png
+2023-08-30 18:10:08,656 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_30.1654_ -86.0161_20230821155255.png
+2023-08-30 18:10:10,834 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.7888_ 35.0368_20230827205952.png
+2023-08-30 18:10:13,150 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_21.9073_ 42.0248_20230827210356.png
+2023-08-30 18:10:15,474 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.5284_ -72.9557_20230821155139.png
+2023-08-30 18:10:17,861 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.7109_ -91.2963_20230827221524.png
+2023-08-30 18:10:20,151 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_2.0132_ 20.8278_20230827185012.png
+2023-08-30 18:10:22,504 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.0733_ 44.0584_20230827131852.png
+2023-08-30 18:10:24,987 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.8841_ 113.5092_20230827174139.png
+2023-08-30 18:10:27,399 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.4312_ -4.0919_20230827183429.png
+2023-08-30 18:10:29,823 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_55.3083_ -160.5580_20230821154635.png
+2023-08-30 18:10:32,175 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.7824_ -83.1943_20230827222230.png
+2023-08-30 18:10:34,505 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.5335_ -92.2542_20230827221542.png
+2023-08-30 18:10:36,915 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.5508_ -91.4639_20230827221532.png
+2023-08-30 18:10:39,208 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.4339_ -91.1307_20230827221500.png
+2023-08-30 18:10:41,537 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.5453_ 121.5301_20230827172405.png
+2023-08-30 18:10:43,787 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1668_ 121.5533_20230827175138.png
+2023-08-30 18:10:46,068 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.7386_ -75.3595_20230821155224.png
+2023-08-30 18:10:48,252 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_43.7173_ 127.3713_20230821153201.png
+2023-08-30 18:10:50,455 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.0635_ -75.7525_20230821155237.png
+2023-08-30 18:10:52,642 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_28.2581_ 117.6471_20230821155544.png
+2023-08-30 18:10:54,820 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.6621_ -106.6703_20230827221735.png
+2023-08-30 18:10:57,090 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.7826_ 110.2655_20230827202316.png
+2023-08-30 18:10:59,341 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7120_ 119.8792_20230827174958.png
+2023-08-30 18:11:01,587 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.4129_ -3.5061_20230827183358.png
+2023-08-30 18:11:03,785 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.0805_ 30.8827_20230827210251.png
+2023-08-30 18:11:06,068 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.9539_ 8.3643_20230827124859.png
+2023-08-30 18:11:08,303 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.4359_ -88.1340_20230821154456.png
+2023-08-30 18:11:10,494 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_41.3836_ -73.4144_20230821155104.png
+2023-08-30 18:11:12,670 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0314_ 110.5614_20230827202457.png
+2023-08-30 18:11:14,921 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.5457_ -75.6070_20230827221946.png
+2023-08-30 18:11:17,133 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-18.2439_ 45.5520_20230827124947.png
+2023-08-30 18:11:19,375 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8523_ 116.4055_20230827175317.png
+2023-08-30 18:11:21,654 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1006_ 113.4009_20230827174216.png
+2023-08-30 18:11:23,909 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.7881_ -3.0015_20230827185423.png
+2023-08-30 18:11:26,164 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.2388_ -111.4528_20230821154722.png
+2023-08-30 18:11:28,428 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.1233_ 46.5930_20230827131949.png
+2023-08-30 18:11:30,797 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.7512_ 117.8018_20230821155359.png
+2023-08-30 18:11:33,059 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.5821_ 35.2734_20230827210010.png
+2023-08-30 18:11:35,368 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8893_ 116.4304_20230827175342.png
+2023-08-30 18:11:37,776 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.4968_ -93.3979_20230827221509.png
+2023-08-30 18:11:40,084 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.2331_ 30.9331_20230827210201.png
+2023-08-30 18:11:42,374 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8892_ 19.0894_20230827183030.png
+2023-08-30 18:11:44,615 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_1.9257_ 26.8296_20230827124813.png
+2023-08-30 18:11:46,809 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_24.1957_ 110.5566_20230827202204.png
+2023-08-30 18:11:49,068 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8029_ 47.1704_20230827125109.png
+2023-08-30 18:11:51,338 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.7177_ -86.0591_20230821154548.png
+2023-08-30 18:11:53,511 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.9730_ -107.8468_20230821155046.png
+2023-08-30 18:11:55,679 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.7597_ -115.1617_20230821154850.png
+2023-08-30 18:11:57,843 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8540_ 119.8861_20230827174954.png
+2023-08-30 18:12:00,088 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.0524_ 85.4644_20230827202801.png
+2023-08-30 18:12:02,313 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0562_ 113.2629_20230827175529.png
+2023-08-30 18:12:04,585 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.5751_ -103.6385_20230821155043.png
+2023-08-30 18:12:06,759 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_35.0572_ 33.1875_20230827210135.png
+2023-08-30 18:12:09,046 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_27.0109_ 116.1364_20230821155527.png
+2023-08-30 18:12:11,240 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1767_ 121.4981_20230827172641.png
+2023-08-30 18:12:13,557 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.9689_ -86.8766_20230821154450.png
+2023-08-30 18:12:15,751 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1478_ 113.9732_20230827175432.png
+2023-08-30 18:12:17,997 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.7535_ 25.0394_20230827125648.png
+2023-08-30 18:12:20,221 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.1764_ -86.6742_20230821154551.png
+2023-08-30 18:12:22,393 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.7023_ 34.7442_20230827210038.png
+2023-08-30 18:12:24,628 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2701_ 121.4239_20230827175212.png
+2023-08-30 18:12:26,905 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.0159_ -92.5751_20230827221543.png
+2023-08-30 18:12:29,122 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.5008_ 108.6239_20230821155404.png
+2023-08-30 18:12:31,292 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.2288_ -6.5780_20230827185349.png
+2023-08-30 18:12:33,468 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.1745_ -109.7322_20230827221405.png
+2023-08-30 18:12:35,729 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_25.6241_ 44.6937_20230827210438.png
+2023-08-30 18:12:37,935 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.6346_ -75.4978_20230821155224.png
+2023-08-30 18:12:40,104 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.6607_ 25.0662_20230827184924.png
+2023-08-30 18:12:42,309 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1313_ 121.2339_20230827174007.png
+2023-08-30 18:12:44,560 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.9566_ -82.3135_20230827222158.png
+2023-08-30 18:12:46,786 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.0439_ 33.5806_20230827210129.png
+2023-08-30 18:12:49,041 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.2910_ 33.5384_20230827210136.png
+2023-08-30 18:12:51,304 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0847_ 113.9384_20230827175505.png
+2023-08-30 18:12:53,561 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.2915_ 33.1608_20230827210109.png
+2023-08-30 18:12:55,799 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7301_ 119.9527_20230827175026.png
+2023-08-30 18:12:58,046 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.6396_ -121.4253_20230827221617.png
+2023-08-30 18:13:00,270 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_65.2460_ -145.0930_20230827221328.png
+2023-08-30 18:13:02,413 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_29.8173_ 119.8053_20230827172430.png
+2023-08-30 18:13:04,649 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.4612_ -72.6053_20230821155153.png
+2023-08-30 18:13:06,810 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.5250_ -112.8719_20230821154740.png
+2023-08-30 18:13:08,974 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.6872_ -75.1938_20230821155155.png
+2023-08-30 18:13:11,148 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4807_ 85.4113_20230827202839.png
+2023-08-30 18:13:13,391 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0056_ 113.0670_20230827174232.png
+2023-08-30 18:13:15,679 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.7320_ -86.4399_20230827221155.png
+2023-08-30 18:13:17,894 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.0962_ 85.3345_20230827202921.png
+2023-08-30 18:13:20,144 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.9836_ -120.2230_20230821154855.png
+2023-08-30 18:13:22,355 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_38.4548_ -75.1418_20230827222100.png
+2023-08-30 18:13:24,592 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9133_ 113.1436_20230827175453.png
+2023-08-30 18:13:26,852 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.3260_ -90.3391_20230827221534.png
+2023-08-30 18:13:29,052 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7508_ 119.9744_20230827173929.png
+2023-08-30 18:13:31,311 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8857_ 116.3906_20230827175358.png
+2023-08-30 18:13:33,576 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.8783_ -68.6445_20230821153914.png
+2023-08-30 18:13:35,744 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3845_ 112.7488_20230821155452.png
+2023-08-30 18:13:37,905 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.3463_ 83.1827_20230827202824.png
+2023-08-30 18:13:40,108 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.9157_ 110.4421_20230827202202.png
+2023-08-30 18:13:42,362 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8695_ 116.3715_20230827174042.png
+2023-08-30 18:13:44,642 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_30.1553_ 113.1235_20230821155539.png
+2023-08-30 18:13:46,803 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.0011587780884827_map_image_30.9020_ 81.0177_20230828183652.png
+2023-08-30 18:13:48,993 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-19.1289_ 48.0511_20230827130317.png
+2023-08-30 18:13:51,243 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.216746494856437_map_image_19.7395_ 80.0505_20230828183520.png
+2023-08-30 18:13:53,488 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.0448_ -93.8446_20230821154834.png
+2023-08-30 18:13:55,660 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.0382_ -85.7423_20230828173022.png
+2023-08-30 18:13:57,908 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7607_ 119.9170_20230827173848.png
+2023-08-30 18:14:00,163 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_26.3773_ 114.3012_20230827172436.png
+2023-08-30 18:14:02,408 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_46.1290_ 111.6416_20230821153157.png
+2023-08-30 18:14:04,554 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.9966_ -72.2191_20230827221939.png
+2023-08-30 18:14:06,763 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3180_ 121.3536_20230827172511.png
+2023-08-30 18:14:09,020 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.199463618969185_map_image_21.8777_ 81.3568_20230828183519.png
+2023-08-30 18:14:11,247 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3749_ 31.4249_20230827210210.png
+2023-08-30 18:14:13,469 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.0372_ -86.8727_20230827221233.png
+2023-08-30 18:14:15,705 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2834_ 121.5909_20230827172512.png
+2023-08-30 18:14:17,964 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_34.2791_ -94.5064_20230827221530.png
+2023-08-30 18:14:20,196 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.8260_ -94.4553_20230821154845.png
+2023-08-30 18:14:22,356 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.5933_ 26.3690_20230827134459.png
+2023-08-30 18:14:24,548 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_9.5902_ 34.1066_20230827185125.png
+2023-08-30 18:14:26,847 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_2.0453_ 25.6525_20230827131809.png
+2023-08-30 18:14:29,132 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.5956_ 128.6799_20230827172410.png
+2023-08-30 18:14:31,420 - process_logger - INFO - process ../datasets/classified_pictures/villages/s=3.14711254440665_map_image_44.3388_ 85.6573_20230828183443.png
+2023-08-30 18:14:33,681 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.9111_ 110.2776_20230827202508.png
+2023-08-30 18:14:35,964 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.7298_ -106.0465_20230827221739.png
+2023-08-30 18:14:38,247 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.0563_ 6.8679_20230827185243.png
+2023-08-30 18:14:40,468 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.5730_ 35.0419_20230827210008.png
+2023-08-30 18:14:42,716 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.1412_ -84.4217_20230827222146.png
+2023-08-30 18:14:44,976 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7979_ 119.8367_20230827173912.png
+2023-08-30 18:14:47,231 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_34.0759_ -92.4717_20230821154823.png
+2023-08-30 18:14:49,412 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_30.8077_ -87.3071_20230821155312.png
+2023-08-30 18:14:51,574 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8536_ 25.0221_20230827184914.png
+2023-08-30 18:14:53,810 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0543_ 110.2392_20230827202534.png
+2023-08-30 18:14:56,061 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_38.6633_ -75.2428_20230821155252.png
+2023-08-30 18:14:58,235 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.1806_ -75.6482_20230821155239.png
+2023-08-30 18:15:00,397 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.6654_ 102.3657_20230827172355.png
+2023-08-30 18:15:02,587 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_55.0972_ -133.1481_20230821154606.png
+2023-08-30 18:15:04,746 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.0788_ 8.3415_20230827125749.png
+2023-08-30 18:15:06,942 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8916_ 116.4641_20230827175234.png
+2023-08-30 18:15:09,207 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.7325_ 44.9759_20230827125102.png
+2023-08-30 18:15:11,467 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_24.2121_ 110.5573_20230827202454.png
+2023-08-30 18:15:13,695 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.3194_ -109.8920_20230827221335.png
+2023-08-30 18:15:15,899 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.5676_ 44.9666_20230827210351.png
+2023-08-30 18:15:18,111 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.6879_ 34.9519_20230827210033.png
+2023-08-30 18:15:20,361 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.3527_ -71.4231_20230821155107.png
+2023-08-30 18:15:22,511 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8883_ 116.4701_20230827174117.png
+2023-08-30 18:15:24,771 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_70.4518_ -149.2277_20230821154635.png
+2023-08-30 18:15:26,932 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.6278_ 43.9245_20230827130210.png
+2023-08-30 18:15:29,219 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7691_ 84.3487_20230827202738.png
+2023-08-30 18:15:31,436 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_35.2389_ 33.3041_20230827210143.png
+2023-08-30 18:15:33,769 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.9720_ -84.7550_20230821155319.png
+2023-08-30 18:15:36,009 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.2645_ 30.8403_20230827210252.png
+2023-08-30 18:15:38,250 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.2476_ 95.8526_20230827172625.png
+2023-08-30 18:15:40,464 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_35.2294_ 33.1393_20230827210156.png
+2023-08-30 18:15:42,702 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.5436_ 46.4558_20230827185531.png
+2023-08-30 18:15:44,949 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.6148_ 110.3954_20230827202308.png
+2023-08-30 18:15:47,185 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.0838_ -6.3816_20230827132432.png
+2023-08-30 18:15:49,363 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.9433_ -75.7545_20230827222016.png
+2023-08-30 18:15:51,552 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.7443_ 35.0935_20230827205941.png
+2023-08-30 18:15:53,785 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1818_ 121.5915_20230827174015.png
+2023-08-30 18:15:56,048 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.061760742431191_map_image_53.2392_ -3.7098_20230828182838.png
+2023-08-30 18:15:58,254 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3691_ 31.0592_20230827210204.png
+2023-08-30 18:16:00,479 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.4434_ 116.7370_20230827172435.png
+2023-08-30 18:16:02,705 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_46.0870_ 104.3363_20230827172539.png
+2023-08-30 18:16:04,898 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.8530_ 115.2158_20230821155352.png
+2023-08-30 18:16:07,064 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.4454_ -102.1928_20230827221656.png
+2023-08-30 18:16:09,272 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2042_ 82.8039_20230827202927.png
+2023-08-30 18:16:11,491 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3782_ 31.0365_20230827210224.png
+2023-08-30 18:16:13,721 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.8020_ 24.4671_20230827182829.png
+2023-08-30 18:16:15,935 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_25.0292_ 1.8513_20230827183312.png
+2023-08-30 18:16:18,145 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_12.6862_ 8.4958_20230827134612.png
+2023-08-30 18:16:20,376 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.8831_ 4.3918_20230827125748.png
+2023-08-30 18:16:22,556 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_33.6494_ -91.7914_20230821154821.png
+2023-08-30 18:16:24,724 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_6.3248_ 25.3910_20230827185056.png
+2023-08-30 18:16:26,941 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8902_ 35.1755_20230827210101.png
+2023-08-30 18:16:29,211 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-33.0214_ -60.8853_20230821155736.png
+2023-08-30 18:16:31,367 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.9849_ 10.6806_20230827183342.png
+2023-08-30 18:16:33,592 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.4021_ 100.3379_20230821155407.png
+2023-08-30 18:16:35,755 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.6327_ 44.4741_20230827185204.png
+2023-08-30 18:16:38,038 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.9850_ -71.8255_20230827221933.png
+2023-08-30 18:16:40,326 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3157_ 121.2415_20230827175213.png
+2023-08-30 18:16:42,617 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9970_ 113.8719_20230827175450.png
+2023-08-30 18:16:44,889 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=0.5703256081955191_map_image_37.2107_ 26.4764_20230828183149.png
+2023-08-30 18:16:47,029 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.092276169906879_map_image_52.3218_ 0.0121_20230828183029.png
+2023-08-30 18:16:49,236 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.3874_ -112.5462_20230827221353.png
+2023-08-30 18:16:51,467 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.218088975303956_map_image_22.0338_ 78.1546_20230828183615.png
+2023-08-30 18:16:53,723 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.4871_ -73.4328_20230821155113.png
+2023-08-30 18:16:55,895 - process_logger - INFO - process ../datasets/classified_pictures/villages/s=2.774439091353836_map_image_40.5557_ 28.5507_20230828183209.png
+2023-08-30 18:16:58,099 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1587_ 121.1667_20230827174026.png
+2023-08-30 18:17:00,354 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.9479_ 25.9372_20230827183520.png
+2023-08-30 18:17:02,520 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.8426_ 31.0646_20230827210237.png
+2023-08-30 18:17:04,740 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.6689_ -104.0081_20230821155012.png
+2023-08-30 18:17:06,892 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.1296_ 82.8283_20230827202926.png
+2023-08-30 18:17:09,130 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.2803_ -107.0252_20230827221714.png
+2023-08-30 18:17:11,382 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.4339_ -72.6720_20230821155128.png
+2023-08-30 18:17:13,537 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.8388_ 30.8716_20230827210233.png
+2023-08-30 18:17:15,774 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.4765_ 83.2017_20230827202932.png
+2023-08-30 18:17:17,992 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_25.6186_ 98.3061_20230827172616.png
+2023-08-30 18:17:20,228 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.3977_ -75.5702_20230827221954.png
+2023-08-30 18:17:22,432 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.4161_ 103.4143_20230821155510.png
+2023-08-30 18:17:24,581 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_35.7872_ -94.0314_20230827221504.png
+2023-08-30 18:17:26,807 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.8822_ 34.7922_20230827210054.png
+2023-08-30 18:17:29,063 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8513_ 116.4481_20230827175259.png
+2023-08-30 18:17:31,330 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.103799237027507_map_image_40.2483_ 28.4641_20230828183154.png
+2023-08-30 18:17:33,560 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.8448_ -3.3522_20230827134555.png
+2023-08-30 18:17:35,759 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=2.850898274927471_map_image_42.3108_ 45.9630_20230828183747.png
+2023-08-30 18:17:37,968 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.8766_ 43.9147_20230827210335.png
+2023-08-30 18:17:40,147 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-33.1290_ -68.8737_20230821155722.png
+2023-08-30 18:17:42,309 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8156_ 119.8395_20230827172635.png
+2023-08-30 18:17:44,554 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.4133_ -113.2850_20230821154717.png
+2023-08-30 18:17:46,805 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_5.9259_ 30.2245_20230827130154.png
+2023-08-30 18:17:49,068 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_4.5488_ 33.7820_20230827130158.png
+2023-08-30 18:17:51,338 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.9900_ -109.1815_20230827221336.png
+2023-08-30 18:17:53,579 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-19.0035_ 47.0755_20230827183632.png
+2023-08-30 18:17:55,836 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.016954054730463_map_image_51.8268_ -4.8058_20230828182903.png
+2023-08-30 18:17:58,056 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_1.7419_ 19.9142_20230827125706.png
+2023-08-30 18:18:00,293 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.8743_ -102.7124_20230827221812.png
+2023-08-30 18:18:02,489 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1289_ 113.9591_20230827175401.png
+2023-08-30 18:18:04,735 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.2415_ 121.5957_20230827174004.png
+2023-08-30 18:18:07,028 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_30.8353_ 30.7333_20230827210235.png
+2023-08-30 18:18:09,260 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_19.1785_ -3.2868_20230827183422.png
+2023-08-30 18:18:11,469 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_9.4129_ 34.6478_20230827185127.png
+2023-08-30 18:18:13,716 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_37.3405_ -107.8506_20230821154956.png
+2023-08-30 18:18:15,886 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.6998_ 125.5988_20230821155425.png
+2023-08-30 18:18:18,044 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_29.4427_ -82.2790_20230827222105.png
+2023-08-30 18:18:20,297 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.4411_ -73.2034_20230821155124.png
+2023-08-30 18:18:22,468 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.8014_ 24.4465_20230827182802.png
+2023-08-30 18:18:24,694 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.3589_ 84.4136_20230827202655.png
+2023-08-30 18:18:26,858 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1005_ 113.9839_20230827175521.png
+2023-08-30 18:18:29,088 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.8308_ 35.0910_20230827210014.png
+2023-08-30 18:18:31,351 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3996_ -109.5627_20230821154742.png
+2023-08-30 18:18:33,509 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8855_ 110.5890_20230827202201.png
+2023-08-30 18:18:35,749 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_28.2369_ 44.3624_20230827210316.png
+2023-08-30 18:18:37,926 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-34.3609_ -59.0405_20230821155706.png
+2023-08-30 18:18:40,083 - process_logger - INFO - process ../datasets/classified_pictures/villages/s=3.143012391011733_map_image_17.7785_ 80.8930_20230828183543.png
+2023-08-30 18:18:42,302 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.5608_ 110.4520_20230827202242.png
+2023-08-30 18:18:44,548 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-34.4181_ -58.5343_20230821155702.png
+2023-08-30 18:18:46,712 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.0047_ 31.0764_20230827210234.png
+2023-08-30 18:18:48,951 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.4160_ 1.2393_20230827185306.png
+2023-08-30 18:18:51,116 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_8.5398_ 46.5030_20230827124846.png
+2023-08-30 18:18:53,483 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.8505_ -75.5644_20230821155203.png
+2023-08-30 18:18:55,696 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.8060_ 35.0120_20230827210019.png
+2023-08-30 18:18:57,970 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.0904_ -85.4080_20230827222247.png
+2023-08-30 18:19:00,202 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7827_ 24.4676_20230827125013.png
+2023-08-30 18:19:02,418 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8676_ 44.9447_20230827185227.png
+2023-08-30 18:19:04,681 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.110790559675632_map_image_52.0513_ -4.2989_20230828182826.png
+2023-08-30 18:19:06,900 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.0757_ 45.8504_20230827125155.png
+2023-08-30 18:19:09,140 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.232023874364201_map_image_54.7644_ 91.2532_20230828183445.png
+2023-08-30 18:19:11,387 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_69.1951_ -140.0120_20230827221246.png
+2023-08-30 18:19:13,612 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.3349_ -83.0330_20230827222219.png
+2023-08-30 18:19:15,845 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7805_ 83.5253_20230827202947.png
+2023-08-30 18:19:18,048 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7732_ 119.9819_20230827175005.png
+2023-08-30 18:19:20,307 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_41.9851_ -122.6241_20230827221640.png
+2023-08-30 18:19:22,562 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.9725_ -113.2582_20230821154721.png
+2023-08-30 18:19:24,733 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3623_ -85.7320_20230821154448.png
+2023-08-30 18:19:26,897 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7345_ 119.9078_20230827175009.png
+2023-08-30 18:19:29,144 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.3120_ 84.4251_20230827202940.png
+2023-08-30 18:19:31,321 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.1217_ -112.7162_20230827221421.png
+2023-08-30 18:19:33,581 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.8657_ 27.6848_20230827130200.png
+2023-08-30 18:19:35,783 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_30.7993_ -86.7072_20230821155315.png
+2023-08-30 18:19:37,950 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_20.4983_ 12.0595_20230827185458.png
+2023-08-30 18:19:40,082 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.7229_ -75.5734_20230827221944.png
+2023-08-30 18:19:42,288 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.3595_ 91.4671_20230821155445.png
+2023-08-30 18:19:44,444 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.4482_ -105.5163_20230827221813.png
+2023-08-30 18:19:46,708 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_24.1067_ 110.4180_20230827202210.png
+2023-08-30 18:19:48,961 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.5700_ -1.4914_20230827183405.png
+2023-08-30 18:19:51,126 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_32.8298_ -86.1498_20230821154525.png
+2023-08-30 18:19:53,280 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.9065_ 43.1099_20230827210309.png
+2023-08-30 18:19:55,462 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.7808_ -112.7185_20230821154712.png
+2023-08-30 18:19:57,618 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.2163_ -109.6116_20230821154718.png
+2023-08-30 18:19:59,826 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_33.2742_ 117.6414_20230821155348.png
+2023-08-30 18:20:02,042 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.9214_ 34.7786_20230827210044.png
+2023-08-30 18:20:04,319 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7295_ 83.9681_20230827202636.png
+2023-08-30 18:20:06,553 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_33.6234_ -113.8258_20230827221356.png
+2023-08-30 18:20:08,806 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_22.1733_ 44.1059_20230827210354.png
+2023-08-30 18:20:10,984 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7775_ 24.5095_20230827184753.png
+2023-08-30 18:20:13,203 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_30.8388_ 30.8716_20230827210233.png
+2023-08-30 18:20:15,452 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7376_ -102.7212_20230827221755.png
+2023-08-30 18:20:17,668 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_5.6619_ 33.6091_20230827185132.png
+2023-08-30 18:20:19,913 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_35.5506_ 101.2122_20230821153233.png
+2023-08-30 18:20:22,080 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.6192_ 35.2084_20230827210003.png
+2023-08-30 18:20:24,318 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.8158_ -71.2402_20230821155126.png
+2023-08-30 18:20:26,499 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3007_ 31.5202_20230827210243.png
+2023-08-30 18:20:28,751 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.9008_ 113.6915_20230821155415.png
+2023-08-30 18:20:30,934 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.7499_ 35.2407_20230827205955.png
+2023-08-30 18:20:33,214 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.4561_ 26.7687_20230827185005.png
+2023-08-30 18:20:35,449 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.0881_ -122.3195_20230821154920.png
+2023-08-30 18:20:37,644 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.070202810120998_map_image_47.1907_ 91.7369_20230828183353.png
+2023-08-30 18:20:39,867 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.4423_ 30.6619_20230827134510.png
+2023-08-30 18:20:42,082 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_39.5312_ -75.5112_20230821155232.png
+2023-08-30 18:20:44,257 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.081278058937965_map_image_44.5282_ 85.3474_20230828183312.png
+2023-08-30 18:20:46,500 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_21.6759_ -10.8573_20230827185439.png
+2023-08-30 18:20:48,680 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_37.9529_ -108.4412_20230821155048.png
+2023-08-30 18:20:50,861 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.0573_ -114.1345_20230827221633.png
+2023-08-30 18:20:53,161 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1118_ 121.4663_20230827175111.png
+2023-08-30 18:20:55,435 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_46.7534_ 106.3439_20230827172540.png
+2023-08-30 18:20:57,648 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.0805_ 30.8827_20230827210251.png
+2023-08-30 18:20:59,892 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=0.6859356836422859_map_image_40.6477_ 27.4545_20230828183147.png
+2023-08-30 18:21:02,049 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_36.3029_ -114.4224_20230821154647.png
+2023-08-30 18:21:04,235 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.981650443817311_map_image_44.9787_ 43.6452_20230828183826.png
+2023-08-30 18:21:06,513 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.3191_ 30.8761_20230827210231.png
+2023-08-30 18:21:08,802 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.6969_ 35.0021_20230827210101.png
+2023-08-30 18:21:11,086 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_41.3577_ -72.3900_20230827221903.png
+2023-08-30 18:21:13,333 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_32.7338_ 35.0711_20230827205949.png
+2023-08-30 18:21:15,601 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_13.4342_ 6.3139_20230827124929.png
+2023-08-30 18:21:17,870 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7757_ 24.5151_20230827134436.png
+2023-08-30 18:21:20,105 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.7648_ -112.9067_20230821154727.png
+2023-08-30 18:21:22,307 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-18.5248_ 44.9688_20230827183630.png
+2023-08-30 18:21:24,596 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_66.4017_ -155.7890_20230821154640.png
+2023-08-30 18:21:26,788 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-18.1703_ 47.0058_20230827183629.png
+2023-08-30 18:21:29,057 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_-18.1890_ 44.9993_20230827125154.png
+2023-08-30 18:21:31,346 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.6419_ 24.6888_20230827132330.png
+2023-08-30 18:21:33,582 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/s=3.1393993144877363_map_image_41.0286_ 27.0153_20230828183222.png
+2023-08-30 18:21:35,831 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_36.3816_ -94.4342_20230821154845.png
+2023-08-30 18:21:38,030 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_0.8935_ 24.8381_20230827182945.png
+2023-08-30 18:21:40,245 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.003451824372336_map_image_52.1249_ -1.1306_20230828182952.png
+2023-08-30 18:21:42,486 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.1225_ 85.0010_20230827202946.png
+2023-08-30 18:21:44,725 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8463_ 24.7386_20230827132327.png
+2023-08-30 18:21:46,966 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.6814_ 25.0396_20230827182940.png
+2023-08-30 18:21:49,222 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_31.5867_ -81.1680_20230827222218.png
+2023-08-30 18:21:51,455 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.6788_ -75.0699_20230827222057.png
+2023-08-30 18:21:53,734 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_41.5351_ -71.9560_20230821155108.png
+2023-08-30 18:21:55,935 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8242_ 119.9118_20230827175054.png
+2023-08-30 18:21:58,217 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_36.3367_ -91.2144_20230821154813.png
+2023-08-30 18:22:00,414 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=3.217661989369272_map_image_43.5255_ 57.2316_20230828183726.png
+2023-08-30 18:22:02,650 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_28.2745_ -82.9382_20230821155318.png
+2023-08-30 18:22:04,823 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_40.1800_ 94.9444_20230821155552.png
+2023-08-30 18:22:07,021 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-32.9580_ -60.8652_20230821153918.png
+2023-08-30 18:22:09,218 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.1736_ 30.0733_20230827185049.png
+2023-08-30 18:22:11,481 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_6.3812_ 30.2442_20230827131835.png
+2023-08-30 18:22:13,826 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3233_ 121.5060_20230827172643.png
+2023-08-30 18:22:16,151 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_28.3377_ 115.6857_20230821155534.png
+2023-08-30 18:22:18,352 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_22.4196_ 16.7374_20230827185505.png
+2023-08-30 18:22:20,535 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1241_ 113.8802_20230827175446.png
+2023-08-30 18:22:22,802 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.4137_ 115.3172_20230827172527.png
+2023-08-30 18:22:25,064 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_38.7486_ -75.6143_20230821155244.png
+2023-08-30 18:22:27,248 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.8491_ 47.2360_20230827132454.png
+2023-08-30 18:22:29,471 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0352_ 113.7842_20230827174214.png
+2023-08-30 18:22:31,730 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.6630_ -73.1089_20230821155139.png
+2023-08-30 18:22:33,891 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_-35.1748_ -58.6655_20230821155703.png
+2023-08-30 18:22:36,050 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.4382_ -75.2057_20230827222043.png
+2023-08-30 18:22:38,305 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_40.7872_ 95.7286_20230821155559.png
+2023-08-30 18:22:40,472 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_46.5217_ 103.9972_20230821155422.png
+2023-08-30 18:22:42,612 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8765_ 116.3639_20230827174108.png
+2023-08-30 18:22:44,884 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7670_ 82.9877_20230827202704.png
+2023-08-30 18:22:47,085 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_31.8764_ 112.3900_20230821155456.png
+2023-08-30 18:22:49,241 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_27.0602_ -8.0990_20230827130310.png
+2023-08-30 18:22:51,442 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.3203_ 121.1968_20230827172638.png
+2023-08-30 18:22:53,689 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_35.1205_ 33.1294_20230827210159.png
+2023-08-30 18:22:55,925 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8439_ 24.4132_20230827182850.png
+2023-08-30 18:22:58,121 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.6349_ 25.9630_20230827185059.png
+2023-08-30 18:23:00,316 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_68.8431_ -143.7575_20230821154629.png
+2023-08-30 18:23:02,461 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.2944_ 4.8787_20230827131902.png
+2023-08-30 18:23:04,619 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_0.8048_ 24.7211_20230827184902.png
+2023-08-30 18:23:06,807 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.0677_ 113.0425_20230827175527.png
+2023-08-30 18:23:09,058 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_23.5335_ 110.3286_20230827202502.png
+2023-08-30 18:23:11,271 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8560_ 116.4807_20230827174051.png
+2023-08-30 18:23:13,529 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_32.7739_ 35.1621_20230827205935.png
+2023-08-30 18:23:15,756 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_-17.1634_ 45.3023_20230827185625.png
+2023-08-30 18:23:17,977 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.8129_ 119.9432_20230827175058.png
+2023-08-30 18:23:20,248 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.2206_ 45.1914_20230827185208.png
+2023-08-30 18:23:22,476 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_30.7993_ -86.7072_20230821155315.png
+2023-08-30 18:23:24,653 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.8948545499942226_map_image_45.5850_ 34.3380_20230828183746.png
+2023-08-30 18:23:26,858 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.1744_ 84.3117_20230827202814.png
+2023-08-30 18:23:29,040 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-32.7699_ -60.7185_20230821155747.png
+2023-08-30 18:23:31,206 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9638_ 113.3808_20230827175415.png
+2023-08-30 18:23:33,470 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.8635_ -107.8781_20230827221727.png
+2023-08-30 18:23:35,689 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_28.4667_ 113.0442_20230821155537.png
+2023-08-30 18:23:37,840 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_36.5777_ -115.5395_20230827221623.png
+2023-08-30 18:23:40,047 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_36.5749_ -114.5970_20230827221349.png
+2023-08-30 18:23:42,281 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_18.8113_ -3.7162_20230827185427.png
+2023-08-30 18:23:44,492 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.7541_ 43.3846_20230827210342.png
+2023-08-30 18:23:46,655 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.0534_ 45.5856_20230827210357.png
+2023-08-30 18:23:48,802 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_19.2642_ -2.7067_20230827185419.png
+2023-08-30 18:23:50,992 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_30.8957_ -87.2790_20230821154537.png
+2023-08-30 18:23:53,151 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.6398_ 9.7809_20230827185311.png
+2023-08-30 18:23:55,313 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8704_ 116.3645_20230827174111.png
+2023-08-30 18:23:57,578 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8686_ 116.4211_20230827175356.png
+2023-08-30 18:23:59,838 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.9310_ 103.3562_20230821155340.png
+2023-08-30 18:24:01,997 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.7407_ 119.9947_20230827172451.png
+2023-08-30 18:24:04,245 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.8609_ 110.2367_20230827202536.png
+2023-08-30 18:24:06,481 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_7.9467_ 46.0452_20230827132402.png
+2023-08-30 18:24:08,733 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.0786_ -105.8334_20230821155006.png
+2023-08-30 18:24:10,893 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.2612_ 84.4083_20230827202845.png
+2023-08-30 18:24:13,071 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_23.7277_ 4.9767_20230827125745.png
+2023-08-30 18:24:15,278 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.8618_ 1.8199_20230827185250.png
+2023-08-30 18:24:17,412 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.5788_ 104.3994_20230827172353.png
+2023-08-30 18:24:19,653 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.9021_ 116.4314_20230827174057.png
+2023-08-30 18:24:21,915 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_34.4579_ 102.9020_20230827172529.png
+2023-08-30 18:24:24,120 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_24.1515_ 110.5351_20230827202318.png
+2023-08-30 18:24:26,380 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_29.1274_ 43.7198_20230827210302.png
+2023-08-30 18:24:28,622 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_0.7973_ 24.4317_20230827182820.png
+2023-08-30 18:24:30,822 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_32.0032_ -81.6673_20230827222205.png
+2023-08-30 18:24:33,055 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_23.6822_ 10.9438_20230827183255.png
+2023-08-30 18:24:35,257 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_1.7942_ 18.7048_20230827132342.png
+2023-08-30 18:24:37,476 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_37.8560_ -103.8156_20230821155023.png
+2023-08-30 18:24:39,623 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-19.1037_ 45.3216_20230827185541.png
+2023-08-30 18:24:41,874 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.3749_ 31.4249_20230827210210.png
+2023-08-30 18:24:44,099 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8828_ 116.4774_20230827175255.png
+2023-08-30 18:24:46,359 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/s=0.8860389866073624_map_image_52.1638_ -4.5333_20230828183037.png
+2023-08-30 18:24:48,487 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8701_ 116.4451_20230827175357.png
+2023-08-30 18:24:50,738 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.3817_ 44.1658_20230827124834.png
+2023-08-30 18:24:53,014 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_-32.8751_ -60.7028_20230821153918.png
+2023-08-30 18:24:55,185 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_39.5483_ -75.3603_20230821155236.png
+2023-08-30 18:24:57,344 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_39.7099_ 83.0708_20230827202950.png
+2023-08-30 18:24:59,557 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_31.6972_ 34.9200_20230827210032.png
+2023-08-30 18:25:01,804 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_23.1546_ 113.9713_20230827175441.png
+2023-08-30 18:25:04,044 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_28.7635_ 119.1765_20230821155537.png
+2023-08-30 18:25:06,239 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_8.5831_ 46.9760_20230827185137.png
+2023-08-30 18:25:08,470 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=2.9868538293733895_map_image_52.8822_ -0.6801_20230828182915.png
+2023-08-30 18:25:10,660 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1208_ 121.2501_20230827175159.png
+2023-08-30 18:25:12,901 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.4146_ -82.3829_20230827222150.png
+2023-08-30 18:25:15,126 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_30.0227_ 116.9340_20230821155533.png
+2023-08-30 18:25:17,275 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_39.8703_ 116.3952_20230827175333.png
+2023-08-30 18:25:19,531 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_31.5136_ -111.6517_20230827221416.png
+2023-08-30 18:25:21,789 - process_logger - INFO - process ../datasets/classified_pictures/villages/map_image_10.4520_ 32.5188_20230827185110.png
+2023-08-30 18:25:24,021 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_38.1310_ -103.8892_20230821155011.png
+2023-08-30 18:25:26,165 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_38.4954_ 126.4595_20230827172545.png
+2023-08-30 18:25:28,375 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_-17.2975_ 45.4081_20230827130321.png
+2023-08-30 18:25:30,612 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_39.2598_ -109.0400_20230821155015.png
+2023-08-30 18:25:32,817 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_24.0408_ 4.2398_20230827183323.png
+2023-08-30 18:25:35,089 - process_logger - INFO - process ../datasets/classified_pictures/plain nature/map_image_41.3851_ -71.2788_20230827221907.png
+2023-08-30 18:25:37,213 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1760_ 121.3846_20230827172510.png
+2023-08-30 18:25:39,475 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_22.9265_ 113.3065_20230827174159.png
+2023-08-30 18:25:41,732 - process_logger - INFO - process ../datasets/classified_pictures/detailed nature/map_image_33.5663_ -85.4630_20230827221153.png
+2023-08-30 18:25:43,954 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_31.1783_ 121.4791_20230827175148.png
+2023-08-30 18:25:46,195 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/map_image_34.7678_ 109.4507_20230821155403.png
+2023-08-30 18:25:48,345 - process_logger - INFO - process ../datasets/classified_pictures/Agriculture/s=3.151291822906449_map_image_27.9529_ 80.2701_20230828183638.png
+2023-08-30 18:25:50,552 - process_logger - INFO - process ../datasets/classified_pictures/city/map_image_32.6367_ 35.1010_20230827205922.png
