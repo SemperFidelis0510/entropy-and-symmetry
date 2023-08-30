@@ -47,18 +47,15 @@ for _ in range(num_images):
 
     for zoom in zoom_levels:
         image_array = get_google_map_image(location, zoom_level=zoom, save=False)
-        
+
         # Save image
         filename = f"{save_directory}map_image_{location.replace(',', '_')}_{zoom}.png"
         image = Image.fromarray(image_array)
         image.save(filename)
-        
+
     coords_for_this_run.append(location)
     coord_names.append(coords_for_this_run)
 
 # Save coordinate names to JSON files
 with open(json_save_path, 'w') as json_file:
     json.dump(coord_names, json_file)
-
-
-

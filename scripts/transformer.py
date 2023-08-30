@@ -97,6 +97,19 @@ class Classifier(nn.Module):
         x2 = self.encoder2(x2)
         x1 = self.transformer1(x1, x1, x1)
         x2 = self.transformer2(x2, x2, x2)
+
+        # print("Shape of x1:", x1.shape)
+        # print("Shape of x2:", x2.shape)
+
+        # Padding x1 to match the sequence length of x2
+        if x1.size(1) < x2.size(1):
+            padding = torch.zeros(x1.size(0), x2.size(1) - x1.size(1), x1.size(2)).to(x1.device)
+            x1 = torch.cat((x1, padding), dim=1)
+        # Padding x2 to match the sequence length of x1
+        elif x2.size(1) < x1.size(1):
+            padding = torch.zeros(x2.size(0), x1.size(1) - x2.size(1), x2.size(2)).to(x2.device)
+            x2 = torch.cat((x2, padding), dim=1)
+
         x = torch.cat((x1, x2), dim=2)
         x = self.classifier(x[:, 0, :])
         return x
@@ -156,7 +169,7 @@ def predict(model, numbers1, numbers2):
 
 # Main function
 def main():
-    path = "../entropy_results/m=2023-08-28_20-04-34/entropy_results.json"
+    path = "../entropy_results/m=2023-08-29_19-14-57/entropy_results.json"
     test_part = 0.1
     stats = {'test_samples': 0, 'right_predictions': 0}
 

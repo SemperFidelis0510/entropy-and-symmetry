@@ -96,7 +96,7 @@ class ImageViewer:
         self.update_buttons()
         self.update_listbox()
         self.update_confirm_button_state()
-        self.button_save.config(state=DISABLED)# Disable save button until entropy calculation is complete
+        self.button_save.config(state=DISABLED)  # Disable save button until entropy calculation is complete
 
         self.image_window.bind('<Right>', self.forward)
         self.image_window.bind('<Left>', self.back)
@@ -488,7 +488,6 @@ class ImageViewer:
         self.update_buttons()
         self.update_status_bar()
         self.update_all_thumbnails()
-
 
     def resize_image(self, percent):
         if not self.List_images[self.img_no]:
