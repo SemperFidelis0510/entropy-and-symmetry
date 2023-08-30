@@ -9,9 +9,9 @@ from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 import numpy as np
 
-from PIL import ImageTk
-from main import *
-
+from PIL import ImageTk, Image
+sys.path.append('./')
+from source.main import main_gui
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -518,32 +518,19 @@ class ImageViewer:
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         method = self.combo.get()
         selected_color = self.combo_color.get()
-        with open('data/ent_norm.json', 'r') as file:
-            ent_norm = json.load(file)
-        if method not in ent_norm:
-            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
-            ent_norm[method] = calc_ent(fixed_noise, method)
-            with open('data/ent_norm.json', 'w') as file:
-                json.dump(ent_norm, file)
-
-        preprocessed_images, _ = preprocess(self.directory, callback=self.update_preprogress)
-        self.image_window.after(0, self.preprogress_window.destroy)
         self.start_entropy_calculation()
-        try:
-            img_ent = label_ent(preprocessed_images, methods=method, sort=True, ent_norm=ent_norm,
-                                colors=selected_color, callback=self.update_progress)
-        except Exception as e:
-            messagebox.showerror("Error", f"An error occurred: {str(e)}")
-        # For save button
-        self.img_ent_data = img_ent
+        save_directory = self.default_save_directory
+        if not save_directory or not os.path.exists(save_directory):
+            # If there's no default directory in the settings or it doesn't exist, ask the user
+            folder_path = filedialog.askdirectory()
+        else:
+            folder_path = save_directory
 
-        # Split images and entropy
-        images, entropies = self.split_images_and_entropy(img_ent)
-
-        self.np_array = images
-        self.entropies = entropies
-
-        #self.refresh_all_images(sorted_images)
+        # Check if a valid directory was chosen or retrieved from the settings
+        if not folder_path:
+            return
+        main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress)
+        self.image_window.after(0, self.preprogress_window.destroy)
         self.image_window.after(0, self.entropy_calculation_complete)
         self.image_window.after(0, self.progress_window.destroy)
     
@@ -633,7 +620,7 @@ class ImageViewer:
             os.makedirs(subfolder_path)
 
         # Save images to the subfolder
-        save_img(subfolder_path, images_arr)
+        #save_img(subfolder_path, images_arr)
 
 
     def save_default_directory(self, user_chosen_path):
