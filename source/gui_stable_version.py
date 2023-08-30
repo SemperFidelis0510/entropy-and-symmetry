@@ -10,9 +10,11 @@ from tkinter.messagebox import askyesno
 import numpy as np
 
 from PIL import ImageTk
+from main import *
 
-from entropy import *
-from functions import *
+import warnings
+
+warnings.filterwarnings("ignore")
 
 CONFIG_FILE = "settings.json"
 
