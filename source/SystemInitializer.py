@@ -29,6 +29,8 @@ class SystemInitializer(Logger):
     def set_logger(self):
         logger = logging.getLogger("process_logger")
         # Create a FileHandler and Formatter, then add the handler to the logger
+        if not os.path.exists(self.dst_folder):
+            os.makedirs(self.dst_folder)
         file_handler = logging.FileHandler(os.path.join(self.dst_folder, "application.log"))
         formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         file_handler.setFormatter(formatter)

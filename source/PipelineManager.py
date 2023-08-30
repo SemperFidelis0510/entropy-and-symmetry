@@ -7,14 +7,17 @@ from source.ImageLoader import ImageLoader
 from source.Logger import Logger
 class PipelineManager(Logger):
     def __init__(self, systemInitializer, imageLoader, preprocessor, processor,
-                 entropyCalculator, dataSaver, callback=print_progress_bar):
+                 entropyCalculator, dataSaver, callback=None):
         self.imageLoader = imageLoader
         self.systemInitializer = systemInitializer
         self.preprocessor = preprocessor
         self.processor = processor
         self.entropyCalculator = entropyCalculator
         self.dataSaver = dataSaver
-        self.print_progress_bar = callback
+        if callback is None:
+            self.print_progress_bar = print_progress_bar
+        else:
+            self.print_progress_bar = callback
 
 
     def process_single_image(self, image):

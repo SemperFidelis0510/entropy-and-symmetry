@@ -4,12 +4,13 @@ import os
 from source.Image import Image
 import time
 from source.utils import print_progress_bar
-from utils import print_progress_bar
 
 class ImageLoader:
-    def __init__(self, callback=print_progress_bar):
-        self.print_progress_bar = callback
-
+    def __init__(self, callback=None):
+        if callback is None:
+            self.print_progress_bar = print_progress_bar
+        else:
+            self.print_progress_bar = callback
     def load_images(self, image_paths, base_index):
         image_objects = []
         start_time = time.time()
