@@ -96,3 +96,14 @@ class DataSaver:
             "label": label,
             "entropy_results": ent_result_with_method
         }
+
+    def prettify_json_file(self):
+        try:
+            with open(self.json_path, 'r') as f:
+                data = json.load(f)
+        except json.JSONDecodeError:
+            print("JSON Decode Error")
+            return
+
+        with open(self.json_path, 'w') as f:
+            json.dump(data, f, indent=4)
