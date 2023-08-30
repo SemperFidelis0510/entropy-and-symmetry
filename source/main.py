@@ -41,14 +41,14 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
          head=None, max_queue_size=None, single_batch_size=None, callback=None):
     # System Configuration
     if process_methods_with_params is None:
-        process_methods_with_params = all_methods_with_params
+        process_methods_with_params = {'dft': None} #all_methods_with_params
     if src_folder is None:
         src_folder = datasets['classified']
     if dst_folder is None:
         m_name = '-'.join(process_methods_with_params.keys())
-        dst_folder = f'../processed/results'
+        dst_folder = f'../processed/localtests'
     if head is None:
-        head = None
+        head = 4
     if max_queue_size is None:
         max_queue_size = 40
     if single_batch_size is None:
