@@ -516,7 +516,7 @@ class ImageViewer:
     def on_confirm_click(self):
         self.image_window.after(0, self.start_preprocess)
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
-        method = self.combo.get()
+        method = {self.combo.get(): None}
         selected_color = self.combo_color.get()
         self.start_entropy_calculation()
         save_directory = self.default_save_directory
