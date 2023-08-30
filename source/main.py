@@ -20,6 +20,7 @@ all_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all'
                            'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                            'dft': None, 'naive': None, 'dwt': {'wavelet': 'haar', 'level': 'all'}}
 
+
 def reset_ent_norm():
     print('reset entropy norm')
     src_folder = datasets["fix_noise"]
@@ -35,6 +36,8 @@ def reset_ent_norm():
                                entropyCalculator, dataSaver)
     pipeline.runPipeline()
     print('please check the result and rename to entropy_norm.json')
+
+
 def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     # System Configuration
     if process_methods_with_params is None:
@@ -55,6 +58,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     pipeline = PipelineManager(systemInitializer, preprocessor, transformer,
                                entropyCalculator, dataSaver)
     pipeline.runPipeline()
+
 
 if __name__ == '__main__':
     main()
