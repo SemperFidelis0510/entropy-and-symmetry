@@ -4,9 +4,10 @@ import json
 
 
 class EntropyCalculator:
-    def __init__(self, color_weight=None, ent_norm_path=None):
+    def __init__(self, color_weight = None, ent_norm_path = None, reset_norm = False):
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
-        self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
+        self.ent_norm_path = ent_norm_path or '../source/data/entropy_norm.json'
+        self.reset_norm = reset_norm
         self.ent_norm = self.get_ent_norm()
 
     def calculateEntropy(self, image: Image):
@@ -62,13 +63,18 @@ class EntropyCalculator:
             data = json.load(f)
 
         # Navigate through the JSON structure to get the 'entropy_results' list
-        entropy_results = data.get("image_0.bmp", {}).get("entropy_results", [])
+        entropy_results = data[0].get("entropy_results", [])
 
         all_results = {}
 
         # Loop through the 'entropy_results' list to collect all methods and their results
         for item in entropy_results:
             method = item.get("method")
-            result = item.get("result")
+            if self.reset_norm:
+                result = 1
+                if method == 'dwt':
+                    result = [1]*10
+            else:
+                result = item.get("result")
             all_results[method] = result
         return all_results
