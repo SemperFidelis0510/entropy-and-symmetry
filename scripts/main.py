@@ -5,20 +5,14 @@ from functions import *
 
 warnings.filterwarnings("ignore")
 
-# ent_methods = [
-#     'hist',
-#     'naive',
-#     'dft',
-#     'dwt',
-#     'laplace',
-#     'joint_red_green',
-#     'joint_all',
-#     'lbp',
-#     'lbp_gabor',
-#     'adapt',
-#     'RGBCM'
-# ]
 ent_methods = [
+    'hist',
+    'naive',
+    'dft',
+    'dwt',
+    'laplace',
+    'joint_red_green',
+    'joint_all',
     'lbp',
     'lbp_gabor',
     'adapt',
