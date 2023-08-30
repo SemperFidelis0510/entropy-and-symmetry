@@ -64,7 +64,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
 
     # Initialize PipelineManager
     pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor,
-                               transformer,entropyCalculator, dataSaver)
+                               transformer,entropyCalculator, dataSaver, callback=callback)
     pipeline.runPipeline()
 
 
