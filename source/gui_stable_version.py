@@ -518,7 +518,7 @@ class ImageViewer:
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         method = {self.combo.get(): None}
         selected_color = self.combo_color.get()
-        self.start_entropy_calculation()
+        #self.start_entropy_calculation()
         save_directory = self.default_save_directory
         if not save_directory or not os.path.exists(save_directory):
             # If there's no default directory in the settings or it doesn't exist, ask the user
@@ -532,7 +532,7 @@ class ImageViewer:
         main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress)
         self.image_window.after(0, self.preprogress_window.destroy)
         self.image_window.after(0, self.entropy_calculation_complete)
-        self.image_window.after(0, self.progress_window.destroy)
+        #self.image_window.after(0, self.progress_window.destroy)
     
     
     def on_scroll(self, *args):
