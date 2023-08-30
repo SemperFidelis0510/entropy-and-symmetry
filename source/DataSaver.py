@@ -5,18 +5,11 @@ import subprocess
 
 
 class DataSaver:
-    def __init__(self, destination, methods, auto_save=False):
+    def __init__(self, destination, methods):
         self.destination = destination
         self.methods = methods
         self.json_path = os.path.join(self.destination, 'entropy_results.json')
         self.json_file = None
-
-        if not os.path.exists(self.destination):
-            os.makedirs(self.destination)
-        # Initialize the JSON file if it doesn't exist
-        if auto_save and not os.path.exists(self.json_path):
-            with open(self.json_path, 'w') as f:
-                f.write("[]")
 
     def save(self, index, image):
         if not os.path.exists(self.destination):
@@ -36,44 +29,17 @@ class DataSaver:
         with open(self.json_path, 'w') as f:
             json.dump(ent_results, f, indent=4)
 
-    def auto_save_ent_result(self, start_index, images):
-        # Create a dictionary to hold the entropy results
-        ent_results = {}
-        # Append new image object data
-        with open(self.json_path, 'rb+') as f:
-            # Move pointer to the position just before the last character (i.e., before the closing '}')
-            f.seek(-1, os.SEEK_END)
-
-            # If file is not empty, add a comma
-            if f.tell() > 1:
-                f.write(b',')
-
-            # Loop through the images and collect their entropy results
-            for index, image in enumerate(images):
-                real_index = index + start_index
-                ent_results[f"image_{real_index}.bmp"] = self.get_ent_result(real_index, image)
-
-            # Iterate through the ent_results dictionary
-            for i, (key, value) in enumerate(ent_results.items()):
-                record = {key: value}
-                f.write(json.dumps(record).encode('utf-8'))
-
-                # Add a comma except for the last item
-                if i < len(ent_results) - 1:
-                    f.write(b',')
-
-            # Add the closing '}'
-            f.write(b']')
-
-    def save_single_ent_result(self, index, image):  # Do not use this
-        if self.json_file is None:
-            self.json_file = open(self.json_path, 'w')
-        ent_results = {f"image_{index}.bmp": self.get_ent_result(index, image)}
-
-        # Write the entropy results to the JSON file
-
-        json_str = json.dumps(ent_results, indent=4)
-        self.json_file.write("\n" + json_str)
+    def save_single_ent_result(self, index, image):
+        if not os.path.exists(self.json_path):
+            with open(self.json_path, 'w') as f:
+                j = {}
+                json.dump(j, f)
+        with open(self.json_path, 'r+') as f:
+            json_obj = json.load(f)
+            json_obj[f"image_{index}.bmp"] = self.get_ent_result(index, image)
+            f.seek(0)
+            json.dump(json_obj, f, indent=4)
+            f.truncate()
 
     def get_ent_result(self, index, image):
         # Assuming image.entropyResults is a list [value1, value2, ...]
@@ -96,14 +62,3 @@ class DataSaver:
             "label": label,
             "entropy_results": ent_result_with_method
         }
-
-    def prettify_json_file(self):
-        try:
-            with open(self.json_path, 'r') as f:
-                data = json.load(f)
-        except json.JSONDecodeError:
-            print("JSON Decode Error")
-            return
-
-        with open(self.json_path, 'w') as f:
-            json.dump(data, f, indent=4)

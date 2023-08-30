@@ -42,17 +42,17 @@ class ImageBrowser:
 
         # List all subdirectories
         subdirs = [d for d in os.listdir(folder_path) if os.path.isdir(os.path.join(folder_path, d))]
-        
+
         for idx, subdir in enumerate(subdirs):
             subfolder_path = os.path.join(folder_path, subdir)
-            
+
             # Create a label for the subfolder name
             label = tk.Label(self.canvas, text=subdir, bg="gray")
             self.canvas.create_window((idx * 150 + 75, 20), window=label, anchor=tk.N)
-            
+
             # Load images from the subfolder
             image_files = [f for f in os.listdir(subfolder_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
-            
+
             for jdx, img_file in enumerate(image_files):
                 img_path = os.path.join(subfolder_path, img_file)
                 with Image.open(img_path) as img:

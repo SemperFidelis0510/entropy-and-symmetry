@@ -29,7 +29,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None):
     if src_folder is None:
         src_folder = datasets['classified']
     if dst_folder is None:
-        m_name = '-'.join(process_methods_with_params.keys())
+        # m_name = '-'.join(process_methods_with_params.keys())
         dst_folder = f'../entropy_results/m={datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
     postprocessor_methods = []
 

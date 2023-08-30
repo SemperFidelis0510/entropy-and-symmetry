@@ -1,11 +1,14 @@
 import numpy as np
 from source.Image import Image
 import json
+
+
 class EntropyCalculator:
-    def __init__(self, color_weight = None, ent_norm_path = None):
+    def __init__(self, color_weight=None, ent_norm_path=None):
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
         self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
         self.ent_norm = self.get_ent_norm()
+
     def calculateEntropy(self, image: Image):
         for method, processedData in image.processedData.items():
             temp = 0
@@ -28,16 +31,18 @@ class EntropyCalculator:
                     ent.append(result)
                 temp = ent
             elif method == 'joint_all':
-                temp = -np.sum(processedData * np.log2(processedData + np.finfo(float).eps))/self.get_norm(method)
+                temp = -np.sum(processedData * np.log2(processedData + np.finfo(float).eps)) / self.get_norm(method)
             else:
                 temp = self.entropy(processedData, self.get_norm(method))
             image.entropyResults.append(temp)
+
     def get_norm(self, method, level=None):
         if level is None:
             norm = self.ent_norm[method]
         else:
             norm = self.ent_norm[method][level]
         return norm
+
     def entropy(self, transformedData, norm=1):
         arr = np.abs(transformedData)
         ent = 0
@@ -49,7 +54,7 @@ class EntropyCalculator:
             return 0
         normalize_arr = arr / total_sum
         ent = -np.sum(normalize_arr * np.log2(normalize_arr + np.finfo(float).eps))
-        return ent/norm
+        return ent / norm
 
     def get_ent_norm(self):
         # Read the JSON file
