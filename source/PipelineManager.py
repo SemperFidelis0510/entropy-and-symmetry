@@ -71,7 +71,7 @@ class PipelineManager(Logger):
             start_time = time.time()
             for queue_index, image_object in enumerate(save_queue):
                 self.dataSaver.save(image_object)
-                print_progress_bar('Saving result in the queue', queue_index + 1, size, start_time=start_time)
+                self.print_progress_bar('Saving result in the queue', queue_index + 1, size, start_time=start_time)
             self.dataSaver.auto_save_ent_result(save_queue)
         self.dataSaver.prettify_json_file()
 
