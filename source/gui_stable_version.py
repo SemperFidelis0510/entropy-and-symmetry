@@ -3,11 +3,15 @@ import platform
 import sys
 import threading
 import os
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 import numpy as np
+import plotnine
 
 from PIL import ImageTk, Image
 sys.path.append('./')
@@ -120,6 +124,7 @@ class ImageViewer:
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
+        self.prob_data = []
         self.zoom_percent = 100
         self.is_fullscreen = False
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
@@ -554,6 +559,23 @@ class ImageViewer:
         if self.img_no != len(self.np_array) - 1:
             self.forward()
             self.back()
+
+
+    def plot_bar_chart(self, frame):
+        df = pd.DataFrame(self.prob_data[self.img_no])
+        # Create figure and axes objects
+        fig, ax = plt.subplots(figsize=(5, 4))
+    
+        # Plot data
+        ax.bar(df['categories'], df['probabilities'], color='blue', alpha=0.7)
+        ax.set_ylabel('Probabilities')
+        ax.set_title('Probability distribution')
+    
+        # Embed the plot in the Tkinter window
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.grid(row=0, column=0, padx=10, pady=10)
+        canvas.draw()
 
 
     def refresh_all_images(self, np_arrays):
