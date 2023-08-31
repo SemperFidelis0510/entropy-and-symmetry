@@ -126,11 +126,15 @@ class SimpleMLP(nn.Module):
                 optimizer.step()
             print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
 
-    def predict(self, entropies):
+    def predict(self, entropies, dwt=None):
         self.eval()
         with torch.no_grad():
             entropies = torch.tensor(entropies, dtype=torch.float).unsqueeze(0)
-            output_ = self(entropies)
+            if dwt is not None and self.dwt_layer:
+                dwt = torch.tensor(dwt, dtype=torch.float).unsqueeze(0)
+            else:
+                dwt = None
+            output_ = self(entropies, dwt)
             predicted_label_idx = torch.argmax(output_, dim=1).item()
             return self.possible_labels[predicted_label_idx]
 
@@ -237,7 +241,7 @@ def evaluate_model(model, test_set):
 
 
 def main(model_type="SimpleMLP"):
-    path = "../processed/results/entropy_results.json"
+    path = "../processed/results/123.json"
     test_part = 0.1
 
     dataset, test_set, input_dim, dwt_input_dim, num_classes = process_json(path, test_part)
