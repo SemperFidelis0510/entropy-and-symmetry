@@ -18,7 +18,7 @@ def merge_labels_based_on_location(data_list):
     return list(location_to_entry.values())
 
 # Load the JSON data
-with open('path', 'r') as file:
+with open('/Users/tangjingqin/Desktop/entropy-and-symmetry/processed/results/entropy_results.json', 'r') as file:
     data_list = json.load(file)
 
 merged_data_list = merge_labels_based_on_location(data_list)
@@ -26,5 +26,5 @@ merged_data_list = merge_labels_based_on_location(data_list)
 # Ensure the new folder exists or create it
 # Save the modified data to a file in the new folder with proper formatting
 
-with open('path', 'w') as file:
+with open('/Users/tangjingqin/Desktop/entropy-and-symmetry/processed/results/123.json', 'w') as file:
     json.dump(merged_data_list, file, indent=4, separators=(',', ': '))
