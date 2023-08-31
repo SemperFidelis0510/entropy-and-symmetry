@@ -187,13 +187,15 @@ class SimpleMLP(nn.Module):
                 optimizer.step()
             print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
 
-    def predict(self, entropies, dwt_x=None):
+    def predict(self, entropies, dwt=None):
         self.eval()
         with torch.no_grad():
             entropies = torch.tensor(entropies, dtype=torch.float).unsqueeze(0)
-            if dwt_x is not None:
-                dwt_x = torch.tensor(dwt_x, dtype=torch.float).unsqueeze(0)
-            output_ = self(entropies, dwt_x)
+            if dwt is not None and self.dwt_layer:
+                dwt = torch.tensor(dwt, dtype=torch.float).unsqueeze(0)
+            else:
+                dwt = None
+            output_ = self(entropies, dwt)
             predicted_label_idx = torch.argmax(output_, dim=1).item()
             return self.possible_labels[predicted_label_idx]
 
@@ -292,6 +294,8 @@ def process_json(path, test_part, model_type="SimpleMLP"):
     test_set = dataset[-i:]
     dataset = dataset[:-i]
 
+    input_dim = len(dataset[0]['entropies'])
+    dwt_input_dim = len(dataset[0]['dwt'])
     num_classes = len(all_labels)
     # print(dataset[:3])  # Print first 3 entries for debugging
     # print(type(dataset[0]['image']))  # Should be <class 'torch.Tensor'>
