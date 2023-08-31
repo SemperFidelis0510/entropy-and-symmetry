@@ -12,3 +12,4 @@ geopandas
 shapely
 torch
 tqdm
+plotnine
