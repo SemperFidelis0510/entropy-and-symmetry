@@ -4,6 +4,7 @@ from shutil import copyfile
 from PIL import Image
 import numpy as np
 
+
 def calculate_sha256(image_path):
     """Calculate SHA-256 hash of the first 100 RGB pixels of an image."""
     img = Image.open(image_path).convert('RGB')

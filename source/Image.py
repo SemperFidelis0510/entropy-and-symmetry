@@ -2,7 +2,7 @@ import os.path
 
 
 class Image:
-    def __init__(self, rawData, path):
+    def __init__(self, rawData, path, index):
         self.path = path
         self.rawData = rawData
         self.preprocessedData = None
@@ -10,3 +10,4 @@ class Image:
         self.entropyResults = []
         self.size = os.path.getsize(path)
         self.pixel_size = rawData.size
+        self.index = index

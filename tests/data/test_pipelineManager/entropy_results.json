@@ -1,0 +1,750 @@
+[
+    {
+        "index": 0,
+        "path": "../datasets/classified_pictures/villages/map_image_23.5595_ 110.5123_20230827202450.png",
+        "size": 714111,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 110.5123",
+            "23.5595"
+        ],
+        "label": "villages",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0360496176463534
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.40983057896345976
+            },
+            {
+                "method": "joint_all",
+                "result": 0.35242778852250184
+            },
+            {
+                "method": "lbp",
+                "result": 1.1069312525608959
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.94316400603082
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6452440462579799
+            },
+            {
+                "method": "dft",
+                "result": 1.0057613297325585
+            },
+            {
+                "method": "naive",
+                "result": 1.0461306932695245
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.999724201178861,
+                    1.70822457439091,
+                    1.2027595629065153,
+                    1.094060968386175,
+                    1.0994715559993735,
+                    1.072068474025063,
+                    1.051365470672609,
+                    1.0384036444146016,
+                    1.0273345905533717,
+                    1.0156602088374855
+                ]
+            }
+        ]
+    },
+    {
+        "index": 1,
+        "path": "../datasets/classified_pictures/plain nature/map_image_8.4445_ 45.0561_20230827124847.png",
+        "size": 794464,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 45.0561",
+            "8.4445"
+        ],
+        "label": "plain nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0423431825456004
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.42703471548463257
+            },
+            {
+                "method": "joint_all",
+                "result": 0.35863882835104083
+            },
+            {
+                "method": "lbp",
+                "result": 1.1158097577544983
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9750739628553649
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.7200322496458343
+            },
+            {
+                "method": "dft",
+                "result": 1.0129233634170398
+            },
+            {
+                "method": "naive",
+                "result": 1.0456374044186585
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9952683690698727,
+                    1.8143052630459475,
+                    1.1827775129969706,
+                    1.0841971224511526,
+                    1.0873076444157528,
+                    1.0646400655968358,
+                    1.0533468334090617,
+                    1.0509444208910634,
+                    1.0428733895533453,
+                    1.0360056322326878
+                ]
+            }
+        ]
+    },
+    {
+        "index": 2,
+        "path": "../datasets/classified_pictures/plain nature/map_image_40.8466_ 87.8270_20230821155500.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " 87.8270",
+            "40.8466"
+        ],
+        "label": "plain nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9381010900708461
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.10111995036389458
+            },
+            {
+                "method": "joint_all",
+                "result": 0.09176475294455003
+            },
+            {
+                "method": "lbp",
+                "result": 0.4444189522797952
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.2694216177005375
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.14132154727649787
+            },
+            {
+                "method": "dft",
+                "result": 0.868603138094602
+            },
+            {
+                "method": "naive",
+                "result": 0.9405072984665146
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.6806521947484868,
+                    0.5594492055355073,
+                    0.5382629551945357,
+                    0.5573717923052743,
+                    0.7800737303988239,
+                    0.7945311829701034,
+                    0.8222868009880449,
+                    0.8456024476594581,
+                    0.9103616623906061
+                ]
+            }
+        ]
+    },
+    {
+        "index": 3,
+        "path": "../datasets/classified_pictures/plain nature/map_image_18.1372_ 26.8365_20230827185453.png",
+        "size": 419350,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 26.8365",
+            "18.1372"
+        ],
+        "label": "plain nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0469511286593525
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.3881493044168872
+            },
+            {
+                "method": "joint_all",
+                "result": 0.337971872602832
+            },
+            {
+                "method": "lbp",
+                "result": 0.9469478103742348
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.8258877946076066
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.5380589004257584
+            },
+            {
+                "method": "dft",
+                "result": 0.9675398347897911
+            },
+            {
+                "method": "naive",
+                "result": 1.0491532313613037
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9998485129201043,
+                    1.6820914380113872,
+                    1.1189103998465497,
+                    1.020369594132714,
+                    1.0674975420660187,
+                    1.0131065383962279,
+                    0.9967739475652504,
+                    1.003368664285398,
+                    0.9881818581537083,
+                    0.9700863447229856
+                ]
+            }
+        ]
+    },
+    {
+        "index": 4,
+        "path": "../datasets/classified_pictures/villages/map_image_27.5377_ -81.7747_20230821155311.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -81.7747",
+            "27.5377"
+        ],
+        "label": "villages",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9253580258051052
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4177050814730888
+            },
+            {
+                "method": "joint_all",
+                "result": 0.36449322726762534
+            },
+            {
+                "method": "lbp",
+                "result": 1.1116906947503398
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9980739604390887
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6437193059078979
+            },
+            {
+                "method": "dft",
+                "result": 0.8921592870476085
+            },
+            {
+                "method": "naive",
+                "result": 0.9330162629862693
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9936837323680163,
+                    1.3309126716783353,
+                    1.201102079598793,
+                    1.0591500195643997,
+                    1.0752050153344317,
+                    1.0466521772660298,
+                    1.0339106997998941,
+                    1.0277675033900693,
+                    1.0225478466012594
+                ]
+            }
+        ]
+    },
+    {
+        "index": 5,
+        "path": "../datasets/classified_pictures/detailed nature/map_image_-16.9003_ 46.3982_20230827132505.png",
+        "size": 799830,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 46.3982",
+            "-16.9003"
+        ],
+        "label": "detailed nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9304008608635905
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.42689261151106234
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3742922234090122
+            },
+            {
+                "method": "lbp",
+                "result": 1.1136090495397422
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 1.0056187703322417
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6300393311928962
+            },
+            {
+                "method": "dft",
+                "result": 0.8793191663108165
+            },
+            {
+                "method": "naive",
+                "result": 0.9378991362916651
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9981067337067031,
+                    1.8320243248375752,
+                    1.2402734026816367,
+                    1.07022889772715,
+                    1.0825509529829425,
+                    1.0581739552743703,
+                    1.0469653996221304,
+                    1.038579880895089,
+                    1.026412749221946
+                ]
+            }
+        ]
+    },
+    {
+        "index": 6,
+        "path": "../datasets/classified_pictures/Agriculture/map_image_39.8923_ -103.8235_20230821155003.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -103.8235",
+            "39.8923"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9250643121369037
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.41523984494654476
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3722345049659503
+            },
+            {
+                "method": "lbp",
+                "result": 1.0534643700798165
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9966505929659867
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.5340988016530521
+            },
+            {
+                "method": "dft",
+                "result": 0.8516075400495249
+            },
+            {
+                "method": "naive",
+                "result": 0.938810114407879
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9989262141512596,
+                    1.7018905568650764,
+                    1.1891079399575115,
+                    1.0600080345141683,
+                    1.0638854848788637,
+                    1.030855086288017,
+                    1.0262905437169785,
+                    1.0168350080987891,
+                    1.0020442238340115
+                ]
+            }
+        ]
+    },
+    {
+        "index": 7,
+        "path": "../datasets/classified_pictures/plain nature/map_image_39.6375_ 82.7471_20230827202700.png",
+        "size": 545458,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 82.7471",
+            "39.6375"
+        ],
+        "label": "plain nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9335409840410082
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.2731589581888407
+            },
+            {
+                "method": "joint_all",
+                "result": 0.25946385425507884
+            },
+            {
+                "method": "lbp",
+                "result": 1.079606038266882
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 1.0031219924509005
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.43099844197548726
+            },
+            {
+                "method": "dft",
+                "result": 0.8362033864035746
+            },
+            {
+                "method": "naive",
+                "result": 0.9404839101095726
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9998923494713307,
+                    1.7424829425148907,
+                    1.1959901695948068,
+                    1.0790224393632055,
+                    1.0827445382143417,
+                    1.0595669471209566,
+                    1.0571404185397721,
+                    1.0492057735356686,
+                    1.0264151882375774
+                ]
+            }
+        ]
+    },
+    {
+        "index": 8,
+        "path": "../datasets/classified_pictures/detailed nature/map_image_35.9277_ 101.8657_20230821155619.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " 101.8657",
+            "35.9277"
+        ],
+        "label": "detailed nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9200912298217994
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4282460410140238
+            },
+            {
+                "method": "joint_all",
+                "result": 0.37294299383210844
+            },
+            {
+                "method": "lbp",
+                "result": 1.0951696634957224
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 1.0616704933295467
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6479575636565161
+            },
+            {
+                "method": "dft",
+                "result": 0.8709843846510734
+            },
+            {
+                "method": "naive",
+                "result": 0.9278596614901422
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9907348642778462,
+                    1.6886186214289678,
+                    1.1802417468474469,
+                    1.0687631225335266,
+                    1.0785537718743847,
+                    1.0489911841031492,
+                    1.0386382664435636,
+                    1.0301169801846417,
+                    1.0198507675872457
+                ]
+            }
+        ]
+    },
+    {
+        "index": 9,
+        "path": "../datasets/classified_pictures/city/map_image_22.9645_ 113.0746_20230827174219.png",
+        "size": 816252,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 113.0746",
+            "22.9645"
+        ],
+        "label": "city",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9247678861147768
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.44717888046308235
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3815555320972467
+            },
+            {
+                "method": "lbp",
+                "result": 1.110520377957596
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 1.031647976370048
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.7071435805768762
+            },
+            {
+                "method": "dft",
+                "result": 0.8893857932025391
+            },
+            {
+                "method": "naive",
+                "result": 0.9332584254602566
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9974144487185771,
+                    1.5424579824470181,
+                    1.2081473536953622,
+                    1.0764016326395547,
+                    1.0861833285894886,
+                    1.0544381469427873,
+                    1.04004595783376,
+                    1.025984298363427,
+                    1.0177113504712545
+                ]
+            }
+        ]
+    },
+    {
+        "index": 10,
+        "path": "../datasets/classified_pictures/plain nature/map_image_39.6939_ 99.1784_20230821155456.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " 99.1784",
+            "39.6939"
+        ],
+        "label": "plain nature",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9310638284939002
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.36607620385483536
+            },
+            {
+                "method": "joint_all",
+                "result": 0.344061462074142
+            },
+            {
+                "method": "lbp",
+                "result": 1.0693926854359248
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 1.056634068971818
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.4664427185953374
+            },
+            {
+                "method": "dft",
+                "result": 0.8329579526832789
+            },
+            {
+                "method": "naive",
+                "result": 0.9398030922492426
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9992042133920491,
+                    1.6619461726709157,
+                    1.180383837876854,
+                    1.0719656807695017,
+                    1.084419952778487,
+                    1.0600010503762491,
+                    1.0485224430265325,
+                    1.039917091934835,
+                    1.0213493468976775
+                ]
+            }
+        ]
+    },
+    {
+        "index": 11,
+        "path": "../datasets/classified_pictures/Agriculture/map_image_43.7173_ 127.3713_20230821153201.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " 127.3713",
+            "43.7173"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9243414061567292
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.3835734344929227
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3340373114210166
+            },
+            {
+                "method": "lbp",
+                "result": 1.0818063398389102
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9612665539507848
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6023057961898275
+            },
+            {
+                "method": "dft",
+                "result": 0.8797025766625798
+            },
+            {
+                "method": "naive",
+                "result": 0.9356685869660573
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9981090409758541,
+                    1.6857569445800396,
+                    1.1268841779002705,
+                    1.0567317786411912,
+                    1.070180978621328,
+                    1.0461765749692256,
+                    1.032317342842181,
+                    1.0212910436752598,
+                    1.007472038929977
+                ]
+            }
+        ]
+    }
+]
