@@ -42,9 +42,9 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
          head=None, max_queue_size=None, single_batch_size=None, callback=None):
     # System Configuration
     if process_methods_with_params is None:
-        process_methods_with_params = {'dft': None} #all_methods_with_params
+        process_methods_with_params = all_methods_with_params
     if src_folder is None:
-        src_folder = datasets['fix_noise']
+        src_folder = datasets['classified']
     if dst_folder is None:
         m_name = '-'.join(process_methods_with_params.keys())
         dst_folder = f'../processed/localtests'

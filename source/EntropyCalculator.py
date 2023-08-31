@@ -14,10 +14,18 @@ class EntropyCalculator:
         for method, processedData in image.processedData.items():
             temp = 0
             if method == 'adapt':
-                segment_entropies = []
-                for segment in processedData:
-                    segment_entropies.append(self.entropy(segment, self.get_norm(method)))
-                temp = np.mean(segment_entropies)
+                temp = []
+                for matrix in processedData:
+                    ent_matrix = []
+                    for row in matrix:
+                        ent_row = []
+                        for sub_image in row:
+                            segment_entropies = []
+                            for segment in sub_image:
+                                segment_entropies.append(self.entropy(segment, self.get_norm(method)))
+                            ent_row.append(np.mean(segment_entropies))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             elif method == 'dwt':
                 ent = []
                 for level in range(len(processedData[0])):
@@ -32,7 +40,15 @@ class EntropyCalculator:
                     ent.append(result)
                 temp = ent
             elif method == 'joint_all':
-                temp = -np.sum(processedData * np.log2(processedData + np.finfo(float).eps)) / self.get_norm(method)
+                temp = []
+                for matrix in processedData:
+                    ent_matrix = []
+                    for row in matrix:
+                        ent_row = []
+                        for sub_image in row:
+                            ent_row.append(-np.sum(sub_image * np.log2(sub_image + np.finfo(float).eps)) / self.get_norm(method))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             else:
                 temp = []
                 for matrix in processedData:
