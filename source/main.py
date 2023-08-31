@@ -18,7 +18,7 @@ datasets = {'china': "../datasets/satellite/china",
             'satellite': "../datasets/satellite",
             "classified": "../datasets/classified_pictures",
             "fix_noise": "../datasets/fixed_noise.bmp",
-            "test_satellite": "../datasets/classified_pictures/detailed nature/map_image_40.1618_ -102.3710_20230821155009.png",
+            "test_satellite": "../datasets/classified_pictures/Agriculture/map_image_38.7904_ -99.2209_20230828191958.png",
             "noising": "../datasets/noising"}
 all_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
                            'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
@@ -28,13 +28,13 @@ channels = {
     "hsb": "hsb",
     "YCbCr": "YCbCr"
 }
-def reset_ent_norm(preprocess_channels):
+def reset_ent_norm():
     print('reset entropy norm')
     src_folder = datasets["fix_noise"]
-    dst_folder = f"data/{preprocess_channels}"
+    dst_folder = "data"
     imageLoader = ImageLoader()
-    systemInitializer = SystemInitializer(src_folder, dst_folder, preprocess_channels=preprocess_channels)
-    preprocessor = Preprocessor(channels=preprocess_channels)
+    systemInitializer = SystemInitializer(src_folder, dst_folder)
+    preprocessor = Preprocessor()
     processor = Processor(all_methods_with_params, level=2)
     entropyCalculator = EntropyCalculator(color_weight=None, reset_norm=True)
     dataSaver = DataSaver(dst_folder, methods=list(all_methods_with_params.keys()))
@@ -43,35 +43,29 @@ def reset_ent_norm(preprocess_channels):
     pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor,
                                processor,entropyCalculator, dataSaver)
     pipeline.runPipeline()
-    print('please check the result and rename to entropy_norm.json')
 def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
-         head=None, max_queue_size=None, single_batch_size=None, callback=None,
-         preprocess_channels=None, processed_level=None):
+         head=None, max_queue_size=None, single_batch_size=None, callback=None, processed_level=None):
     # System Configuration
     if process_methods_with_params is None:
         process_methods_with_params = all_methods_with_params
     if src_folder is None:
-        src_folder = datasets['test_satellite']
+        src_folder = datasets['fix_noise']
     if dst_folder is None:
-        dst_folder = f'../processed/localtests/sub'
+        dst_folder = f'../processed/testonly'
     if head is None:
         head = None
     if max_queue_size is None:
         max_queue_size = 4
     if single_batch_size is None:
         single_batch_size = 4
-    if preprocess_channels is None:
-       preprocess_channels = channels['YCbCr']
     if processed_level is None:
         processed_level = 2
-    ent_norm_path = f"data/{preprocess_channels}/entropy_results.json"
-    systemInitializer = SystemInitializer(src_folder, dst_folder, head=head,max_queue_size=max_queue_size,
-                                        single_batch_size=single_batch_size, preprocess_channels=preprocess_channels
-                                          , ent_norm_path=ent_norm_path)
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=head, max_queue_size=max_queue_size,
+                                        single_batch_size=single_batch_size)
     imageLoader = ImageLoader(callback=callback)
-    preprocessor = Preprocessor(crop_size=None, channels=preprocess_channels)
+    preprocessor = Preprocessor(crop_size=None)
     processor = Processor(process_methods_with_params, level=processed_level)
-    entropyCalculator = EntropyCalculator(color_weight=None, ent_norm_path=ent_norm_path)
+    entropyCalculator = EntropyCalculator(color_weight=None)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
@@ -79,35 +73,36 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
                                processor, entropyCalculator, dataSaver, callback=callback)
     pipeline.runPipeline()
 
+def test_and_analyze():
+    for methods, param in all_methods_with_params.items():
+        method_para = {methods:param}
+        dst_folder = f"../processed/test_and_analyze/{methods}"
+        src_folder = datasets["noising"]
+        main(dst_folder, src_folder, method_para, single_batch_size=25)
+
 def main_gui(dst_folder=None, src_folder=None, process_methods_with_params=None,
-         head=None, max_queue_size=None, single_batch_size=None, callback=None,
-             preprocess_channels=None, processed_level=None):
+         head=None, max_queue_size=None, single_batch_size=None, callback=None, processed_level=None):
     # System Configuration
     if process_methods_with_params is None:
         process_methods_with_params = all_methods_with_params
     if src_folder is None:
         src_folder = datasets['classified']
     if dst_folder is None:
-        m_name = '-'.join(process_methods_with_params.keys())
-        dst_folder = f'../processed/gui_results'
+        dst_folder = f'../processed/testonly'
     if head is None:
         head = None
     if max_queue_size is None:
-        max_queue_size = 30
+        max_queue_size = 4
     if single_batch_size is None:
-        single_batch_size = 1000
-    if preprocess_channels is None:
-        preprocess_channels = channels['rgb']
+        single_batch_size = 4
     if processed_level is None:
         processed_level = 2
-    ent_norm_path = f"data/{preprocess_channels}/entropy_results.json"
     systemInitializer = SystemInitializer(src_folder, dst_folder, head=head, max_queue_size=max_queue_size,
-                                          single_batch_size=single_batch_size, preprocess_channels=preprocess_channels
-                                          , ent_norm_path=ent_norm_path)
+                                        single_batch_size=single_batch_size)
     imageLoader = ImageLoader(callback=callback)
-    preprocessor = Preprocessor(crop_size=None, channels=preprocess_channels)
+    preprocessor = Preprocessor(crop_size=None)
     processor = Processor(process_methods_with_params, level=processed_level)
-    entropyCalculator = EntropyCalculator(color_weight=None, ent_norm_path=ent_norm_path)
+    entropyCalculator = EntropyCalculator(color_weight=None)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
@@ -117,5 +112,5 @@ def main_gui(dst_folder=None, src_folder=None, process_methods_with_params=None,
 
 if __name__ == '__main__':
     main()
-    # preprocess_channels = channels["YCbCr"]
-    # reset_ent_norm(preprocess_channels)
+    # reset_ent_norm()
+    # test_and_analyze()

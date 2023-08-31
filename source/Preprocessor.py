@@ -15,7 +15,7 @@ class Preprocessor:
             img_arr = img_arr[:, :, :-1]
         elif img_arr.ndim == 2:
             img_arr = np.stack([img_arr] * 3, axis=-1)
-        image_object.preprocessedData = self.change_channels(img_arr)
+        image_object.preprocessedData = img_arr
 
     def change_channels(self, img):
         match self.channels:
@@ -47,6 +47,10 @@ class Preprocessor:
                 y = kR * R + kG * G + kB * B
                 cb = (-kR / (2 * (1 - kB))) * R + (-kG / (2 * (1 - kB))) * G + 1 / 2 * B
                 cr = 1 / 2 * R + (-kG / (2 * (1 - kR))) * G + (-kB / (2 * (1 - kR))) * B
+                # Scale and shift to 8-bit integer values
+                y = np.clip((219 * y + 16), 16, 235).astype(np.uint8)
+                cb = np.clip((224 * cb + 128), 16, 240).astype(np.uint8)
+                cr = np.clip((224 * cr + 128), 16, 240).astype(np.uint8)
                 ycbcr_image_array = np.stack([y, cb, cr], axis=-1)
                 img = ycbcr_image_array
             case 'greyscale':

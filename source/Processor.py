@@ -49,7 +49,14 @@ class Processor:
 
     def compute_naive(self, image, level):
         partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
-        return partition_matrix
+        processed_matrix = []
+        for partition_row in partition_matrix:
+            processed_row = []
+            for sub_image in partition_row:
+                img = self.apply_ycrcb(sub_image)
+                processed_row.append(img)
+            processed_matrix.append(processed_row)
+        return processed_matrix
     def apply_dft(self, image):
         results = []
         for level in range(self.level+1):
@@ -61,10 +68,10 @@ class Processor:
         for partition_row in partition_matrix:
             dft_row = []
             for sub_image in partition_row:
-                    #sub_image = partition_matrix[row][column]
-                    result = np.empty_like(sub_image, dtype=np.float64)
-                    for i in range(sub_image.shape[2]):
-                        result[:, :, i] = np.abs(np.fft.fft2(sub_image[:, :, i]))
+                    img = self.apply_ycrcb(sub_image)
+                    result = np.empty_like(img, dtype=np.float64)
+                    for i in range(img.shape[2]):
+                        result[:, :, i] = np.abs(np.fft.fft2(img[:, :, i]))
                     dft_row.append(result)
             dft_matrix.append(dft_row)
         return dft_matrix
@@ -77,7 +84,8 @@ class Processor:
             result = self.compute_dwt(image, wavelet=wavelet, level=None)
         return result
 
-    def compute_dwt(self, image, wavelet='db1', level=None):
+    def compute_dwt(self, ori_image, wavelet='db1', level=None):
+        image = self.apply_ycrcb(ori_image)
         rank = image.ndim
 
         # Handle 1D arrays
@@ -379,3 +387,18 @@ class Processor:
             result.append(row)
 
         return result
+    def apply_ycrcb(self, img):
+        kR = 0.299
+        kG = 0.587
+        kB = 0.114
+        R = img[..., 0]
+        G = img[..., 1]
+        B = img[..., 2]
+        y = kR * R + kG * G + kB * B
+        cb = (-kR / (2 * (1 - kB))) * R + (-kG / (2 * (1 - kB))) * G + 1 / 2 * B
+        cr = 1 / 2 * R + (-kG / (2 * (1 - kR))) * G + (-kB / (2 * (1 - kR))) * B
+        # Scale and shift to 8-bit integer values
+        y = np.clip((219 * y + 16), 16, 235).astype(np.uint8)
+        cb = np.clip((224 * cb + 128), 16, 240).astype(np.uint8)
+        cr = np.clip((224 * cr + 128), 16, 240).astype(np.uint8)
+        return np.stack([y, cb, cr], axis=-1)

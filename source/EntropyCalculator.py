@@ -6,7 +6,7 @@ import json
 class EntropyCalculator:
     def __init__(self, color_weight = None, ent_norm_path = None, reset_norm = False):
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
-        self.ent_norm_path = ent_norm_path or '../source/data/entropy_norm.json'
+        self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
         self.reset_norm = reset_norm
         self.ent_norm = self.get_ent_norm()
 
@@ -85,6 +85,8 @@ class EntropyCalculator:
         return ent / norm
 
     def get_ent_norm(self):
+        if self.reset_norm:
+            return
         # Read the JSON file
         with open(self.ent_norm_path, 'r') as f:
             data = json.load(f)
@@ -97,9 +99,6 @@ class EntropyCalculator:
         # Loop through the 'entropy_results' list to collect all methods and their results
         for item in entropy_results:
             method = item.get("method")
-            if self.reset_norm:
-                result = 1
-            else:
-                result = item.get("result")
+            result = item.get("result")
             all_results[method] = result
         return all_results

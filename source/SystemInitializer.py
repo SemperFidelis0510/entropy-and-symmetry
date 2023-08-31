@@ -19,7 +19,7 @@ class SystemInitializer(Logger):
         self.max_queue_size = max_queue_size
         self.set_logger()
         self.preprocessed_channels = preprocess_channels
-        self.ent_norm_path = ent_norm_path
+        self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
     def initSystemState(self):
         self.get_all_data_paths()
         self.get_already_processed_paths()
