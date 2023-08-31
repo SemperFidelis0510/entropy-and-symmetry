@@ -363,11 +363,18 @@ class Processor:
         # Initialize the result matrix
         result = []
 
-        for i in range(0, height, partition_height):
+        height_left = height % partition
+        width_left = width % partition
+        for i in range(0, height-height_left, partition_height):
             row = []
-            for j in range(0, width, partition_width):
-                # Extract the sub-image
-                sub_image = image[i:i + partition_height, j:j + partition_width]
+            for j in range(0, width-width_left, partition_width):
+                if j//partition_width==partition - 1:
+                    sub_image = image[i:i + partition_height, j:]
+                elif i//partition_height==partition-1:
+                    sub_image = image[i:, j:j + partition_width]
+                else:
+                    # Extract the sub-image
+                    sub_image = image[i:i + partition_height, j:j + partition_width]
                 row.append(sub_image)
             result.append(row)
 

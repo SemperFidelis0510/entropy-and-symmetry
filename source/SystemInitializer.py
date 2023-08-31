@@ -3,7 +3,9 @@ import json
 import logging
 from source.Logger import Logger
 class SystemInitializer(Logger):
-    def __init__(self, src_folder, dst_folder, image_format=('png', 'bmp'), head=None, single_batch_size=300, max_queue_size=30):
+    def __init__(self, src_folder, dst_folder, image_format=('png', 'bmp'),
+                 head=None, single_batch_size=300, max_queue_size=30, preprocess_channels='rgb',
+                 ent_norm_path=None):
         self.src_folder = src_folder
         self.dst_folder = dst_folder
         self.all_data_paths = []
@@ -16,6 +18,8 @@ class SystemInitializer(Logger):
         self.single_batch_size = single_batch_size
         self.max_queue_size = max_queue_size
         self.set_logger()
+        self.preprocessed_channels = preprocess_channels
+        self.ent_norm_path = ent_norm_path
     def initSystemState(self):
         self.get_all_data_paths()
         self.get_already_processed_paths()
@@ -72,6 +76,8 @@ class SystemInitializer(Logger):
         print(f' * Total Batch: {self.total_batch}')
         print(f' * Single Batch Size: {self.single_batch_size}')
         print(f' * Auto Save: for every {self.max_queue_size}')
+        print(f' * Preprocessed Channels: {self.preprocessed_channels}')
+        print(f' * Entropy norm path: {self.ent_norm_path}')
         print(f' * Output folder: {self.dst_folder}')
 
     def logSystemState(self):
@@ -83,7 +89,10 @@ class SystemInitializer(Logger):
         self.log_message(f' * Total Batch: {self.total_batch}')
         self.log_message(f' * Single Batch Size: {self.single_batch_size}')
         self.log_message(f' * Auto Save: for every {self.max_queue_size}')
+        self.log_message(f' * Preprocessed Channels: {self.preprocessed_channels}')
+        self.log_message(f' * Entropy norm path: {self.ent_norm_path}')
         self.log_message(f' * Output folder: {self.dst_folder}')
+
 
 
 if __name__ == '__main__':
