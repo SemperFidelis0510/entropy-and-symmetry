@@ -536,7 +536,7 @@ class ImageViewer:
         # Check if a valid directory was chosen or retrieved from the settings
         if not folder_path:
             return
-        main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress)
+        main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress, preprocess_channels = selected_color,processed_level = 0)
         self.image_window.after(0, self.preprogress_window.destroy)
         self.image_window.after(0, self.entropy_calculation_complete)
         #self.image_window.after(0, self.progress_window.destroy)
