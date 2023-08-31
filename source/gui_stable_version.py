@@ -3,11 +3,15 @@ import platform
 import sys
 import threading
 import os
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 import numpy as np
+import plotnine
 
 from PIL import ImageTk, Image
 sys.path.append('./')
@@ -28,6 +32,8 @@ ENTROPY_METHODS = [
 ]
 
 COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']
+
+LIMIT_IMAGES = 500 # Limit the number of images to load in one page of thumbnail frame
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
@@ -120,6 +126,7 @@ class ImageViewer:
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
+        self.prob_data = []
         self.zoom_percent = 100
         self.is_fullscreen = False
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
@@ -518,7 +525,7 @@ class ImageViewer:
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
         method = {self.combo.get(): None}
         selected_color = self.combo_color.get()
-        self.start_entropy_calculation()
+        #self.start_entropy_calculation()
         save_directory = self.default_save_directory
         if not save_directory or not os.path.exists(save_directory):
             # If there's no default directory in the settings or it doesn't exist, ask the user
@@ -532,7 +539,7 @@ class ImageViewer:
         main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress)
         self.image_window.after(0, self.preprogress_window.destroy)
         self.image_window.after(0, self.entropy_calculation_complete)
-        self.image_window.after(0, self.progress_window.destroy)
+        #self.image_window.after(0, self.progress_window.destroy)
     
     
     def on_scroll(self, *args):
@@ -554,6 +561,23 @@ class ImageViewer:
         if self.img_no != len(self.np_array) - 1:
             self.forward()
             self.back()
+
+
+    def plot_bar_chart(self, frame):
+        df = pd.DataFrame(self.prob_data[self.img_no])
+        # Create figure and axes objects
+        fig, ax = plt.subplots(figsize=(5, 4))
+    
+        # Plot data
+        ax.bar(df['categories'], df['probabilities'], color='blue', alpha=0.7)
+        ax.set_ylabel('Probabilities')
+        ax.set_title('Probability distribution')
+    
+        # Embed the plot in the Tkinter window
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.grid(row=0, column=0, padx=10, pady=10)
+        canvas.draw()
 
 
     def refresh_all_images(self, np_arrays):
@@ -674,10 +698,10 @@ class ImageViewer:
         self.confirm_button.config(state=DISABLED)
         # Create a new Toplevel window for progress bar
         self.preprogress_window = Toplevel(self.image_window)
-        self.preprogress_window.title("Preprocessing Images...")
+        self.preprogress_window.title("Calculating")
 
         # Add a label for information
-        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
+        Label(self.preprogress_window, text="Please wait ...").pack(pady=10)
 
         # Create and pack the progress bar
         self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
