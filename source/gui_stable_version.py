@@ -33,6 +33,8 @@ ENTROPY_METHODS = [
 
 COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']
 
+LIMIT_IMAGES = 500 # Limit the number of images to load in one page of thumbnail frame
+
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
 
