@@ -1,0 +1,961 @@
+
+{
+    "image_0.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-18.0462_ 46.8203_20230827185529.png",
+        "size": 714201,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 46.8203",
+            "-18.0462"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0341290015370155
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.42661889142261755
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3661970559358406
+            },
+            {
+                "method": "lbp",
+                "result": 1.0973063380071706
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.8965909913530963
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.5939806171799661
+            },
+            {
+                "method": "dft",
+                "result": 0.9991095009012417
+            },
+            {
+                "method": "naive",
+                "result": 1.047157264769813
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9993340958080077,
+                    1.8320713768080665,
+                    1.1693615645866111,
+                    1.0846179897136734,
+                    1.102016138053717,
+                    1.0709615818569393,
+                    1.05201506210702,
+                    1.0393436960567832,
+                    1.0296537637740968,
+                    1.016695861112274
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_1.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-18.1383_ 47.6814_20230827185546.png",
+        "size": 707720,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 47.6814",
+            "-18.1383"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.036325251130578
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4395867086407887
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3706611403763131
+            },
+            {
+                "method": "lbp",
+                "result": 1.0961787741885012
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.925460626180612
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.632532943498741
+            },
+            {
+                "method": "dft",
+                "result": 0.9999929574893986
+            },
+            {
+                "method": "naive",
+                "result": 1.0464306950167273
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9996548084069572,
+                    1.7342536511929842,
+                    1.1863066418904153,
+                    1.0915305678106728,
+                    1.104196889640579,
+                    1.0738722520743893,
+                    1.054901317816352,
+                    1.0413903346926219,
+                    1.0306824748669101,
+                    1.018478934349107
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_2.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-18.1703_ 47.0058_20230827183629.png",
+        "size": 685748,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 47.0058",
+            "-18.1703"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0342943092187178
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.41571346648396285
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3558561893082407
+            },
+            {
+                "method": "lbp",
+                "result": 1.0907907234364147
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9022352501859581
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6040056554831639
+            },
+            {
+                "method": "dft",
+                "result": 0.9963529408168244
+            },
+            {
+                "method": "naive",
+                "result": 1.0469973204669705
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9983632772697577,
+                    1.750516399560039,
+                    1.1682686258007664,
+                    1.0785803960914904,
+                    1.101575428751166,
+                    1.067417626480569,
+                    1.0468261877580338,
+                    1.033628812689321,
+                    1.0244474188661128,
+                    1.0114565196932332
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_3.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-18.2967_ 45.8863_20230827183644.png",
+        "size": 716602,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 45.8863",
+            "-18.2967"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0324909172813057
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4255386723269222
+            },
+            {
+                "method": "joint_all",
+                "result": 0.36324768130982343
+            },
+            {
+                "method": "lbp",
+                "result": 1.1002360993361233
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.8907595555119215
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.5967463636405885
+            },
+            {
+                "method": "dft",
+                "result": 1.0003724752817469
+            },
+            {
+                "method": "naive",
+                "result": 1.0460821883521
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.999510579362232,
+                    1.7024133329921365,
+                    1.1838997390683186,
+                    1.0865297038094557,
+                    1.1019032887742235,
+                    1.0728612094805525,
+                    1.053641539737486,
+                    1.0409187988527822,
+                    1.0306193828914845,
+                    1.0184575108679779
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_4.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-18.4768_ 47.2133_20230827185551.png",
+        "size": 752207,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 47.2133",
+            "-18.4768"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.0376946923399717
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4235611056447691
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3618634623529093
+            },
+            {
+                "method": "lbp",
+                "result": 1.1119442065919853
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9405115710894085
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6536958458917072
+            },
+            {
+                "method": "dft",
+                "result": 1.0039303553174932
+            },
+            {
+                "method": "naive",
+                "result": 1.0464516938763573
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9993271062722129,
+                    1.6911745638064648,
+                    1.1728471797173738,
+                    1.0950090349778194,
+                    1.1027034048047186,
+                    1.0739481568284308,
+                    1.0558900927445376,
+                    1.0431262212564654,
+                    1.033749313923351,
+                    1.0231575309758005
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_5.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-19.0332_ 46.0416_20230827183606.png",
+        "size": 756058,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 46.0416",
+            "-19.0332"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.039603383622877
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.4348367250061112
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3675042466196724
+            },
+            {
+                "method": "lbp",
+                "result": 1.1111624550992953
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.9363856013561859
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6372849319814119
+            },
+            {
+                "method": "dft",
+                "result": 1.0035929310126854
+            },
+            {
+                "method": "naive",
+                "result": 1.0462231705040062
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9998918995475734,
+                    1.706232854201596,
+                    1.1886135700501956,
+                    1.0824329719159516,
+                    1.1015459322629824,
+                    1.072419479409425,
+                    1.0553550371268428,
+                    1.0434044042322133,
+                    1.0337743012787588,
+                    1.0235480639513042
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_6.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-19.1609_ 46.7466_20230827125203.png",
+        "size": 779960,
+        "pixel size": [
+            1000,
+            978
+        ],
+        "location": [
+            " 46.7466",
+            "-19.1609"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 1.032514176017367
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.42667453333511035
+            },
+            {
+                "method": "joint_all",
+                "result": 0.3710547795774854
+            },
+            {
+                "method": "lbp",
+                "result": 1.1160813913365195
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.932347839453437
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.6546839605021032
+            },
+            {
+                "method": "dft",
+                "result": 1.0067732532318194
+            },
+            {
+                "method": "naive",
+                "result": 1.0428293811249554
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    0.9988090559104404,
+                    1.8117005211239618,
+                    1.2022492532800548,
+                    1.083437793994026,
+                    1.1013850892043873,
+                    1.0738028067952559,
+                    1.054424416458969,
+                    1.0437576653481546,
+                    1.0332473609363049,
+                    1.0218631099586117
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_7.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7210_ -60.8886_20230821155737.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.8886",
+            "-32.7210"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9325567024885913
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.14393429967047847
+            },
+            {
+                "method": "joint_all",
+                "result": 0.12896518549566138
+            },
+            {
+                "method": "lbp",
+                "result": 0.44466984269545246
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.35231015867298476
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.1645207807807333
+            },
+            {
+                "method": "dft",
+                "result": 0.9368549452947663
+            },
+            {
+                "method": "naive",
+                "result": 0.9389526992080357
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.7328231734202839,
+                    0.757864391249931,
+                    0.7524377384150032,
+                    0.7780033766514283,
+                    0.8665213099527688,
+                    0.8722386854613219,
+                    0.8791402596836431,
+                    0.8844831416646514,
+                    0.8920083261554344
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_8.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7493_ -60.7901_20230821155740.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.7901",
+            "-32.7493"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9231500152445576
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.1490894943708656
+            },
+            {
+                "method": "joint_all",
+                "result": 0.1274641234004828
+            },
+            {
+                "method": "lbp",
+                "result": 0.4180627641095995
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.34953921395604115
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.1814979630662881
+            },
+            {
+                "method": "dft",
+                "result": 0.9681815312936448
+            },
+            {
+                "method": "naive",
+                "result": 0.9381258824883807
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.7233854567376091,
+                    0.7172758704975383,
+                    0.7545581492559865,
+                    0.7977725012679453,
+                    0.8577951224122056,
+                    0.8686521465195125,
+                    0.8746855265510929,
+                    0.8783047889072129,
+                    0.8813934313037954
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_9.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7512_ -60.7873_20230821153920.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.7873",
+            "-32.7512"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9230160656524083
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.14937594362993664
+            },
+            {
+                "method": "joint_all",
+                "result": 0.1260421204173303
+            },
+            {
+                "method": "lbp",
+                "result": 0.424402010101056
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.3485010189393048
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.1834654198646178
+            },
+            {
+                "method": "dft",
+                "result": 0.9756712114377956
+            },
+            {
+                "method": "naive",
+                "result": 0.93790843608401
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.5935922042647431,
+                    0.771379853266499,
+                    0.7580985032073982,
+                    0.8074404347542954,
+                    0.8610412101541007,
+                    0.8700135115545529,
+                    0.8736512143170532,
+                    0.8774536028742406,
+                    0.8838327942655738
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_10.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7786_ -60.8147_20230821155741.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.8147",
+            "-32.7786"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9259607708230038
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.14885147429486054
+            },
+            {
+                "method": "joint_all",
+                "result": 0.12817622144950935
+            },
+            {
+                "method": "lbp",
+                "result": 0.4258542188324953
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.34412882384129523
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.18554223681271906
+            },
+            {
+                "method": "dft",
+                "result": 0.9708279509687087
+            },
+            {
+                "method": "naive",
+                "result": 0.9383915137322514
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.8011647326021798,
+                    0.773865432025094,
+                    0.7291282129622272,
+                    0.7856874878995876,
+                    0.867837725050135,
+                    0.8738343405153332,
+                    0.8764343710099234,
+                    0.8813096313757659,
+                    0.888529001431246
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_11.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7886_ -60.7370_20230821155739.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.7370",
+            "-32.7886"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9276413610793987
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.15335376395467587
+            },
+            {
+                "method": "joint_all",
+                "result": 0.1283344230769717
+            },
+            {
+                "method": "lbp",
+                "result": 0.4475001173130214
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.36165292375409375
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.21590470062097808
+            },
+            {
+                "method": "dft",
+                "result": 1.0029486857005983
+            },
+            {
+                "method": "naive",
+                "result": 0.9353056300606897
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.6854465119699075,
+                    0.7456282282535147,
+                    0.7347368986618045,
+                    0.7981640590605776,
+                    0.8667946367260855,
+                    0.8791869094308749,
+                    0.8867663670044468,
+                    0.8925178304252892,
+                    0.8984331032487629
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_12.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7896_ -60.8304_20230821155742.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.8304",
+            "-32.7896"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9297342433156527
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.14671792234001385
+            },
+            {
+                "method": "joint_all",
+                "result": 0.1275609074844665
+            },
+            {
+                "method": "lbp",
+                "result": 0.4405570203595848
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.3433548625958894
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.17476994373268795
+            },
+            {
+                "method": "dft",
+                "result": 0.9488765816919223
+            },
+            {
+                "method": "naive",
+                "result": 0.9389458884025048
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.8229617114962577,
+                    0.6708754748520609,
+                    0.7506212816879732,
+                    0.7637881543119749,
+                    0.8675652013940429,
+                    0.8743040092876049,
+                    0.8775218330383148,
+                    0.8842842601488665,
+                    0.8904327616500529
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_13.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7898_ -60.8484_20230821153919.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.8484",
+            "-32.7898"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9320595061600607
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.14519361220824695
+            },
+            {
+                "method": "joint_all",
+                "result": 0.12984169558994443
+            },
+            {
+                "method": "lbp",
+                "result": 0.45019287316749884
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.3538190618536557
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.16101642536656344
+            },
+            {
+                "method": "dft",
+                "result": 0.9306082353957102
+            },
+            {
+                "method": "naive",
+                "result": 0.9391681204491256
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.68219432156445,
+                    0.7313050699311119,
+                    0.7515462804234756,
+                    0.7652258996986612,
+                    0.8630781177825801,
+                    0.8727721827908287,
+                    0.8766245390119299,
+                    0.8800976864992486,
+                    0.9002601786751728
+                ]
+            }
+        ]
+    }
+}
+{
+    "image_14.bmp": {
+        "path": "../datasets/classified_pictures\\Agriculture\\map_image_-32.7930_ -60.7674_20230821153920.png",
+        "size": 686462,
+        "pixel size": [
+            478,
+            478
+        ],
+        "location": [
+            " -60.7674",
+            "-32.7930"
+        ],
+        "label": "Agriculture",
+        "entropy_results": [
+            {
+                "method": "laplace",
+                "result": 0.9232054794099867
+            },
+            {
+                "method": "joint_red_green",
+                "result": 0.146213894507612
+            },
+            {
+                "method": "joint_all",
+                "result": 0.12529792035774331
+            },
+            {
+                "method": "lbp",
+                "result": 0.41010574021619983
+            },
+            {
+                "method": "lbp_gabor",
+                "result": 0.34977938247513507
+            },
+            {
+                "method": "RGBCM",
+                "result": 0.1796656077429132
+            },
+            {
+                "method": "dft",
+                "result": 0.970241242614264
+            },
+            {
+                "method": "naive",
+                "result": 0.9382917278007783
+            },
+            {
+                "method": "dwt",
+                "result": [
+                    -1.6017144134643236e-16,
+                    0.762260518306238,
+                    0.7517157272601928,
+                    0.7634770606835455,
+                    0.8191126897146335,
+                    0.865614288140578,
+                    0.8772503975315198,
+                    0.8766379467913303,
+                    0.8782735905984532,
+                    0.8807787535927551
+                ]
+            }
+        ]
+    }
+}
