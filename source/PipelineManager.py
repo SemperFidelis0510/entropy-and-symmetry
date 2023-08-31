@@ -23,10 +23,10 @@ class PipelineManager(Logger):
     def process_single_image(self, image):
         self.log_message(f'process {image.path}')
         self.preprocessor.applyPreprocessing(image)
-        del image.rawData
         self.processor.applyProcessing(image)
-        del image.preprocessedData
         self.entropyCalculator.calculateEntropy(image)
+        del image.rawData
+        del image.preprocessedData
         del image.processedData
         return image
 

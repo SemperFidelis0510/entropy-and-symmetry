@@ -101,12 +101,13 @@ def main_gui(dst_folder=None, src_folder=None, process_methods_with_params=None,
     if processed_level is None:
         processed_level = 2
     ent_norm_path = f"data/{preprocess_channels}/entropy_results.json"
-    systemInitializer = SystemInitializer(src_folder, dst_folder, head=head,max_queue_size=max_queue_size,
-                                        single_batch_size=single_batch_size, preprocess_channels=preprocess_channels)
+    systemInitializer = SystemInitializer(src_folder, dst_folder, head=head, max_queue_size=max_queue_size,
+                                          single_batch_size=single_batch_size, preprocess_channels=preprocess_channels
+                                          , ent_norm_path=ent_norm_path)
     imageLoader = ImageLoader(callback=callback)
     preprocessor = Preprocessor(crop_size=None, channels=preprocess_channels)
     processor = Processor(process_methods_with_params, level=processed_level)
-    entropyCalculator = EntropyCalculator(color_weight=None)
+    entropyCalculator = EntropyCalculator(color_weight=None, ent_norm_path=ent_norm_path)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
