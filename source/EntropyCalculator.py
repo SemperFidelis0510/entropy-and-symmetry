@@ -28,13 +28,21 @@ class EntropyCalculator:
                             data = color[level].flatten()
                         else:
                             data = np.array(color[level]).flatten()
-                        result += self.entropy(data, norm)
+                        result += self.dwt_entropy(data, norm)
                     ent.append(result)
                 temp = ent
             elif method == 'joint_all':
                 temp = -np.sum(processedData * np.log2(processedData + np.finfo(float).eps)) / self.get_norm(method)
             else:
-                temp = self.entropy(processedData, self.get_norm(method))
+                temp = []
+                for matrix in processedData:
+                    ent_matrix = []
+                    for row in matrix:
+                        ent_row = []
+                        for sub_image in row:
+                          ent_row.append(self.entropy(sub_image, self.get_norm(method)))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             image.entropyResults.append(temp)
 
     def get_norm(self, method, level=None):
@@ -44,8 +52,34 @@ class EntropyCalculator:
             norm = self.ent_norm[method][level]
         return norm
 
-    def entropy(self, transformedData, norm=1):
-        arr = np.abs(transformedData)
+    def dwt_entropy(self, Data, norm=1):
+        arr = np.abs(Data)
+        ent = 0
+        if arr.ndim == 3:
+            if arr.shape[-1] == 3:  # Check if the last dimension has 3 channels (RGB)
+                arr = np.dot(arr, self.color_weight)
+        total_sum = np.sum(arr)
+        if total_sum == 0:
+            return 0
+        normalize_arr = arr / total_sum
+        ent = -np.sum(normalize_arr * np.log2(normalize_arr + np.finfo(float).eps))
+        return ent / norm
+
+    def entropy2(self, processedData, norm=1):
+        arr = np.abs(processedData)
+        ent = 0
+        if arr.ndim == 3:
+            if arr.shape[-1] == 3:  # Check if the last dimension has 3 channels (RGB)
+                arr = np.dot(arr, self.color_weight)
+        total_sum = np.sum(arr)
+        if total_sum == 0:
+            return 0
+        normalize_arr = arr / total_sum
+        ent = -np.sum(normalize_arr * np.log2(normalize_arr + np.finfo(float).eps))
+        return ent / norm
+
+    def entropy(self, Data, norm=1):
+        arr = np.abs(Data)
         ent = 0
         if arr.ndim == 3:
             if arr.shape[-1] == 3:  # Check if the last dimension has 3 channels (RGB)

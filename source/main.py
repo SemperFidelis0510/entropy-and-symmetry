@@ -16,6 +16,7 @@ datasets = {'china': "../datasets/satellite/china",
             'satellite': "../datasets/satellite",
             "classified": "../datasets/classified_pictures",
             "fix_noise": "../datasets/fixed_noise.bmp",
+            "test_satellite": "../datasets/classified_pictures/city/map_image_21.9073_ 42.0248_20230827210356.png",
             "noising": "../datasets/noising"}
 all_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
                            'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
@@ -43,7 +44,7 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
     if process_methods_with_params is None:
         process_methods_with_params = {'dft': None} #all_methods_with_params
     if src_folder is None:
-        src_folder = datasets['classified']
+        src_folder = datasets['fix_noise']
     if dst_folder is None:
         m_name = '-'.join(process_methods_with_params.keys())
         dst_folder = f'../processed/localtests'
@@ -53,18 +54,18 @@ def main(dst_folder=None, src_folder=None, process_methods_with_params=None,
         max_queue_size = 40
     if single_batch_size is None:
         single_batch_size = 1000
-
+    processed_level = 1
     systemInitializer = SystemInitializer(src_folder, dst_folder, head=head,
                                           max_queue_size=max_queue_size, single_batch_size=single_batch_size)
     imageLoader = ImageLoader(callback=callback)
     preprocessor = Preprocessor(crop_size=None)
-    transformer = Processor(process_methods_with_params)
+    processor = Processor(process_methods_with_params, level=processed_level)
     entropyCalculator = EntropyCalculator(color_weight=None)
     dataSaver = DataSaver(dst_folder, methods=list(process_methods_with_params.keys()))
 
     # Initialize PipelineManager
     pipeline = PipelineManager(systemInitializer, imageLoader, preprocessor,
-                               transformer,entropyCalculator, dataSaver, callback=callback)
+                               processor, entropyCalculator, dataSaver, callback=callback)
     pipeline.runPipeline()
 
 

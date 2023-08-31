@@ -10,13 +10,13 @@ from skimage.segmentation import slic
 
 
 class Processor:
-    def __init__(self, processing_methods_with_params=None):
+    def __init__(self, processing_methods_with_params=None, level=0):
         self.processing_methods_with_params = processing_methods_with_params
-
+        self.level = level
     def applyProcessing(self, image: Image):
         for method, params in self.processing_methods_with_params.items():
             if method == 'dft':
-                image.processedData[method] = self.apply_dft(image.preprocessedData)
+                image.processedData[method] = self.apply_dft(image)
             elif method == 'dwt':
                 image.processedData[method] = self.apply_dwt(image.preprocessedData, **params)
             elif method == 'naive':
@@ -44,19 +44,23 @@ class Processor:
                 raise ValueError(f"No entropy method matched for method '{method}'!!")
 
     def apply_dft(self, image):
-        rank = image.ndim
-
-        if rank == 1:
-            return np.abs(np.fft.fft(image))
-        elif rank == 2:
-            return np.abs(np.fft.fft2(image))
-        elif rank == 3:
-            result = np.empty_like(image, dtype=np.float64)
-            for i in range(image.shape[2]):
-                result[:, :, i] = np.abs(np.fft.fft2(image[:, :, i]))
-            return result
-        else:
-            raise ValueError("Array must be 1D, 2D, or 3D")
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_dft(image, level))
+        return results
+    def compute_dft(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2**level)
+        dft_matrix = []
+        for partition_row in partition_matrix:
+            dft_row = []
+            for sub_image in partition_row:
+                    #sub_image = partition_matrix[row][column]
+                    result = np.empty_like(sub_image, dtype=np.float64)
+                    for i in range(sub_image.shape[2]):
+                        result[:, :, i] = np.abs(np.fft.fft2(sub_image[:, :, i]))
+                    dft_row.append(result)
+            dft_matrix.append(dft_row)
+        return dft_matrix
 
     def apply_dwt(self, image, wavelet='db1', level=None):
         result = []
@@ -92,46 +96,24 @@ class Processor:
             raise ValueError("Array must be 1D, 2D, or 3D")
 
     def apply_histogram(self, img_arr):
-        if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
-            img_arr = img_arr.astype(np.uint32)  # Convert to an integer type
-            # Reduce color resolution by right-shifting
-            reduced_img_arr = img_arr >> 4
-            # Combine the reduced RGB values into a single integer
-            flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:,
-                                                                                                     :,
-                                                                                                     2]
-            # Create the histogram with fewer bins
-            bins_ = 64 ** 3
-            hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
-            return hist
-        elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
-            bins_ = 256
-            hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
-            return hist
-        else:
-            raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
+        img_arr = img_arr.astype(np.uint32)  # Convert to an integer type
+        # Reduce color resolution by right-shifting
+        reduced_img_arr = img_arr >> 4
+        # Combine the reduced RGB values into a single integer
+        flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:,
+                                                                                                 :,
+                                                                                                 2]
+        # Create the histogram with fewer bins
+        bins_ = 64 ** 3
+        hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+        return hist
 
     def apply_laplacian(self, arr):
-        rank = arr.ndim
-
-        # Define the kernel based on the array's rank
-        if rank == 1:
-            kernel = np.array([-1, 2, -1])
-        elif rank == 2:
-            kernel = np.array([[0, -1, 0],
-                               [-1, 4, -1],
-                               [0, -1, 0]])
-        elif rank == 3:
-            kernel = np.zeros((3, 3, 3))
-            kernel[1, 1, 1] = 6
-            kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[
-                2, 1, 1] = -1
-        else:
-            raise ValueError("Array must be 1D, 2D, or 3D")
-
-        # Apply the convolution with the kernel
+        kernel = np.zeros((3, 3, 3))
+        kernel[1, 1, 1] = 6
+        kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[
+            2, 1, 1] = -1        # Apply the convolution with the kernel
         result = convolve(arr, kernel, mode='constant', cval=0.0)
-
         return result
 
     def apply_joint_red_green(self, img_arr):
@@ -303,3 +285,27 @@ class Processor:
             co_occurrence_array[:, :, channel] /= len(angles)
 
         return co_occurrence_array
+
+    def partition_image(self, image, partition):
+        """
+        Returns:
+            list: A 2D list (matrix) where each element is a sub-image.
+        """
+        # Get the shape of the image
+        height, width, _ = image.shape
+        # Calculate the size of each partition
+        partition_height = height // partition
+        partition_width = width // partition
+
+        # Initialize the result matrix
+        result = []
+
+        for i in range(0, height, partition_height):
+            row = []
+            for j in range(0, width, partition_width):
+                # Extract the sub-image
+                sub_image = image[i:i + partition_height, j:j + partition_width]
+                row.append(sub_image)
+            result.append(row)
+
+        return result
