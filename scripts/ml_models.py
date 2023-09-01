@@ -8,6 +8,9 @@ from PIL import Image
 import numpy as np
 import json
 import cv2
+import time
+
+from scripts.utils import print_progress_bar
 
 all_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
 
@@ -87,6 +90,70 @@ class TransformerBlock(nn.Module):
         return out
 
 
+class Classifier(nn.Module):
+    def __init__(self, num_classes):
+        super(Classifier, self).__init__()
+        self.encoder1 = nn.Embedding(256, 512)
+        self.encoder2 = nn.Embedding(256, 512)
+        self.transformer1 = TransformerBlock(embed_size=512, heads=8)
+        self.transformer2 = TransformerBlock(embed_size=512, heads=8)
+        self.classifier = nn.Linear(1024, num_classes)
+        self.possible_labels = all_labels
+
+    def forward(self, x1, x2):
+        x1 = self.encoder1(x1)
+        x2 = self.encoder2(x2)
+        x1 = self.transformer1(x1, x1, x1)
+        x2 = self.transformer2(x2, x2, x2)
+        # Padding x1 to match the sequence length of x2
+        if x1.size(1) < x2.size(1):
+            padding = torch.zeros(x1.size(0), x2.size(1) - x1.size(1), x1.size(2)).to(x1.device)
+            x1 = torch.cat((x1, padding), dim=1)
+        # Padding x2 to match the sequence length of x1
+        elif x2.size(1) < x1.size(1):
+            padding = torch.zeros(x2.size(0), x1.size(1) - x2.size(1), x2.size(2)).to(x2.device)
+            x2 = torch.cat((x2, padding), dim=1)
+
+        x = torch.cat((x1, x2), dim=2)
+        x = self.classifier(x[:, 0, :])
+        return x
+
+    def train_model(self, dataset, epochs=100):
+        loss = None
+        entropies = [torch.tensor(d['entropies'], dtype=torch.long) for d in dataset]
+        dwt_entropies = [torch.tensor(d['dwt'], dtype=torch.long) for d in dataset]
+        labels = [self.possible_labels.index(d['label']) for d in dataset]
+        entropies = torch.stack(entropies)
+        dwt_entropies = torch.stack(dwt_entropies)
+        labels = torch.tensor(labels, dtype=torch.long)
+        train_data = TensorDataset(entropies, dwt_entropies, labels)
+        train_loader = DataLoader(train_data, batch_size=128, shuffle=True)
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.Adam(self.parameters(), lr=0.0001)
+        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, factor=0.5)
+
+        for epoch in range(epochs):
+            for batch_idx, (data1, data2, target) in enumerate(train_loader):
+                self.train()
+                optimizer.zero_grad()
+                output = self(data1, data2)
+                loss = criterion(output, target)
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=1)
+                optimizer.step()
+            scheduler.step(loss.item())
+            print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
+
+    def predict(self, numbers1, numbers2):
+        self.eval()
+        with torch.no_grad():
+            numbers1 = torch.tensor(numbers1, dtype=torch.long).unsqueeze(0)
+            numbers2 = torch.tensor(numbers2, dtype=torch.long).unsqueeze(0)
+            output_ = self(numbers1, numbers2)
+            predicted_label_idx = torch.argmax(output_, dim=1).item()
+            return self.possible_labels[predicted_label_idx]
+
+
 class MultiLabelImageClassifier(nn.Module):
     def __init__(self, num_classes):
         super(MultiLabelImageClassifier, self).__init__()
@@ -110,9 +177,9 @@ class MultiLabelImageClassifier(nn.Module):
         x = self.fc2(x)
         return torch.sigmoid(x)
 
-    def train_model(self, dataset, epochs=100):
+    def train_model(self, dataset, epochs=100, batch_size=64):
         loss = None
-        train_loader = DataLoader(dataset, batch_size=64, shuffle=True)
+        train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
         criterion = nn.BCEWithLogitsLoss()
         optimizer = optim.Adam(self.parameters(), lr=0.001)
 
@@ -121,7 +188,7 @@ class MultiLabelImageClassifier(nn.Module):
                 data = batch['image']
                 target = batch['label']
 
-                # print(f"Debug: target = {target}")  # Debugging line
+                print_progress_bar('Batch index', batch_idx-1, batch_size, start_time=time.time())
 
                 # One-hot encode the target labels
                 target = [one_hot_encode(t, all_labels) for t in target]
@@ -133,7 +200,7 @@ class MultiLabelImageClassifier(nn.Module):
                 loss = criterion(output, target)
                 loss.backward()
                 optimizer.step()
-            print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
+            print(f"\nEpoch {epoch + 1}, Loss: {loss.item()}")
 
     def predict(self, image):
         self.eval()
@@ -200,78 +267,15 @@ class SimpleMLP(nn.Module):
             return self.possible_labels[predicted_label_idx]
 
 
-class Classifier(nn.Module):
-    def __init__(self, num_classes):
-        super(Classifier, self).__init__()
-        self.encoder1 = nn.Embedding(256, 512)
-        self.encoder2 = nn.Embedding(256, 512)
-        self.transformer1 = TransformerBlock(embed_size=512, heads=8)
-        self.transformer2 = TransformerBlock(embed_size=512, heads=8)
-        self.classifier = nn.Linear(1024, num_classes)
-        self.possible_labels = all_labels
-
-    def forward(self, x1, x2):
-        x1 = self.encoder1(x1)
-        x2 = self.encoder2(x2)
-        x1 = self.transformer1(x1, x1, x1)
-        x2 = self.transformer2(x2, x2, x2)
-        # Padding x1 to match the sequence length of x2
-        if x1.size(1) < x2.size(1):
-            padding = torch.zeros(x1.size(0), x2.size(1) - x1.size(1), x1.size(2)).to(x1.device)
-            x1 = torch.cat((x1, padding), dim=1)
-        # Padding x2 to match the sequence length of x1
-        elif x2.size(1) < x1.size(1):
-            padding = torch.zeros(x2.size(0), x1.size(1) - x2.size(1), x2.size(2)).to(x2.device)
-            x2 = torch.cat((x2, padding), dim=1)
-
-        x = torch.cat((x1, x2), dim=2)
-        x = self.classifier(x[:, 0, :])
-        return x
-
-    def train_model(self, dataset, epochs=100):
-        loss = None
-        entropies = [torch.tensor(d['entropies'], dtype=torch.long) for d in dataset]
-        dwt_entropies = [torch.tensor(d['dwt'], dtype=torch.long) for d in dataset]
-        labels = [self.possible_labels.index(d['label']) for d in dataset]
-        entropies = torch.stack(entropies)
-        dwt_entropies = torch.stack(dwt_entropies)
-        labels = torch.tensor(labels, dtype=torch.long)
-        train_data = TensorDataset(entropies, dwt_entropies, labels)
-        train_loader = DataLoader(train_data, batch_size=128, shuffle=True)
-        criterion = nn.CrossEntropyLoss()
-        optimizer = optim.Adam(self.parameters(), lr=0.0001)
-        scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=5, factor=0.5)
-
-        for epoch in range(epochs):
-            for batch_idx, (data1, data2, target) in enumerate(train_loader):
-                self.train()
-                optimizer.zero_grad()
-                output = self(data1, data2)
-                loss = criterion(output, target)
-                loss.backward()
-                torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=1)
-                optimizer.step()
-            scheduler.step(loss.item())
-            print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
-
-    def predict(self, numbers1, numbers2):
-        self.eval()
-        with torch.no_grad():
-            numbers1 = torch.tensor(numbers1, dtype=torch.long).unsqueeze(0)
-            numbers2 = torch.tensor(numbers2, dtype=torch.long).unsqueeze(0)
-            output_ = self(numbers1, numbers2)
-            predicted_label_idx = torch.argmax(output_, dim=1).item()
-            return self.possible_labels[predicted_label_idx]
-
-
 def process_json(path, test_part, model_type="SimpleMLP"):
     with open(path, 'r') as f:
         metadata = json.load(f)
     dataset = []
 
-    input_dim = dwt_input_dim = 0
-
+    i = -1
+    n = len(metadata)
     for entry in metadata:
+        i += 1
         if model_type == "ImageClassifier":
             image_path = entry['path']
             image = cv2.imread(image_path)
@@ -285,20 +289,28 @@ def process_json(path, test_part, model_type="SimpleMLP"):
             entropies = [s['result'] for s in entry['entropy_results'] if s['method'] != 'dwt']
             dwt_entropies = next((s['result'][:9] for s in entry['entropy_results'] if s['method'] == 'dwt'), None)
             dataset.append({'entropies': entropies, 'dwt': dwt_entropies, 'label': entry['label']})
-            input_dim = len(entropies)
-            dwt_input_dim = len(dwt_entropies)
+        print_progress_bar('Processed entry', i, n)
 
-    print(f"Length of dataset: {len(dataset)}")  # Debugging line
+    print(f"\nLength of dataset: {len(dataset)}")  # Debugging line
 
-    i = int(test_part * len(dataset))
+    if isinstance(test_part, float):
+        i = int(test_part * len(dataset))
+    elif isinstance(test_part, str):
+        i = int(test_part)
+    else:
+        raise ValueError("Incompatible format for 'test_part'.")
+
     test_set = dataset[-i:]
     dataset = dataset[:-i]
 
-    input_dim = len(dataset[0]['entropies'])
-    dwt_input_dim = len(dataset[0]['dwt'])
+    if model_type != "ImageClassifier":
+        input_dim = len(dataset[0]['entropies'])
+        dwt_input_dim = len(dataset[0]['dwt'])
+    else:
+        input_dim = None
+        dwt_input_dim = None
+
     num_classes = len(all_labels)
-    # print(dataset[:3])  # Print first 3 entries for debugging
-    # print(type(dataset[0]['image']))  # Should be <class 'torch.Tensor'>
 
     return dataset, test_set, input_dim, dwt_input_dim, num_classes
 
