@@ -10,53 +10,71 @@ from skimage.segmentation import slic
 
 
 class Processor:
-    def __init__(self, processing_methods_with_params=None):
+    def __init__(self, processing_methods_with_params=None, level=0):
         self.processing_methods_with_params = processing_methods_with_params
-
+        self.level = level
     def applyProcessing(self, image: Image):
         for method, params in self.processing_methods_with_params.items():
             if method == 'dft':
-                image.processedData[method] = self.apply_dft(image.preprocessedData)
+                image.processedData[method] = self.apply_dft(image)
             elif method == 'dwt':
                 image.processedData[method] = self.apply_dwt(image.preprocessedData, **params)
             elif method == 'naive':
-                image.processedData[method] = image.preprocessedData
+                image.processedData[method] = self.apply_naive(image)
             elif method == 'hist':
                 image.processedData[method] = self.apply_histogram(image.preprocessedData)
             elif method == 'laplace':
-                image.processedData[method] = self.apply_laplacian(image.preprocessedData)
+                image.processedData[method] = self.apply_laplacian(image)
             elif method == 'joint_red_green':
-                image.processedData[method] = self.apply_joint_red_green(image.preprocessedData)
+                image.processedData[method] = self.apply_joint_red_green(image)
             elif method == 'joint_all':
-                image.processedData[method] = self.apply_joint_RGB(image.preprocessedData)
+                image.processedData[method] = self.apply_joint_RGB(image)
             elif method == 'lbp':
-                image.processedData[method] = self.apply_texture(image.preprocessedData)
-
+                image.processedData[method] = self.apply_texture(image)
             elif method == 'lbp_gabor':
-                image.processedData[method] = self.apply_texture_gabor(image.preprocessedData)
-
+                image.processedData[method] = self.apply_texture_gabor(image)
             elif method == 'adapt':
-                image.processedData[method] = self.apply_adaptive_estimation(image.preprocessedData, **params)
+                image.processedData[method] = self.apply_adaptive_estimation(image, **params)
             elif method == 'RGBCM':
-                image.processedData[method] = self.apply_CM_co_occurrence(image.preprocessedData)
+                image.processedData[method] = self.apply_CM_co_occurrence(image)
 
             else:
                 raise ValueError(f"No entropy method matched for method '{method}'!!")
 
-    def apply_dft(self, image):
-        rank = image.ndim
+    def apply_naive(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_naive(image, level))
+        return results
 
-        if rank == 1:
-            return np.abs(np.fft.fft(image))
-        elif rank == 2:
-            return np.abs(np.fft.fft2(image))
-        elif rank == 3:
-            result = np.empty_like(image, dtype=np.float64)
-            for i in range(image.shape[2]):
-                result[:, :, i] = np.abs(np.fft.fft2(image[:, :, i]))
-            return result
-        else:
-            raise ValueError("Array must be 1D, 2D, or 3D")
+    def compute_naive(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        processed_matrix = []
+        for partition_row in partition_matrix:
+            processed_row = []
+            for sub_image in partition_row:
+                img = self.apply_ycrcb(sub_image)
+                processed_row.append(img)
+            processed_matrix.append(processed_row)
+        return processed_matrix
+    def apply_dft(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_dft(image, level))
+        return results
+    def compute_dft(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2**level)
+        dft_matrix = []
+        for partition_row in partition_matrix:
+            dft_row = []
+            for sub_image in partition_row:
+                    img = self.apply_ycrcb(sub_image)
+                    result = np.empty_like(img, dtype=np.float64)
+                    for i in range(img.shape[2]):
+                        result[:, :, i] = np.abs(np.fft.fft2(img[:, :, i]))
+                    dft_row.append(result)
+            dft_matrix.append(dft_row)
+        return dft_matrix
 
     def apply_dwt(self, image, wavelet='db1', level=None):
         result = []
@@ -66,7 +84,8 @@ class Processor:
             result = self.compute_dwt(image, wavelet=wavelet, level=None)
         return result
 
-    def compute_dwt(self, image, wavelet='db1', level=None):
+    def compute_dwt(self, ori_image, wavelet='db1', level=None):
+        image = self.apply_ycrcb(ori_image)
         rank = image.ndim
 
         # Handle 1D arrays
@@ -91,215 +110,295 @@ class Processor:
         else:
             raise ValueError("Array must be 1D, 2D, or 3D")
 
-    def apply_histogram(self, img_arr):
-        if img_arr.ndim == 3:  # Check if the tensor is RGB (rank 3)
-            img_arr = img_arr.astype(np.uint32)  # Convert to an integer type
-            # Reduce color resolution by right-shifting
-            reduced_img_arr = img_arr >> 4
-            # Combine the reduced RGB values into a single integer
-            flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:,
-                                                                                                     :,
-                                                                                                     2]
-            # Create the histogram with fewer bins
-            bins_ = 64 ** 3
-            hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
-            return hist
-        elif img_arr.ndim == 2:  # Check if the tensor is grayscale (rank 2)
-            bins_ = 256
-            hist, _ = np.histogram(img_arr.ravel(), bins=bins_, range=(0, bins_))
-            return hist
-        else:
-            raise ValueError("Invalid tensor rank. Supported ranks are 2 (greyscale) and 3 (RGB).")
+    def apply_histogram(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_histogram(image, level))
+        return results
+    def compute_histogram(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        hist_matrix = []
+        for partition_row in partition_matrix:
+            hist_row = []
+            for sub_image in partition_row:
+                sub_image = sub_image.astype(np.uint32)  # Convert to an integer type
+                # Reduce color resolution by right-shifting
+                reduced_img_arr = sub_image >> 4
+                # Combine the reduced RGB values into a single integer
+                flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:, :, 2]
+                # Create the histogram with fewer bins
+                bins_ = 64 ** 3
+                hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+                hist_row.append(hist)
+            hist_matrix.append(hist_row)
+        return hist_matrix
 
-    def apply_laplacian(self, arr):
-        rank = arr.ndim
+    def apply_laplacian(self, image):
+        results = []
+        for level in range(self.level + 1):
+            results.append(self.compute_laplacian(image, level))
+        return results
+    def compute_laplacian(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        laplacian_matrix = []
+        for partition_row in partition_matrix:
+            laplacian_row = []
+            for sub_image in partition_row:
+                kernel = np.zeros((3, 3, 3))
+                kernel[1, 1, 1] = 6
+                kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[
+                    2, 1, 1] = -1  # Apply the convolution with the kernel
+                result = convolve(sub_image, kernel, mode='constant', cval=0.0)
+                laplacian_row.append(result)
+            laplacian_matrix.append(laplacian_row)
+        return laplacian_matrix
 
-        # Define the kernel based on the array's rank
-        if rank == 1:
-            kernel = np.array([-1, 2, -1])
-        elif rank == 2:
-            kernel = np.array([[0, -1, 0],
-                               [-1, 4, -1],
-                               [0, -1, 0]])
-        elif rank == 3:
-            kernel = np.zeros((3, 3, 3))
-            kernel[1, 1, 1] = 6
-            kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[
-                2, 1, 1] = -1
-        else:
-            raise ValueError("Array must be 1D, 2D, or 3D")
+    def apply_joint_red_green(self, image):
+        results = []
+        for level in range(self.level + 1):
+            results.append(self.compute_joint_red_green(image, level))
+        return results
+    def compute_joint_red_green(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        rg_matrix = []
+        for partition_row in partition_matrix:
+            rg_row = []
+            for sub_image in partition_row:
+                # Extract red and green channels from the image array
+                red_channel, green_channel = sub_image[:, :, 0], sub_image[:, :, 1]
 
-        # Apply the convolution with the kernel
-        result = convolve(arr, kernel, mode='constant', cval=0.0)
+                # Calculate the 2D histogram
+                joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256)
 
-        return result
+                # Calculate joint probabilities
+                joint_probabilities = joint_histogram / joint_histogram.sum()
+                rg_row.append(joint_probabilities)
+            rg_matrix.append(rg_row)
+        return rg_matrix
 
-    def apply_joint_red_green(self, img_arr):
-        # Extract red and green channels from the image array
-        red_channel, green_channel = img_arr[:, :, 0], img_arr[:, :, 1]
+    def apply_joint_RGB(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_joint_RGB(image, level))
+        return results
+    def compute_joint_RGB(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2**level)
+        processed_matrix = []
+        for partition_row in partition_matrix:
+            processed_row = []
+            for sub_image in partition_row:
+                # Flatten and stack the color channels
+                rgb_flatten = np.vstack([sub_image[:, :, i].ravel() for i in range(3)]).T
+                # Calculate the 3D histogram
+                joint_histogram, _ = np.histogramdd(rgb_flatten, bins=256, range=[[0, 256], [0, 256], [0, 256]])
+                # Calculate joint probabilities
+                joint_probabilities = joint_histogram / joint_histogram.sum()
+                processed_row.append(joint_probabilities)
+            processed_matrix.append(processed_row)
+        return processed_matrix
+    def apply_texture(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_texture(image, level))
+        return results
+    def compute_texture(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        texture_matrix = []
+        for partition_row in partition_matrix:
+            texture_row = []
+            for sub_image in partition_row:
+                # Convert the image to grayscale if it's a color image
+                if sub_image.ndim == 3 and sub_image.shape[-1] == 3:
+                    gray_image = rgb2gray(sub_image)
+                elif sub_image.ndim == 2 or (sub_image.ndim == 3 and sub_image.shape[-1] == 1):
+                    gray_image = sub_image.squeeze()
+                else:
+                    raise ValueError("Input image should be either grayscale or RGB.")
 
-        # Calculate the 2D histogram
-        joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256)
+                # Normalize the grayscale image if it isn't already
+                if gray_image.max() > 1:
+                    gray_image /= 255.0
 
-        # Calculate joint probabilities
-        joint_probabilities = joint_histogram / joint_histogram.sum()
+                # Apply Local Binary Pattern (LBP) to extract texture features
+                radius = 1
+                n_points = 8 * radius
+                lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
 
-        return joint_probabilities
+                # Calculate histogram of LBP values
+                n_bins = int(n_points * (n_points - 1) / 2) + 2
+                hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
 
-    def apply_joint_RGB(self, rgb_image):
-        # Flatten and stack the color channels
-        rgb_flatten = np.vstack([rgb_image[:, :, i].ravel() for i in range(3)]).T
+                # Normalize histogram
+                hist = hist.astype("float")
+                hist /= (hist.sum() + np.finfo(float).eps)
+                texture_row.append(hist)
+            texture_matrix.append(texture_row)
+        return texture_matrix
 
-        # Calculate the 3D histogram
-        joint_histogram, _ = np.histogramdd(rgb_flatten, bins=256, range=[[0, 256], [0, 256], [0, 256]])
 
-        # Calculate joint probabilities
-        joint_probabilities = joint_histogram / joint_histogram.sum()
 
-        return joint_probabilities
+    def apply_texture_gabor(self, image):
+        results = []
+        for level in range(self.level + 1):
+            results.append(self.compute_texture_gabor(image, level))
+        return results
 
-    def apply_texture(self, img_arr):
-        """
-        Calculate the histogram of Local Binary Pattern (LBP) values for the texture of a given image.
+    def compute_texture_gabor(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        tg_matrix = []
+        for partition_row in partition_matrix:
+            tg_row = []
+            for sub_image in partition_row:
+                # Convert the image to grayscale if it's a color image
+                if sub_image.ndim == 3 and sub_image.shape[-1] in [3, 4]:
+                    gray_image = 0.299 * sub_image[:, :, 0] + 0.587 * sub_image[:, :, 1] + 0.114 * sub_image[:, :, 2]
+                elif sub_image.ndim == 2 or (sub_image.ndim == 3 and sub_image.shape[-1] == 1):
+                    gray_image = sub_image.squeeze()
+                else:
+                    raise ValueError("Input image should be either grayscale or RGB.")
 
-        Parameters:
-        - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
+                # Define Gabor filter parameters
+                wavelength = 5.0
+                orientation = np.pi / 4
+                frequency = 1 / wavelength
+                sigma = 1.0
 
-        Returns:
-        - 1D NumPy array representing the histogram of LBP values.
-        """
-        # Convert the image to grayscale if it's a color image
-        if img_arr.ndim == 3 and img_arr.shape[-1] == 3:
-            gray_image = rgb2gray(img_arr)
-        elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
-            gray_image = img_arr.squeeze()
-        else:
-            raise ValueError("Input image should be either grayscale or RGB.")
+                # Create Gabor filter
+                x, y = np.meshgrid(np.arange(-15, 16), np.arange(-15, 16))
+                gabor_real = np.exp(-0.5 * (x ** 2 + y ** 2) / (sigma ** 2)) * np.cos(
+                    2 * np.pi * frequency * (x * np.cos(orientation) + y * np.sin(orientation)))
 
-        # Normalize the grayscale image if it isn't already
-        if gray_image.max() > 1:
-            gray_image /= 255.0
+                # Apply Gabor filter
+                gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
 
-        # Apply Local Binary Pattern (LBP) to extract texture features
-        radius = 1
-        n_points = 8 * radius
-        lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
+                # Calculate histogram
+                hist, _ = np.histogram(gabor_response, bins=256, density=True)
+                tg_row.append(hist)
+            tg_matrix.append(tg_row)
+        return tg_matrix
 
-        # Calculate histogram of LBP values
-        n_bins = int(n_points * (n_points - 1) / 2) + 2
-        hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
 
-        # Normalize histogram
-        hist = hist.astype("float")
-        hist /= (hist.sum() + np.finfo(float).eps)
 
-        return hist
+    def apply_adaptive_estimation(self, image, num_segments=100):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_adaptive_estimation(image, level, num_segments))
+        return results
+    def compute_adaptive_estimation(self, image, level, num_segments):
+        partition_matrix = self.partition_image(image.preprocessedData, 2**level)
+        processed_matrix = []
+        for partition_row in partition_matrix:
+            processed_row = []
+            for sub_image in partition_row:
+                # Convert the image to grayscale if it's a color image
+                if sub_image.ndim == 3:
+                    gray_image = rgb2gray(sub_image)
+                else:
+                    gray_image = sub_image
 
-    def apply_texture_gabor(self, img_arr):
-        """
-            Calculate the histogram of Gabor-filtered values for the texture of a given image.
+                # Segment the image using SLIC
+                segments = slic(sub_image, n_segments=num_segments, compactness=10, sigma=1)
 
-            Parameters:
-            - img_arr: 2D or 3D NumPy array representing the grayscale or color image.
+                # Initialize list to store segment entropies
+                segment = []
 
-            Returns:
-            - 1D NumPy array representing the histogram of Gabor-filtered values.
-            """
-        # Convert the image to grayscale if it's a color image
-        if img_arr.ndim == 3 and img_arr.shape[-1] in [3, 4]:
-            gray_image = 0.299 * img_arr[:, :, 0] + 0.587 * img_arr[:, :, 1] + 0.114 * img_arr[:, :, 2]
-        elif img_arr.ndim == 2 or (img_arr.ndim == 3 and img_arr.shape[-1] == 1):
-            gray_image = img_arr.squeeze()
-        else:
-            raise ValueError("Input image should be either grayscale or RGB.")
+                # Loop through each unique segment
+                unique_segments = np.unique(segments)
+                for segment_idx in unique_segments:
+                    segment_mask = (segments == segment_idx)
+                    segment_region = gray_image[segment_mask]
 
-        # Define Gabor filter parameters
-        wavelength = 5.0
-        orientation = np.pi / 4
-        frequency = 1 / wavelength
-        sigma = 1.0
+                    # Calculate the entropy of each segment using the Shannon entropy formula
+                    hist, _ = np.histogram(segment_region, bins=256)
+                    prob_dist = hist / hist.sum()
+                    segment.append(prob_dist)
+                processed_row.append(segment)
+            processed_matrix.append(processed_row)
+        return processed_matrix
 
-        # Create Gabor filter
-        x, y = np.meshgrid(np.arange(-15, 16), np.arange(-15, 16))
-        gabor_real = np.exp(-0.5 * (x ** 2 + y ** 2) / (sigma ** 2)) * np.cos(
-            2 * np.pi * frequency * (x * np.cos(orientation) + y * np.sin(orientation)))
 
-        # Apply Gabor filter
-        gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
-
-        # Calculate histogram
-        hist, _ = np.histogram(gabor_response, bins=256, density=True)
-
-        return hist
-
-    def apply_adaptive_estimation(self, img_arr, num_segments=100):
-        """
-            Estimate the adaptive entropy of an image by segmenting it and averaging the entropies of the segments.
-
-            Parameters:
-            - img_arr: 2D or 3D NumPy array representing the image.
-            - num_segments: Number of segments to divide the image into using the SLIC algorithm.
-
-            Returns:
-            - float: Adaptive entropy of the image.
-            """
-        # Convert the image to grayscale if it's a color image
-        if img_arr.ndim == 3:
-            gray_image = rgb2gray(img_arr)
-        else:
-            gray_image = img_arr
-
-        # Segment the image using SLIC
-        segments = slic(img_arr, n_segments=num_segments, compactness=10, sigma=1)
-
-        # Initialize list to store segment entropies
-        segment = []
-
-        # Loop through each unique segment
-        unique_segments = np.unique(segments)
-        for segment_idx in unique_segments:
-            segment_mask = (segments == segment_idx)
-            segment_region = gray_image[segment_mask]
-
-            # Calculate the entropy of each segment using the Shannon entropy formula
-            hist, _ = np.histogram(segment_region, bins=256)
-            prob_dist = hist / hist.sum()
-            segment.append(prob_dist)
-
-        return segment
 
     def apply_CM_co_occurrence(self, image):
+        results = []
+        for level in range(self.level+1):
+            results.append(self.compute_CM_co_occurrence(image, level))
+        return results
+    def compute_CM_co_occurrence(self, image, level):
+        partition_matrix = self.partition_image(image.preprocessedData, 2 ** level)
+        CM_matrix = []
+        for partition_row in partition_matrix:
+            CM_row = []
+            for sub_image in partition_row:
+                distances = [1]  # Distance between pixels for co-occurrence
+                angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
+                levels = 256  # Number of intensity levels in the image
+
+                # Initialize array for co-occurrence matrices
+                co_occurrence_array = np.zeros((levels, levels, 3))
+
+                for channel in range(3):  # Iterate over RGB channels
+                    channel_image = sub_image[:, :, channel]
+
+                    # Ensure it's in 8-bit integer type
+                    gray_image = (channel_image * 255).astype(np.uint8)
+
+                    # Calculate GLCM
+                    glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
+                                        normed=True)
+
+                    for angle_idx in range(len(angles)):
+                        # Accumulate co-occurrence matrices
+                        co_occurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
+
+                    # Normalize the accumulated co-occurrence matrix for each channel
+                    co_occurrence_array[:, :, channel] /= len(angles)
+                CM_row.append(co_occurrence_array)
+            CM_matrix.append(CM_row)
+        return CM_matrix
+
+
+    def partition_image(self, image, partition):
         """
-        Calculate the color co-occurrence matrix for an RGB image at different angles.
-
-        Parameters:
-        - image: 3D NumPy array representing the RGB image.
-
         Returns:
-        - 3D NumPy array representing the accumulated co-occurrence matrices for each color channel.
+            list: A 2D list (matrix) where each element is a sub-image.
         """
-        distances = [1]  # Distance between pixels for co-occurrence
-        angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
-        levels = 256  # Number of intensity levels in the image
+        # Get the shape of the image
+        height, width, _ = image.shape
+        # Calculate the size of each partition
+        partition_height = height // partition
+        partition_width = width // partition
 
-        # Initialize array for co-occurrence matrices
-        co_occurrence_array = np.zeros((levels, levels, 3))
+        # Initialize the result matrix
+        result = []
 
-        for channel in range(3):  # Iterate over RGB channels
-            channel_image = image[:, :, channel]
+        height_left = height % partition
+        width_left = width % partition
+        for i in range(0, height-height_left, partition_height):
+            row = []
+            for j in range(0, width-width_left, partition_width):
+                if j//partition_width==partition - 1:
+                    sub_image = image[i:i + partition_height, j:]
+                elif i//partition_height==partition-1:
+                    sub_image = image[i:, j:j + partition_width]
+                else:
+                    # Extract the sub-image
+                    sub_image = image[i:i + partition_height, j:j + partition_width]
+                row.append(sub_image)
+            result.append(row)
 
-            # Ensure it's in 8-bit integer type
-            gray_image = (channel_image * 255).astype(np.uint8)
-
-            # Calculate GLCM
-            glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
-                                normed=True)
-
-            for angle_idx in range(len(angles)):
-                # Accumulate co-occurrence matrices
-                co_occurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
-
-            # Normalize the accumulated co-occurrence matrix for each channel
-            co_occurrence_array[:, :, channel] /= len(angles)
-
-        return co_occurrence_array
+        return result
+    def apply_ycrcb(self, img):
+        kR = 0.299
+        kG = 0.587
+        kB = 0.114
+        R = img[..., 0]
+        G = img[..., 1]
+        B = img[..., 2]
+        y = kR * R + kG * G + kB * B
+        cb = (-kR / (2 * (1 - kB))) * R + (-kG / (2 * (1 - kB))) * G + 1 / 2 * B
+        cr = 1 / 2 * R + (-kG / (2 * (1 - kR))) * G + (-kB / (2 * (1 - kR))) * B
+        # Scale and shift to 8-bit integer values
+        y = np.clip((219 * y + 16), 16, 235).astype(np.uint8)
+        cb = np.clip((224 * cb + 128), 16, 240).astype(np.uint8)
+        cr = np.clip((224 * cr + 128), 16, 240).astype(np.uint8)
+        return np.stack([y, cb, cr], axis=-1)

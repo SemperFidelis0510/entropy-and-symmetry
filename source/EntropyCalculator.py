@@ -6,7 +6,7 @@ import json
 class EntropyCalculator:
     def __init__(self, color_weight = None, ent_norm_path = None, reset_norm = False):
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
-        self.ent_norm_path = ent_norm_path or '../source/data/entropy_norm.json'
+        self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
         self.reset_norm = reset_norm
         self.ent_norm = self.get_ent_norm()
 
@@ -14,10 +14,18 @@ class EntropyCalculator:
         for method, processedData in image.processedData.items():
             temp = 0
             if method == 'adapt':
-                segment_entropies = []
-                for segment in processedData:
-                    segment_entropies.append(self.entropy(segment, self.get_norm(method)))
-                temp = np.mean(segment_entropies)
+                temp = []
+                for level, matrix in enumerate(processedData):
+                    ent_matrix = []
+                    for row_index, row in enumerate(matrix):
+                        ent_row = []
+                        for column_index, sub_image in enumerate(row):
+                            segment_entropies = []
+                            for segment in sub_image:
+                                segment_entropies.append(self.entropy(segment, self.get_norm(method, level, row_index, column_index)))
+                            ent_row.append(np.mean(segment_entropies))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             elif method == 'dwt':
                 ent = []
                 for level in range(len(processedData[0])):
@@ -32,20 +40,39 @@ class EntropyCalculator:
                     ent.append(result)
                 temp = ent
             elif method == 'joint_all':
-                temp = -np.sum(processedData * np.log2(processedData + np.finfo(float).eps)) / self.get_norm(method)
+                temp = []
+                for level, matrix in enumerate(processedData):
+                    ent_matrix = []
+                    for row_index, row in enumerate(matrix):
+                        ent_row = []
+                        for column_index, sub_image in enumerate(row):
+                            sub_image = sub_image/np.sum(sub_image)
+                            ent_row.append(-np.sum(sub_image * np.log2(sub_image + np.finfo(float).eps)) / self.get_norm(method, level, row_index, column_index))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             else:
-                temp = self.entropy(processedData, self.get_norm(method))
+                temp = []
+                for level, matrix in enumerate(processedData):
+                    ent_matrix = []
+                    for row_index, row in enumerate(matrix):
+                        ent_row = []
+                        for column_index, sub_image in enumerate(row):
+                          ent_row.append(self.entropy(sub_image, self.get_norm(method, level, row_index, column_index)))
+                        ent_matrix.append(ent_row)
+                    temp.append(ent_matrix)
             image.entropyResults.append(temp)
 
-    def get_norm(self, method, level=None):
-        if level is None:
-            norm = self.ent_norm[method]
-        else:
+    def get_norm(self, method, level, row=None, column=None):
+        if self.reset_norm:
+            return 1
+        if row is not None:
+            norm = self.ent_norm[method][level][row][column]
+        else: # dwt
             norm = self.ent_norm[method][level]
         return norm
 
-    def entropy(self, transformedData, norm=1):
-        arr = np.abs(transformedData)
+    def entropy(self, Data, norm=1):
+        arr = np.abs(Data)
         ent = 0
         if arr.ndim == 3:
             if arr.shape[-1] == 3:  # Check if the last dimension has 3 channels (RGB)
@@ -58,6 +85,8 @@ class EntropyCalculator:
         return ent / norm
 
     def get_ent_norm(self):
+        if self.reset_norm:
+            return
         # Read the JSON file
         with open(self.ent_norm_path, 'r') as f:
             data = json.load(f)
@@ -70,11 +99,6 @@ class EntropyCalculator:
         # Loop through the 'entropy_results' list to collect all methods and their results
         for item in entropy_results:
             method = item.get("method")
-            if self.reset_norm:
-                result = 1
-                if method == 'dwt':
-                    result = [1]*10
-            else:
-                result = item.get("result")
+            result = item.get("result")
             all_results[method] = result
         return all_results

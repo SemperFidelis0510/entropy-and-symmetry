@@ -3,15 +3,19 @@ import platform
 import sys
 import threading
 import os
+import pandas as pd
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime
 from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 import numpy as np
+import plotnine
 
-from PIL import ImageTk
-from main import *
-
+from PIL import ImageTk, Image
+sys.path.append('./')
+from source.main import main_gui
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -28,6 +32,8 @@ ENTROPY_METHODS = [
 ]
 
 COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']
+
+LIMIT_IMAGES = 500 # Limit the number of images to load in one page of thumbnail frame
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(script_dir)
@@ -120,6 +126,7 @@ class ImageViewer:
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
+        self.prob_data = []
         self.zoom_percent = 100
         self.is_fullscreen = False
         self.thumbnail_placeholder = ImageTk.PhotoImage(Image.new("RGB", (60, 60), "gray"))  # Grey placeholder
@@ -163,7 +170,7 @@ class ImageViewer:
         self.update_buttons()
         self.update_listbox()
         self.update_confirm_button_state()
-        self.button_save.config(state=DISABLED)# Disable save button until entropy calculation is complete
+        #self.button_save.config(state=DISABLED)# Disable save button until entropy calculation is complete
 
         self.image_window.bind('<Right>', self.forward)
         self.image_window.bind('<Left>', self.back)
@@ -252,22 +259,22 @@ class ImageViewer:
     
     def create_calculation_buttons(self, frame):
         method_label = Label(frame, text="Entropy Method")
-        color_label = Label(frame, text="Color Space")
+        color_label = Label(frame, text="")
         method_label.grid(row=2, column=0, sticky='ew')
         color_label.grid(row=1, column=0, sticky='ew')
         # Create a Combobox and make it visible
         self.combo = ttk.Combobox(frame, values=ENTROPY_METHODS, state='readonly')
         self.combo.grid(row=2, column=1)  # Set the position of the combobox
-        self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
-        self.combo_color.grid(row=1, column=1)  # Set the position of the combobox
+        #self.combo_color = ttk.Combobox(frame, values=COLOR_OPTIONS, state='readonly')
+        #self.combo_color.grid(row=1, column=1)  # Set the position of the combobox
 
         # Binding selection event
         self.combo.bind("<<ComboboxSelected>>", self.on_combo_select)
-        self.combo_color.bind("<<ComboboxSelected>>", self.on_combo_color_select)
+        #self.combo_color.bind("<<ComboboxSelected>>", self.on_combo_color_select)
 
         # The save button is arranged on the right side of the combobox
-        self.button_save = Button(frame, text="Save", command=self.save)
-        self.button_save.grid(row=2, column=3, sticky='ew')
+        #self.button_save = Button(frame, text="Save", command=self.save)
+        #self.button_save.grid(row=2, column=3, sticky='ew')
 
         self.confirm_button = Button(frame, text="Confirm", command=lambda: self.thread_it(self.on_confirm_click))
         self.confirm_button.grid(row=2, column=2, sticky='ew')
@@ -388,7 +395,7 @@ class ImageViewer:
         self.refresh_all_images(self.np_array)
         self.scroll_to_img_no()
         self.entropies_calculated = 1
-        self.button_save.config(state=NORMAL)
+        #self.button_save.config(state=NORMAL)
         self.confirm_button.config(state=NORMAL)
         self.forward()
         self.back()
@@ -516,44 +523,38 @@ class ImageViewer:
     def on_confirm_click(self):
         self.image_window.after(0, self.start_preprocess)
         # The logic of sorting and displaying pictures based on the entropy method selected by combo box
-        method = self.combo.get()
-        selected_color = self.combo_color.get()
-        with open('data/ent_norm.json', 'r') as file:
-            ent_norm = json.load(file)
-        if method not in ent_norm:
-            fixed_noise = np.array(Image.open('../datasets/fixed_noise.bmp'))
-            ent_norm[method] = calc_ent(fixed_noise, method)
-            with open('data/ent_norm.json', 'w') as file:
-                json.dump(ent_norm, file)
+        method = {self.combo.get(): None}
+        #selected_color = self.combo_color.get()
+        #self.start_entropy_calculation()
+        save_directory = self.default_save_directory
+        if not save_directory or not os.path.exists(save_directory):
+            # If there's no default directory in the settings or it doesn't exist, ask the user
+            folder_path = filedialog.askdirectory()
+        else:
+            folder_path = save_directory
 
-        preprocessed_images, _ = preprocess(self.directory, callback=self.update_preprogress)
+        # Check if a valid directory was chosen or retrieved from the settings
+        if not folder_path:
+            return
+        main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress, processed_level = 0)
         self.image_window.after(0, self.preprogress_window.destroy)
-        self.start_entropy_calculation()
-        try:
-            img_ent = label_ent(preprocessed_images, methods=method, sort=True, ent_norm=ent_norm,
-                                colors=selected_color, callback=self.update_progress)
-        except Exception as e:
-            messagebox.showerror("Error", f"An error occurred: {str(e)}")
-        # For save button
-        self.img_ent_data = img_ent
-
-        # Split images and entropy
-        images, entropies = self.split_images_and_entropy(img_ent)
-
-        self.np_array = images
-        self.entropies = entropies
-
-        #self.refresh_all_images(sorted_images)
         self.image_window.after(0, self.entropy_calculation_complete)
-        self.image_window.after(0, self.progress_window.destroy)
+        #self.image_window.after(0, self.progress_window.destroy)
     
     
     def on_scroll(self, *args):
-        # Default scrolling behavior
-        self.canvas_thumbnails.yview(*args)
+        # Check if the first argument is 'scroll'
+        if args[0] == 'scroll':
+            # Double the scroll speed by multiplying second argument
+            modified_args = (args[0], int(args[1]) * 2, args[2])
+            self.canvas_thumbnails.yview(*modified_args)
+        else:
+            # Default behavior
+            self.canvas_thumbnails.yview(*args)
 
         # Load visible thumbnails after scrolling
         self.load_visible_thumbnails()
+
 
 
     def on_select(self, idx):
@@ -567,6 +568,23 @@ class ImageViewer:
         if self.img_no != len(self.np_array) - 1:
             self.forward()
             self.back()
+
+
+    def plot_bar_chart(self, frame):
+        df = pd.DataFrame(self.prob_data[self.img_no])
+        # Create figure and axes objects
+        fig, ax = plt.subplots(figsize=(5, 4))
+    
+        # Plot data
+        ax.bar(df['categories'], df['probabilities'], color='blue', alpha=0.7)
+        ax.set_ylabel('Probabilities')
+        ax.set_title('Probability distribution')
+    
+        # Embed the plot in the Tkinter window
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.grid(row=0, column=0, padx=10, pady=10)
+        canvas.draw()
 
 
     def refresh_all_images(self, np_arrays):
@@ -619,21 +637,21 @@ class ImageViewer:
 
         # 1. Get the selected entropy method
         entropy_method = self.combo.get()
-        color = self.combo_color.get()
+        #color = self.combo_color.get()
 
         # 2. Get the current time
         current_time = datetime.now().strftime('%Y%m%d_%H%M%S')  # Format: YYYYMMDD_HHMMSS
 
         # 3. Create a subfolder name based on entropy method and current time
-        subfolder_name = f"{color}_{entropy_method}_{current_time}"
-        subfolder_path = os.path.join(folder_path, subfolder_name)
+        #subfolder_name = f"{color}_{entropy_method}_{current_time}"
+        #subfolder_path = os.path.join(folder_path, subfolder_name)
 
         # 4. Create the subfolder
-        if not os.path.exists(subfolder_path):
-            os.makedirs(subfolder_path)
+        #if not os.path.exists(subfolder_path):
+            #os.makedirs(subfolder_path)
 
         # Save images to the subfolder
-        save_img(subfolder_path, images_arr)
+        #save_img(subfolder_path, images_arr)
 
 
     def save_default_directory(self, user_chosen_path):
@@ -683,14 +701,14 @@ class ImageViewer:
 
 
     def start_preprocess(self):
-        self.button_save.config(state=DISABLED)
+        #self.button_save.config(state=DISABLED)
         self.confirm_button.config(state=DISABLED)
         # Create a new Toplevel window for progress bar
         self.preprogress_window = Toplevel(self.image_window)
-        self.preprogress_window.title("Preprocessing Images...")
+        self.preprogress_window.title("Calculating")
 
         # Add a label for information
-        Label(self.preprogress_window, text="Please wait while preprocessing images...").pack(pady=10)
+        Label(self.preprogress_window, text="Please wait ...").pack(pady=10)
 
         # Create and pack the progress bar
         self.preprogress = ttk.Progressbar(self.preprogress_window, orient="horizontal", length=200, mode="determinate")
@@ -728,7 +746,7 @@ class ImageViewer:
     
     def update_confirm_button_state(self, event=None):
         if self.combo.get():  # If there's a value selected in the combobox
-            if self.combo_color.get():
+            #if self.combo_color.get():
                 self.confirm_button.config(state=NORMAL)
         else:
             self.confirm_button.config(state=DISABLED)
