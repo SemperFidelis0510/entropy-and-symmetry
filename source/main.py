@@ -1,7 +1,6 @@
 import os.path
 import sys
-sys.path.append('/home/ec2-user/SageMaker/entropy-and-symmetry')
-
+sys.path.append('/home/ubuntu/entropy-and-symmetry')
 
 from source.Preprocessor import Preprocessor
 from source.Processor import Processor
