@@ -118,7 +118,7 @@ if __name__ == '__main__':
     # reset_ent_norm()
     # test_and_analyze()
     src_folder = '../datasets/classified_pictures'
-    dst_folder = '../processed/all_results_without_joint_all'
+    dst_folder = '../processed/all_results'
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
     processed_level = 2      # level, 0, 1, 2
