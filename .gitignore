@@ -165,3 +165,6 @@ cython_debug/
 *.log
 .DS_Store
 .DS_Store?
+# Exclude folders
+administrative/
+processed/entropy_ordering/*
