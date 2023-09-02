@@ -1,9 +1,8 @@
 import os
-import sys
 import json
-import numpy as np
 from PIL import Image
 from scripts.utils import print_progress_bar
+import shutil
 
 
 def cut(ds, n):
@@ -11,8 +10,8 @@ def cut(ds, n):
 
 
 def join_labels(ds):
-    old_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
-    new_labels = ['nature', 'country', 'city']
+    # old_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
+    # new_labels = ['nature', 'country', 'city']
     new_ds = []
 
     for obj in ds:
@@ -39,6 +38,9 @@ def join_labels(ds):
         new_folder = os.path.join(parent_folder, new_label)
         new_path = os.path.join(new_folder, filename)
 
+        # Move the file to the new path
+        shutil.move(old_path, new_path)
+
         # Update the path in the dataset object
         obj["path"] = new_path
 
@@ -56,19 +58,11 @@ def augment_data(ds):
         original_label = entry["label"]
         original_entropy_results = entry["entropy_results"]
 
-        # Update the path to match the new label folder
-        folder, filename = os.path.split(original_path)
-        parent_folder = os.path.dirname(folder)
-        new_folder = os.path.join(parent_folder, original_label)
-        if not os.path.exists(new_folder):
-            os.mkdir(new_folder)
-        updated_path = os.path.join(new_folder, filename)
-
         # Load the original image
         try:
-            img = Image.open(updated_path).convert('RGB')
+            img = Image.open(original_path).convert('RGB')
         except FileNotFoundError:
-            print(f"\nFile not found: {updated_path}")
+            print(f"\nFile not found: {original_path}")
             continue
 
         # Generate augmented images
@@ -80,13 +74,14 @@ def augment_data(ds):
                     new_img = new_img.transpose(Image.FLIP_LEFT_RIGHT)
 
                 # Generate new path
+                folder, filename = os.path.split(original_path)
                 new_path = os.path.join(
-                    new_folder,
+                    folder,
                     f"{os.path.splitext(filename)[0]}_rot{angle}_flip{int(flip)}.png"
                 )
 
                 # Save the new image, overwrite if exists
-                new_img.save(new_path, overwrite=True)
+                new_img.save(new_path)
 
                 # Create new dataset entry
                 new_entry = {
@@ -108,7 +103,8 @@ def augment_data(ds):
 
 
 def main():
-    path = "../processed/results/entropy_results_joined_labels.json"
+    path = "../datasets/classified_pictures/entropy_results_joined_labels.json"
+    # path = "../processed/results/entropy_results.json"
     with open(path, 'r') as f:
         dataset = json.load(f)
 
@@ -116,6 +112,7 @@ def main():
     dataset = augment_data(dataset)
 
     path = "../datasets/classified_pictures/entropy_results_augmented.json"
+    # path = "../datasets/classified_pictures/entropy_results_joined_labels.json"
     with open(path, 'w') as f:
         json.dump(dataset, f, indent=4)
 
