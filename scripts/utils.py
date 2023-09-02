@@ -18,8 +18,8 @@ def print_progress_bar(text, iteration, total, start_time=None, length=50):
         elapsed_time = time.time() - start_time
         mins, secs = divmod(int(elapsed_time), 60)
         timer = f"{mins:02d}:{secs:02d}"
-        progress_bar = f"{bar} | {percent}% Complete {iteration}/{total} images | Time: {timer}"
+        progress_bar = f"{bar} | {percent}% Complete {iteration}/{total} instances | Time: {timer}"
     else:
-        progress_bar = f"{bar} | {percent}% Complete {iteration}/{total} images."
+        progress_bar = f"{bar} | {percent}% Complete {iteration}/{total} instances."
 
     print(f'\r{text}: {progress_bar}', end='', flush=True)

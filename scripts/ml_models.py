@@ -4,6 +4,13 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import torch.nn.functional as F
+from PIL import Image
+import numpy as np
+import json
+import cv2
+import time
+
+from scripts.utils import print_progress_bar
 
 all_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
 
@@ -83,62 +90,6 @@ class TransformerBlock(nn.Module):
         return out
 
 
-class SimpleMLP(nn.Module):
-    def __init__(self, input_dim, dwt_input_dim, num_classes):
-        super(SimpleMLP, self).__init__()
-        self.layer1 = nn.Linear(input_dim, 128)
-        self.layer2 = nn.Linear(128, 64)
-        self.layer3 = nn.Linear(64, num_classes)
-        self.dwt_layer = nn.Linear(dwt_input_dim, 128) if dwt_input_dim else None
-        self.dropout = nn.Dropout(0.5)
-        self.possible_labels = all_labels
-
-    def forward(self, x, dwt_x=None):
-        x = F.relu(self.layer1(x))
-        x = self.dropout(x)
-        if dwt_x is not None and self.dwt_layer:
-            dwt_x = F.relu(self.dwt_layer(dwt_x))
-            x += dwt_x
-        x = F.relu(self.layer2(x))
-        x = self.dropout(x)
-        x = F.softmax(self.layer3(x), dim=1)
-        return x
-
-    def train_model(self, dataset, epochs=100):
-        loss = None
-        entropies = [torch.tensor(d['entropies'], dtype=torch.float) for d in dataset]
-        labels = [torch.tensor([1 if l in d['label'] else 0 for l in self.possible_labels], dtype=torch.float) for d in
-                  dataset]
-        entropies = torch.stack(entropies)
-        labels = torch.stack(labels)
-        train_data = TensorDataset(entropies, labels)
-        train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
-        criterion = nn.BCELoss()
-        optimizer = optim.Adam(self.parameters(), lr=0.001)
-
-        for epoch in range(epochs):
-            for batch_idx, (data, target) in enumerate(train_loader):
-                self.train()
-                optimizer.zero_grad()
-                output = self(data)
-                loss = criterion(output, target)
-                loss.backward()
-                optimizer.step()
-            print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
-
-    def predict(self, entropies, dwt=None):
-        self.eval()
-        with torch.no_grad():
-            entropies = torch.tensor(entropies, dtype=torch.float).unsqueeze(0)
-            if dwt is not None and self.dwt_layer:
-                dwt = torch.tensor(dwt, dtype=torch.float).unsqueeze(0)
-            else:
-                dwt = None
-            output_ = self(entropies, dwt)
-            predicted_label_idx = torch.argmax(output_, dim=1).item()
-            return self.possible_labels[predicted_label_idx]
-
-
 class Classifier(nn.Module):
     def __init__(self, num_classes):
         super(Classifier, self).__init__()
@@ -203,22 +154,162 @@ class Classifier(nn.Module):
             return self.possible_labels[predicted_label_idx]
 
 
-def process_json(path, test_part):
+class MultiLabelImageClassifier(nn.Module):
+    def __init__(self, num_classes):
+        super(MultiLabelImageClassifier, self).__init__()
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, stride=1, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3)
+        self.fc1 = nn.Linear(128 * 6 * 6, 256)
+        self.fc2 = nn.Linear(256, num_classes)
+        self.possible_labels = ['plain nature', 'detailed nature', 'Agriculture', 'villages', 'city']
+
+    def forward(self, x):
+        x = nn.functional.relu(self.conv1(x))
+        x = nn.functional.max_pool2d(x, 2)
+        x = nn.functional.relu(self.conv2(x))
+        x = nn.functional.max_pool2d(x, 2)
+        x = nn.functional.relu(self.conv3(x))
+        x = nn.functional.max_pool2d(x, 2)
+        x = nn.functional.adaptive_avg_pool2d(x, (6, 6))  # Add this line to adjust the shape
+        x = x.view(-1, 128 * 6 * 6)
+        x = nn.functional.relu(self.fc1(x))
+        x = self.fc2(x)
+        return torch.sigmoid(x)
+
+    def train_model(self, dataset, epochs=100, batch_size=64):
+        loss = None
+        train_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+        criterion = nn.BCEWithLogitsLoss()
+        optimizer = optim.Adam(self.parameters(), lr=0.001)
+
+        for epoch in range(epochs):
+            for batch_idx, batch in enumerate(train_loader):
+                data = batch['image']
+                target = batch['label']
+
+                print_progress_bar('Batch index', batch_idx-1, batch_size, start_time=time.time())
+
+                # One-hot encode the target labels
+                target = [one_hot_encode(t, all_labels) for t in target]
+                target = torch.tensor(target, dtype=torch.float32)
+
+                self.train()
+                optimizer.zero_grad()
+                output = self(data.float())
+                loss = criterion(output, target)
+                loss.backward()
+                optimizer.step()
+            print(f"\nEpoch {epoch + 1}, Loss: {loss.item()}")
+
+    def predict(self, image):
+        self.eval()
+        with torch.no_grad():
+            image = image.unsqueeze(0)  # Add a batch dimension
+            output_ = self(image)
+            output_ = (output_ > 0.5).float()
+            return [label for idx, label in enumerate(self.possible_labels) if output_[0, idx] == 1]
+
+
+class SimpleMLP(nn.Module):
+    def __init__(self, input_dim, dwt_input_dim, num_classes):
+        super(SimpleMLP, self).__init__()
+        self.layer1 = nn.Linear(input_dim, 128)
+        self.layer2 = nn.Linear(128, 64)
+        self.layer3 = nn.Linear(64, num_classes)
+        self.dwt_layer = nn.Linear(dwt_input_dim, 128) if dwt_input_dim else None
+        self.dropout = nn.Dropout(0.5)
+        self.possible_labels = all_labels
+
+    def forward(self, x, dwt_x=None):
+        x = F.relu(self.layer1(x))
+        x = self.dropout(x)
+        if dwt_x is not None and self.dwt_layer:
+            dwt_x = F.relu(self.dwt_layer(dwt_x))
+            x += dwt_x
+        x = F.relu(self.layer2(x))
+        x = self.dropout(x)
+        x = F.softmax(self.layer3(x), dim=1)
+        return x
+
+    def train_model(self, dataset, epochs=100):
+        loss = None
+        entropies = [torch.tensor(d['entropies'], dtype=torch.float) for d in dataset]
+        labels = [torch.tensor([1 if l in d['label'] else 0 for l in self.possible_labels], dtype=torch.float) for d in
+                  dataset]
+        entropies = torch.stack(entropies)
+        labels = torch.stack(labels)
+        train_data = TensorDataset(entropies, labels)
+        train_loader = DataLoader(train_data, batch_size=64, shuffle=True)
+        criterion = nn.BCELoss()
+        optimizer = optim.Adam(self.parameters(), lr=0.001)
+
+        for epoch in range(epochs):
+            for batch_idx, (data, target) in enumerate(train_loader):
+                self.train()
+                optimizer.zero_grad()
+                output = self(data)
+                loss = criterion(output, target)
+                loss.backward()
+                optimizer.step()
+            print(f"Epoch {epoch + 1}, Loss: {loss.item()}")
+
+    def predict(self, entropies, dwt=None):
+        self.eval()
+        with torch.no_grad():
+            entropies = torch.tensor(entropies, dtype=torch.float).unsqueeze(0)
+            if dwt is not None and self.dwt_layer:
+                dwt = torch.tensor(dwt, dtype=torch.float).unsqueeze(0)
+            else:
+                dwt = None
+            output_ = self(entropies, dwt)
+            predicted_label_idx = torch.argmax(output_, dim=1).item()
+            return self.possible_labels[predicted_label_idx]
+
+
+def process_json(path, test_part, model_type="SimpleMLP"):
     with open(path, 'r') as f:
         metadata = json.load(f)
     dataset = []
 
+    i = -1
+    n = len(metadata)
     for entry in metadata:
-        entropies = [s['result'] for s in entry['entropy_results'] if s['method'] != 'dwt']
-        dwt_entropies = next((s['result'][:9] for s in entry['entropy_results'] if s['method'] == 'dwt'), None)
-        dataset.append({'entropies': entropies, 'dwt': dwt_entropies, 'label': entry['label']})
+        i += 1
+        if model_type == "ImageClassifier":
+            image_path = entry['path']
+            image = cv2.imread(image_path)
+            if image is None:
+                print(f"Could not read image at {image_path}")
+                continue
+            resized_image = cv2.resize(image, (224, 224))
+            resized_image = torch.tensor(resized_image, dtype=torch.float32).permute(2, 0, 1) / 255.0
+            dataset.append({'image': resized_image, 'label': entry['label']})
+        else:
+            entropies = [s['result'] for s in entry['entropy_results'] if s['method'] != 'dwt']
+            dwt_entropies = next((s['result'][:9] for s in entry['entropy_results'] if s['method'] == 'dwt'), None)
+            dataset.append({'entropies': entropies, 'dwt': dwt_entropies, 'label': entry['label']})
+        print_progress_bar('Processed entry', i, n)
 
-    i = int(test_part * len(dataset))
+    print(f"\nLength of dataset: {len(dataset)}")  # Debugging line
+
+    if isinstance(test_part, float):
+        i = int(test_part * len(dataset))
+    elif isinstance(test_part, str):
+        i = int(test_part)
+    else:
+        raise ValueError("Incompatible format for 'test_part'.")
+
     test_set = dataset[-i:]
     dataset = dataset[:-i]
 
-    input_dim = len(dataset[0]['entropies'])
-    dwt_input_dim = len(dataset[0]['dwt'])
+    if model_type != "ImageClassifier":
+        input_dim = len(dataset[0]['entropies'])
+        dwt_input_dim = len(dataset[0]['dwt'])
+    else:
+        input_dim = None
+        dwt_input_dim = None
+
     num_classes = len(all_labels)
 
     return dataset, test_set, input_dim, dwt_input_dim, num_classes
@@ -240,17 +331,24 @@ def evaluate_model(model, test_set):
           f"The model's success rate is: {stats['success_rate']}%")
 
 
-def main(model_type="SimpleMLP"):
-    path = "../processed/results/123.json"
-    test_part = 0.1
+def one_hot_encode(labels, all_labels_):
+    return [1 if label in labels else 0 for label in all_labels_]
 
-    dataset, test_set, input_dim, dwt_input_dim, num_classes = process_json(path, test_part)
+
+def main(model_type="SimpleMLP"):
+    path = "../processed/results/entropy_results.json"
+    test_part = 0.05
+
+    dataset, test_set, input_dim, dwt_input_dim, num_classes = process_json(path, test_part, model_type)
 
     if model_type == "SimpleMLP":
         model = SimpleMLP(input_dim, dwt_input_dim, num_classes)
         model.train_model(dataset, epochs=100)
     elif model_type == "Transformer":
         model = Classifier(num_classes)
+        model.train_model(dataset, epochs=100)
+    elif model_type == "ImageClassifier":
+        model = MultiLabelImageClassifier(num_classes)
         model.train_model(dataset, epochs=100)
     else:
         print("Invalid model type")
@@ -261,4 +359,4 @@ def main(model_type="SimpleMLP"):
 
 
 if __name__ == "__main__":
-    main(model_type="Transformer")  # Choose between "SimpleMLP" and "Transformer".
+    main(model_type="ImageClassifier")  # Choose one amongst ("SimpleMLP", "Transformer", "ImageClassifier").
