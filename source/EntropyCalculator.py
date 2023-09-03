@@ -54,7 +54,7 @@ class EntropyCalculator:
             image.entropyResults.append(temp)
 
     def get_norm(self, method, level, row=None, column=None):
-        if self.reset_norm:
+        if not self.reset_norm:
             return 1
         if row is not None:
             norm = self.ent_norm[method][level][row][column]
@@ -64,11 +64,16 @@ class EntropyCalculator:
 
     def entropy_gpu(self, Data, norm=1):
         Data = Data.abs()
+        result = []
         ent = 0
         if Data.dim() == 3:
-            if Data.size(-1) == 3:  # Check if the last dimension has 3 channels (RGB)
-                Data = torch.matmul(Data, self.color_weight_gpu.to(Data.dtype))
+            for i in range(3):
+                ent = self.entropy_each_channel(Data[i,:,:], norm=norm)
+                result.append(ent)
+            return result
+        return [self.entropy_each_channel(Data, norm=norm)]
 
+    def entropy_each_channel(self, Data, norm=1):
         total_sum = torch.sum(Data)
         if total_sum == 0:
             return 0

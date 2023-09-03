@@ -8,6 +8,7 @@ from pytorch_wavelets import DWTForward
 from skimage.segmentation import slic
 import torch
 import torch.nn.functional as F
+from PIL import Image as PILImage
 class Processor:
     def __init__(self, processing_methods_with_params=None, level=0):
         self.processing_methods_with_params = processing_methods_with_params
@@ -216,11 +217,9 @@ class Processor:
                 # Stack all three RGB channels
                 rgb_channels = sub_image[0:3, :, :]
 
-                # Normalize RGB channels to [0, 1] range
-                normalized_rgb_channels = rgb_channels / 255.0
 
                 # Flatten the normalized channels
-                rgb_channels_flat = normalized_rgb_channels.reshape(3, -1)
+                rgb_channels_flat = rgb_channels.reshape(3, -1)
 
                 # Calculate the 3D histogram
                 hist_3d = torch.histc(rgb_channels_flat, bins=256, min=0, max=1)

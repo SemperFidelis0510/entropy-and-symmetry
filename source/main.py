@@ -18,7 +18,7 @@ datasets = {'china': "../datasets/satellite/china",
             "test_satellite": "../datasets/classified_pictures/Agriculture/map_image_38.7904_ -99.2209_20230828191958.png",
             "noising": "../datasets/noising"}
 all_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
-                           'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
+                           'lbp': None, 'lbp_gabor': None, 'RGBCM': None, 'hist':None,
                            'dft': None, 'naive': None, 'dwt': {'wavelet': 'haar', 'level': 'all'}}
 channels = {
     "rgb": "rgb",
@@ -111,13 +111,14 @@ if __name__ == '__main__':
     # main()
     # reset_ent_norm()
     # test_and_analyze()
-    src_folder = '../datasets/classified_pictures'
-    dst_folder = '../processed/all_results_gpu'
+    src_folder = datasets['test_satellite']
+    dst_folder = '../processed/test2'
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
     processed_level = 0      # level, 0, 1, 2
     all_methods_with_params = {'laplace': None, 'joint_red_green': None, 'joint_all': None,
-                           'lbp': None, 'lbp_gabor': None, 'RGBCM': None, #'hist': None,
-                           'dft': None, 'naive': None}
+                               'lbp': None, 'lbp_gabor': None, 'RGBCM': None, 'hist': None,
+                               'dft': None, 'naive': None}
     main(dst_folder=dst_folder, src_folder=src_folder, max_queue_size=max_queue_size, 
-         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params=all_methods_with_params)
+         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={
+            'hist': None})
