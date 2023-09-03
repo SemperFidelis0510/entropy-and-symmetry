@@ -21,7 +21,7 @@ class Processor:
             elif method == 'naive':
                 image.processedData[method] = self.apply_naive(image)
             elif method == 'hist':
-                image.processedData[method] = self.apply_histogram(image.preprocessedData)
+                image.processedData[method] = self.apply_histogram(image)
             elif method == 'laplace':
                 image.processedData[method] = self.apply_laplacian(image)
             elif method == 'joint_red_green':
@@ -67,11 +67,10 @@ class Processor:
         for partition_row in partition_matrix:
             dft_row = []
             for sub_image in partition_row:
+                sub_image = self.apply_ycrcb(sub_image)
                 result = torch.empty_like(sub_image, dtype=torch.float64)
-
                 # Ensure the tensor is on the same device (GPU) as img
                 result = result.to(sub_image.device)
-
                 for i in range(sub_image.shape[0]):
                     channel_data = sub_image[i,:,:]
                     fft_result = torch.fft.fft2(channel_data)
@@ -89,14 +88,16 @@ class Processor:
         return result
 
     def compute_dwt(self, image, wavelet='db1', level=None):
-        #image = self.apply_ycrcb(ori_image)
+        image = self.apply_ycrcb(image)
         # Calculate the maximum number of decomposition levels
-        J_max = int(torch.floor(torch.log2(torch.min(torch.tensor([image.shape[1], image.shape[2]], dtype=torch.float32)))).item())
-
-        dwt = DWTForward(wave=wavelet, J=J_max).cuda()
+        if level is None:
+            J_level = 9 #int(torch.floor(torch.log2(torch.min(torch.tensor([image.shape[1], image.shape[2]], dtype=torch.float32)))).item())
+        else:
+            J_level = level
+        dwt = DWTForward(wave=wavelet, J=J_level).cuda()
 
         result = []
-        for i in range(image.shape[0]):  # Iterate over RGB channels
+        for i in range(image.shape[0]):  # Iterate over Y,Cb,Cr channels
             channel_image = image[i, :, :].unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
 
             # Calculate DWT using pytorch-wavelets
@@ -118,20 +119,24 @@ class Processor:
             for sub_image in partition_row:
                 # Assuming sub_image is a PyTorch tensor on GPU with shape (C, H, W)
 
+                # Scale the values to 0-15 range for right-shifting
+                scaled_sub_image = (sub_image * 15).to(torch.uint8)
+
                 # Reduce color resolution by right-shifting (in-place operation)
-                reduced_img_tensor = sub_image >> 4
+                reduced_img_tensor = scaled_sub_image >> 4
 
                 # Combine the reduced RGB values into a single integer
                 # Using bitwise operations directly on slices of the original tensor
-                flattened_img_tensor = (reduced_img_tensor[0] << 12) | (reduced_img_tensor[1] << 6) | \
-                                       reduced_img_tensor[2]
+                flattened_img_tensor = (reduced_img_tensor[0] << 8) | (reduced_img_tensor[1] << 4) | reduced_img_tensor[
+                    2]
 
                 # Create the histogram with fewer bins
-                bins_ = 64 ** 3
+                bins_per_channel = 64  # Number of bins per color channel
+                bins_total = bins_per_channel ** 3
 
                 # Flatten the tensor and calculate histogram
                 flattened_img_tensor = flattened_img_tensor.view(-1)
-                hist = torch.histc(flattened_img_tensor.float(), bins=bins_, min=0, max=bins_ - 1)
+                hist = torch.histc(flattened_img_tensor.float(), bins=bins_total, min=0, max=bins_total - 1)
                 hist_row.append(hist)
             hist_matrix.append(hist_row)
         return hist_matrix
@@ -180,6 +185,7 @@ class Processor:
         for partition_row in partition_matrix:
             rg_row = []
             for sub_image in partition_row:
+
                 red_channel, green_channel = sub_image[0, :, :], sub_image[1, :, :]
 
                 # Flatten the channels
@@ -207,27 +213,20 @@ class Processor:
         for partition_row in partition_matrix:
             processed_row = []
             for sub_image in partition_row:
-                # Assuming sub_image is a PyTorch tensor with shape [C, H, W] and is already on the GPU
+                # Stack all three RGB channels
+                rgb_channels = sub_image[0:3, :, :]
 
-                # Flatten and stack the color channels
-                rgb_flatten = torch.cat([sub_image[i, :, :].view(-1, 1) for i in range(3)], dim=1)
+                # Normalize RGB channels to [0, 1] range
+                normalized_rgb_channels = rgb_channels / 255.0
+
+                # Flatten the normalized channels
+                rgb_channels_flat = normalized_rgb_channels.reshape(3, -1)
 
                 # Calculate the 3D histogram
-                bins = 256
-                joint_histogram = torch.zeros((bins, bins, bins), device=sub_image.device)
-
-                # Use advanced indexing to update the histogram
-                for i in range(bins):
-                    mask_i = (rgb_flatten[:, 0] == i)
-                    for j in range(bins):
-                        mask_j = (rgb_flatten[:, 1] == j)
-                        for k in range(bins):
-                            mask_k = (rgb_flatten[:, 2] == k)
-                            joint_histogram[i, j, k] = torch.sum(mask_i & mask_j & mask_k)
+                hist_3d = torch.histc(rgb_channels_flat, bins=256, min=0, max=1)
 
                 # Calculate joint probabilities
-                joint_probabilities = joint_histogram / joint_histogram.sum()
-
+                joint_probabilities = hist_3d / hist_3d.sum()
                 processed_row.append(joint_probabilities)
             processed_matrix.append(processed_row)
         return processed_matrix
@@ -452,4 +451,4 @@ class Processor:
         y = torch.clamp((219 * y + 16), 16, 235)
         cb = torch.clamp((224 * cb + 128), 16, 240)
         cr = torch.clamp((224 * cr + 128), 16, 240)
-        return torch.stack([y, cb, cr], dim=-1)
+        return torch.stack([y, cb, cr], dim=-1).to(img.device)

@@ -14,7 +14,6 @@ class EntropyCalculator:
 
     def calculateEntropy(self, image: Image):
         for method, processedData in image.processedData.items():
-            temp = 0
             if method == 'adapt':
                 temp = []
                 for level, matrix in enumerate(processedData):
@@ -34,25 +33,13 @@ class EntropyCalculator:
                     norm = self.get_norm(method, level)
                     result = 0
                     for color in processedData:
-                        if level == 0:
+                        if level == 0: #approximation coefficient
                             data = color[level].flatten()
                         else:
                             data = color[1][level].flatten()
                         result += self.entropy_gpu(data, norm)
                     ent.append(result)
                 temp = ent
-            elif method == 'joint_all':
-                temp = []
-                for level, matrix in enumerate(processedData):
-                    ent_matrix = []
-                    for row_index, row in enumerate(matrix):
-                        ent_row = []
-                        for column_index, sub_image in enumerate(row):
-                            norm_value = self.get_norm(method, level, row_index, column_index)
-                            ent_value = self.entropy_gpu(sub_image, norm_value)
-                            ent_row.append(ent_value)
-                        ent_matrix.append(ent_row)
-                    temp.append(ent_matrix)
             else:
                 temp = []
                 for level, matrix in enumerate(processedData):
@@ -79,7 +66,7 @@ class EntropyCalculator:
         ent = 0
         if Data.dim() == 3:
             if Data.size(-1) == 3:  # Check if the last dimension has 3 channels (RGB)
-                Data = torch.matmul(Data, self.color_weight_gpu)
+                Data = torch.matmul(Data, self.color_weight_gpu.to(Data.dtype))
 
         total_sum = torch.sum(Data)
         if total_sum == 0:

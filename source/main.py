@@ -1,7 +1,3 @@
-import os.path
-import sys
-sys.path.append('/home/ubuntu/entropy-and-symmetry')
-
 from source.Preprocessor import Preprocessor
 from source.Processor import Processor
 from source.EntropyCalculator import EntropyCalculator
@@ -9,7 +5,6 @@ from source.DataSaver import DataSaver
 from source.PipelineManager import PipelineManager
 from source.SystemInitializer import SystemInitializer
 from source.ImageLoader import ImageLoader
-from datetime import datetime
 import warnings
 
 warnings.filterwarnings("ignore")
@@ -120,9 +115,10 @@ if __name__ == '__main__':
     dst_folder = '../processed/all_results_gpu'
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
-    processed_level = 2      # level, 0, 1, 2
+    processed_level = 0      # level, 0, 1, 2
     all_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
                            'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                            'dft': None, 'naive': None}
     main(dst_folder=dst_folder, src_folder=src_folder, max_queue_size=max_queue_size, 
-         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params=all_methods_with_params)
+         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={'joint_all': None
+            })
