@@ -126,6 +126,8 @@ class ImageViewer:
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
+        self.sorted_indices = None
+        self.json_data = None
         self.prob_data = []
         self.zoom_percent = 100
         self.is_fullscreen = False
@@ -391,7 +393,9 @@ class ImageViewer:
             return None
         
 
-    def entropy_calculation_complete(self):  # This method should be called once the entropy calculation is done
+    def entropy_calculation_complete(self, path):  # This method should be called once the entropy calculation is done
+        self.load_json_entropy_data(path)
+        self.rearrange_nparray()
         self.refresh_all_images(self.np_array)
         self.scroll_to_img_no()
         self.entropies_calculated = 1
@@ -510,6 +514,21 @@ class ImageViewer:
                 self.load_image_at_index(idx)
     
     
+    def load_json_entropy_data(self, path):
+        json_path = path + '/entropy_results.json'
+        # Load the JSON data
+        try:
+            with open(json_path, 'r') as file:
+                self.json_data = json.load(file)
+        except FileNotFoundError:
+            messagebox.showerror(f"Error: File not found at {json_path}")
+        except json.JSONDecodeError:
+            messagebox.showerror(f"Error: Unable to decode JSON from {json_path}")
+        except Exception as e:
+            messagebox.showerror(f"An unexpected error occurred: {e}")
+
+    
+    
     def on_combo_color_select(self, event=None):
         selected_color = self.combo.get()
         self.update_confirm_button_state()
@@ -538,7 +557,7 @@ class ImageViewer:
             return
         main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress, processed_level = 0)
         self.image_window.after(0, self.preprogress_window.destroy)
-        self.image_window.after(0, self.entropy_calculation_complete)
+        self.image_window.after(0, self.entropy_calculation_complete, folder_path)
         #self.image_window.after(0, self.progress_window.destroy)
     
     
@@ -587,6 +606,15 @@ class ImageViewer:
         canvas.draw()
 
 
+    def rearrange_nparray(self):
+        data = self.json_data
+        self.entropy = [item['entropy_results'][0]['result'][0][0][0] for item in data]
+        self.sorted_indices = list(np.argsort(self.entropy))
+    
+        # Rearrange the list based on sorted indices
+        self.np_array = [self.np_array[i] for i in self.sorted_indices]
+
+    
     def refresh_all_images(self, np_arrays):
         self.img_no=0
         self.initialize_all_images()
@@ -801,7 +829,7 @@ class ImageViewer:
         if self.entropies_calculated == 0:
             info_text = f"Try to calculate the entropy!"
         else:
-            info_text = f"Entropy: {self.entropies[self.img_no]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+            info_text = f"Entropy: {self.entropy[self.sorted_indices[self.img_no]]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
         self.status_bar.config(text=info_text)
 
     
