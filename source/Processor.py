@@ -330,6 +330,11 @@ class Processor:
         for level in range(self.level+1):
             results.append(self.compute_adaptive_estimation(image, level, num_segments))
         return results
+
+    def rgb_to_gray(self, rgb_image):
+        r, g, b = rgb_image[0], rgb_image[1], rgb_image[2]
+        gray_image = 0.2989 * r + 0.5870 * g + 0.1140 * b
+        return gray_image
     def compute_adaptive_estimation(self, image, level, num_segments):
         partition_matrix = self.partition_image(image.preprocessedData, 2**level)
         processed_matrix = []
@@ -337,13 +342,16 @@ class Processor:
             processed_row = []
             for sub_image in partition_row:
                 # Convert the image to grayscale if it's a color image
-                if sub_image.ndim == 3:
-                    gray_image = rgb2gray(sub_image)
+                if sub_image.dim() == 3:
+                    gray_image = self.rgb_to_gray(sub_image)
                 else:
                     gray_image = sub_image
 
+                # Convert gray_image tensor to numpy array on CPU for SLIC
+                gray_image_cpu = gray_image.cpu().numpy()
+
                 # Segment the image using SLIC
-                segments = slic(sub_image, n_segments=num_segments, compactness=10, sigma=1)
+                segments = slic(gray_image_cpu, n_segments=num_segments, compactness=10, sigma=1)
 
                 # Initialize list to store segment entropies
                 segment = []
@@ -353,8 +361,6 @@ class Processor:
                 for segment_idx in unique_segments:
                     segment_mask = (segments == segment_idx)
                     segment_region = gray_image[segment_mask]
-
-                    # Calculate the entropy of each segment using the Shannon entropy formula
                     hist, _ = np.histogram(segment_region, bins=256)
                     prob_dist = hist / hist.sum()
                     segment.append(prob_dist)
