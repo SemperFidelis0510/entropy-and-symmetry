@@ -16,7 +16,7 @@ warnings.filterwarnings("ignore")
 
 datasets = {'china': "../datasets/satellite/china",
             'usa': "../datasets/satellite/usa",
-            'argentina': "../datasets/satellite/argentina",
+            'argentina': "../datasets/satellite/dftargentina",
             'satellite': "../datasets/satellite",
             "classified": "../datasets/classified_pictures",
             "fix_noise": "../datasets/fixed_noise.bmp",
@@ -121,9 +121,8 @@ if __name__ == '__main__':
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
     processed_level = 2      # level, 0, 1, 2
-    all_methods_with_params = {'laplace': None, 'joint_red_green': None,
-                               'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
-                               'dft': None, 'naive': None}
+    all_methods_with_params = {'laplace': None, 'joint_red_green': None, #'joint_all': None,
+                           'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
+                           'dft': None, 'naive': None}
     main(dst_folder=dst_folder, src_folder=src_folder, max_queue_size=max_queue_size, 
-         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={
-            'hist': None})
+         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={'joint_all': None})

@@ -37,8 +37,8 @@ class EntropyCalculator:
                         if level == 0:
                             data = color[level].flatten()
                         else:
-                            data = np.array(color[level]).flatten()
-                        result += self.entropy(data, norm)
+                            data = color[1][level].flatten()
+                        result += self.entropy_gpu(data, norm)
                     ent.append(result)
                 temp = ent
             elif method == 'joint_all':
@@ -49,7 +49,7 @@ class EntropyCalculator:
                         ent_row = []
                         for column_index, sub_image in enumerate(row):
                             norm_value = self.get_norm(method, level, row_index, column_index)
-                            ent_value = self.entropy(sub_image, norm_value)
+                            ent_value = self.entropy_gpu(sub_image, norm_value)
                             ent_row.append(ent_value)
                         ent_matrix.append(ent_row)
                     temp.append(ent_matrix)

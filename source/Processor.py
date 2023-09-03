@@ -2,13 +2,12 @@ import numpy as np
 from source.Image import Image
 import pywt
 from skimage.color import rgb2gray
-from scipy.ndimage import convolve
 from skimage.feature import graycomatrix
 from skimage.feature import local_binary_pattern
-from scipy.signal import convolve2d
+from pytorch_wavelets import DWTForward
 from skimage.segmentation import slic
 import torch
-
+import torch.nn.functional as F
 class Processor:
     def __init__(self, processing_methods_with_params=None, level=0):
         self.processing_methods_with_params = processing_methods_with_params
@@ -91,11 +90,18 @@ class Processor:
 
     def compute_dwt(self, image, wavelet='db1', level=None):
         #image = self.apply_ycrcb(ori_image)
+        # Calculate the maximum number of decomposition levels
+        J_max = int(torch.floor(torch.log2(torch.min(torch.tensor([image.shape[1], image.shape[2]], dtype=torch.float32)))).item())
+
+        dwt = DWTForward(wave=wavelet, J=J_max).cuda()
 
         result = []
-        for i in range(image.shape[2]):
-            temp = pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)
-            result.append(temp)
+        for i in range(image.shape[0]):  # Iterate over RGB channels
+            channel_image = image[i, :, :].unsqueeze(0).unsqueeze(0)  # Add batch and channel dimensions
+
+            # Calculate DWT using pytorch-wavelets
+            Yl, Yh = dwt(channel_image)
+            result.append((Yl, Yh))
 
         return result
 
@@ -141,11 +147,24 @@ class Processor:
         for partition_row in partition_matrix:
             laplacian_row = []
             for sub_image in partition_row:
-                kernel = np.zeros((3, 3, 3))
+                # Create the kernel as a PyTorch tensor
+                kernel = torch.zeros(3, 3, 3)
                 kernel[1, 1, 1] = 6
                 kernel[1, 1, 0] = kernel[1, 1, 2] = kernel[1, 0, 1] = kernel[1, 2, 1] = kernel[0, 1, 1] = kernel[
-                    2, 1, 1] = -1  # Apply the convolution with the kernel
-                result = convolve(sub_image, kernel, mode='constant', cval=0.0)
+                    2, 1, 1] = -1
+
+                # Move the kernel to the same device as sub_image
+                kernel = kernel.to(sub_image.device)
+
+                # Add an extra batch dimension and an extra channel dimension to both the image and the kernel
+                sub_image = sub_image.unsqueeze(0).unsqueeze(0)  # Shape becomes [1, 1, C, H, W]
+                kernel = kernel.unsqueeze(0).unsqueeze(0)  # Shape becomes [1, 1, 3, 3, 3]
+
+                # Apply the 3D convolution
+                result = F.conv3d(sub_image, kernel, padding=1)
+
+                # Remove the extra dimensions
+                result = result.squeeze(0).squeeze(0)
                 laplacian_row.append(result)
             laplacian_matrix.append(laplacian_row)
         return laplacian_matrix
@@ -161,11 +180,15 @@ class Processor:
         for partition_row in partition_matrix:
             rg_row = []
             for sub_image in partition_row:
-                # Extract red and green channels from the image array
-                red_channel, green_channel = sub_image[:, :, 0], sub_image[:, :, 1]
+                red_channel, green_channel = sub_image[0, :, :], sub_image[1, :, :]
+
+                # Flatten the channels
+                red_channel_flat = red_channel.reshape(-1)
+                green_channel_flat = green_channel.reshape(-1)
 
                 # Calculate the 2D histogram
-                joint_histogram, _, _ = np.histogram2d(red_channel.ravel(), green_channel.ravel(), bins=256)
+                joint_histogram = torch.histc(torch.stack((red_channel_flat, green_channel_flat), dim=1), bins=256,
+                                              min=0, max=1)
 
                 # Calculate joint probabilities
                 joint_probabilities = joint_histogram / joint_histogram.sum()
@@ -184,20 +207,27 @@ class Processor:
         for partition_row in partition_matrix:
             processed_row = []
             for sub_image in partition_row:
+                # Assuming sub_image is a PyTorch tensor with shape [C, H, W] and is already on the GPU
+
                 # Flatten and stack the color channels
-                rgb_flatten = torch.cat([sub_image[:, :, i].view(-1, 1) for i in range(3)], dim=1)
+                rgb_flatten = torch.cat([sub_image[i, :, :].view(-1, 1) for i in range(3)], dim=1)
 
                 # Calculate the 3D histogram
                 bins = 256
-                joint_histogram = torch.zeros((bins, bins, bins))
+                joint_histogram = torch.zeros((bins, bins, bins), device=sub_image.device)
+
+                # Use advanced indexing to update the histogram
                 for i in range(bins):
+                    mask_i = (rgb_flatten[:, 0] == i)
                     for j in range(bins):
+                        mask_j = (rgb_flatten[:, 1] == j)
                         for k in range(bins):
-                            joint_histogram[i, j, k] = torch.sum(
-                                (rgb_flatten[:, 0] == i) & (rgb_flatten[:, 1] == j) & (rgb_flatten[:, 2] == k))
+                            mask_k = (rgb_flatten[:, 2] == k)
+                            joint_histogram[i, j, k] = torch.sum(mask_i & mask_j & mask_k)
 
                 # Calculate joint probabilities
                 joint_probabilities = joint_histogram / joint_histogram.sum()
+
                 processed_row.append(joint_probabilities)
             processed_matrix.append(processed_row)
         return processed_matrix
@@ -230,7 +260,7 @@ class Processor:
                 lbp_image = local_binary_pattern(gray_image.cpu().numpy(), n_points, radius, method='uniform')
 
                 # Convert to PyTorch tensor and move to GPU
-                lbp_image = torch.tensor(lbp_image, dtype=torch.float32).to('cuda')
+                lbp_image = torch.tensor(lbp_image, dtype=torch.float32).to(sub_image.device)
 
                 # Calculate histogram of LBP values
                 n_bins = int(n_points * (n_points - 1) / 2) + 2
@@ -257,30 +287,39 @@ class Processor:
         for partition_row in partition_matrix:
             tg_row = []
             for sub_image in partition_row:
-                # Convert the image to grayscale if it's a color image
-                if sub_image.ndim == 3 and sub_image.shape[-1] in [3, 4]:
-                    gray_image = 0.299 * sub_image[:, :, 0] + 0.587 * sub_image[:, :, 1] + 0.114 * sub_image[:, :, 2]
-                elif sub_image.ndim == 2 or (sub_image.ndim == 3 and sub_image.shape[-1] == 1):
-                    gray_image = sub_image.squeeze()
+                if sub_image.shape[0] in [3, 4]:
+                    gray_image = 0.299 * sub_image[0, :, :] + 0.587 * sub_image[1, :, :] + 0.114 * sub_image[2, :, :]
+                elif sub_image.shape[0] == 1:
+                    gray_image = sub_image.squeeze(0)
                 else:
                     raise ValueError("Input image should be either grayscale or RGB.")
 
-                # Define Gabor filter parameters
+                    # Define Gabor filter parameters
                 wavelength = 5.0
                 orientation = np.pi / 4
                 frequency = 1 / wavelength
                 sigma = 1.0
 
-                # Create Gabor filter
-                x, y = np.meshgrid(np.arange(-15, 16), np.arange(-15, 16))
-                gabor_real = np.exp(-0.5 * (x ** 2 + y ** 2) / (sigma ** 2)) * np.cos(
-                    2 * np.pi * frequency * (x * np.cos(orientation) + y * np.sin(orientation)))
+                # Create Gabor filter using PyTorch
+                x, y = torch.meshgrid(torch.arange(-15, 16).float().to(sub_image.device),
+                                      torch.arange(-15, 16).float().to(sub_image.device))
+                gabor_real = torch.exp(-0.5 * (x ** 2 + y ** 2) / (sigma ** 2)) * torch.cos(
+                    2 * np.pi * frequency * (
+                                x * torch.cos(torch.tensor(orientation, device=sub_image.device)) + y * torch.sin(
+                            torch.tensor(orientation, device=sub_image.device))))
 
-                # Apply Gabor filter
-                gabor_response = convolve2d(gray_image, gabor_real, mode='same', boundary='wrap')
+                # Add extra dimensions to the Gabor filter and the image for batch and channel
+                gabor_real = gabor_real.unsqueeze(0).unsqueeze(0)
+                gray_image = gray_image.unsqueeze(0).unsqueeze(0)
 
-                # Calculate histogram
-                hist, _ = np.histogram(gabor_response, bins=256, density=True)
+                # Apply Gabor filter using PyTorch's conv2d
+                gabor_response = F.conv2d(gray_image, gabor_real, padding=15)
+
+                # Remove extra dimensions
+                gabor_response = gabor_response.squeeze(0).squeeze(0)
+
+                # Calculate histogram using PyTorch
+                hist = torch.histc(gabor_response, bins=256, min=gabor_response.min(), max=gabor_response.max())
                 tg_row.append(hist)
             tg_matrix.append(tg_row)
         return tg_matrix
@@ -337,26 +376,33 @@ class Processor:
         for partition_row in partition_matrix:
             CM_row = []
             for sub_image in partition_row:
-                distances = [1]  # Distance between pixels for co-occurrence
-                angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]  # Angles for co-occurrence (in radians)
-                levels = 256  # Number of intensity levels in the image
+                # Assuming sub_image is a PyTorch tensor with shape [C, H, W] and is already on the GPU
+
+                # Initialize parameters
+                distances = [1]
+                angles = [0, np.pi / 4, np.pi / 2, 3 * np.pi / 4]
+                levels = 256
 
                 # Initialize array for co-occurrence matrices
-                co_occurrence_array = np.zeros((levels, levels, 3))
+                co_occurrence_array = torch.zeros((levels, levels, 3), device=sub_image.device)
+
+                # Move tensor to CPU for GLCM calculation
+                sub_image_cpu = sub_image.cpu().numpy()
 
                 for channel in range(3):  # Iterate over RGB channels
-                    channel_image = sub_image[:, :, channel]
+                    channel_image = sub_image_cpu[channel, :, :]
 
                     # Ensure it's in 8-bit integer type
                     gray_image = (channel_image * 255).astype(np.uint8)
 
-                    # Calculate GLCM
+                    # Calculate GLCM using scikit-image
                     glcm = graycomatrix(gray_image, distances=distances, angles=angles, levels=levels, symmetric=False,
                                         normed=True)
 
                     for angle_idx in range(len(angles)):
                         # Accumulate co-occurrence matrices
-                        co_occurrence_array[:, :, channel] += glcm[:, :, 0, angle_idx]
+                        co_occurrence_array[:, :, channel] += torch.tensor(glcm[:, :, 0, angle_idx],
+                                                                           device=sub_image.device)
 
                     # Normalize the accumulated co-occurrence matrix for each channel
                     co_occurrence_array[:, :, channel] /= len(angles)
