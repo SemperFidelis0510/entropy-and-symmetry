@@ -11,7 +11,6 @@ from tkinter import *
 from tkinter import filedialog, messagebox, ttk
 from tkinter.messagebox import askyesno
 import numpy as np
-import plotnine
 
 from PIL import ImageTk, Image
 sys.path.append('./')
