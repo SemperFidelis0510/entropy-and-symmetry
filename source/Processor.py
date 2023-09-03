@@ -7,7 +7,7 @@ from skimage.feature import graycomatrix
 from skimage.feature import local_binary_pattern
 from scipy.signal import convolve2d
 from skimage.segmentation import slic
-
+import torch
 
 class Processor:
     def __init__(self, processing_methods_with_params=None, level=0):
@@ -68,11 +68,16 @@ class Processor:
         for partition_row in partition_matrix:
             dft_row = []
             for sub_image in partition_row:
-                    img = self.apply_ycrcb(sub_image)
-                    result = np.empty_like(img, dtype=np.float64)
-                    for i in range(img.shape[2]):
-                        result[:, :, i] = np.abs(np.fft.fft2(img[:, :, i]))
-                    dft_row.append(result)
+                result = torch.empty_like(sub_image, dtype=torch.float64)
+
+                # Ensure the tensor is on the same device (GPU) as img
+                result = result.to(sub_image.device)
+
+                for i in range(sub_image.shape[0]):
+                    channel_data = sub_image[i,:,:]
+                    fft_result = torch.fft.fft2(channel_data)
+                    result[i,:,:] = torch.abs(fft_result)
+                dft_row.append(result)
             dft_matrix.append(dft_row)
         return dft_matrix
 
@@ -84,31 +89,15 @@ class Processor:
             result = self.compute_dwt(image, wavelet=wavelet, level=None)
         return result
 
-    def compute_dwt(self, ori_image, wavelet='db1', level=None):
-        image = self.apply_ycrcb(ori_image)
-        rank = image.ndim
+    def compute_dwt(self, image, wavelet='db1', level=None):
+        #image = self.apply_ycrcb(ori_image)
 
-        # Handle 1D arrays
-        if rank == 1:
-            w_transform = pywt.wavedec(image, wavelet=wavelet, level=level)
-            return np.abs(w_transform[level])
+        result = []
+        for i in range(image.shape[2]):
+            temp = pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)
+            result.append(temp)
 
-        # Handle 2D arrays
-        elif rank == 2:
-            w_transform = pywt.wavedec2(image, wavelet=wavelet, level=level)
-            return np.abs(w_transform[level])
-
-        # Handle 3D arrays
-        elif rank == 3:
-            result = []
-            for i in range(image.shape[2]):
-                temp = pywt.wavedec2(image[:, :, i], wavelet=wavelet, level=level)
-                result.append(temp)
-
-            return result
-
-        else:
-            raise ValueError("Array must be 1D, 2D, or 3D")
+        return result
 
     def apply_histogram(self, image):
         results = []
@@ -121,14 +110,22 @@ class Processor:
         for partition_row in partition_matrix:
             hist_row = []
             for sub_image in partition_row:
-                sub_image = sub_image.astype(np.uint32)  # Convert to an integer type
-                # Reduce color resolution by right-shifting
-                reduced_img_arr = sub_image >> 4
+                # Assuming sub_image is a PyTorch tensor on GPU with shape (C, H, W)
+
+                # Reduce color resolution by right-shifting (in-place operation)
+                reduced_img_tensor = sub_image >> 4
+
                 # Combine the reduced RGB values into a single integer
-                flattened_img_arr = (reduced_img_arr[:, :, 0] << 12) + (reduced_img_arr[:, :, 1] << 6) + reduced_img_arr[:, :, 2]
+                # Using bitwise operations directly on slices of the original tensor
+                flattened_img_tensor = (reduced_img_tensor[0] << 12) | (reduced_img_tensor[1] << 6) | \
+                                       reduced_img_tensor[2]
+
                 # Create the histogram with fewer bins
                 bins_ = 64 ** 3
-                hist, _ = np.histogram(flattened_img_arr, bins=bins_, range=(0, bins_ - 1))
+
+                # Flatten the tensor and calculate histogram
+                flattened_img_tensor = flattened_img_tensor.view(-1)
+                hist = torch.histc(flattened_img_tensor.float(), bins=bins_, min=0, max=bins_ - 1)
                 hist_row.append(hist)
             hist_matrix.append(hist_row)
         return hist_matrix
@@ -182,15 +179,23 @@ class Processor:
             results.append(self.compute_joint_RGB(image, level))
         return results
     def compute_joint_RGB(self, image, level):
-        partition_matrix = self.partition_image(image.preprocessedData, 2**level)
+        partition_matrix = self.partition_image(torch.tensor(image.preprocessedData), 2**level)
         processed_matrix = []
         for partition_row in partition_matrix:
             processed_row = []
             for sub_image in partition_row:
                 # Flatten and stack the color channels
-                rgb_flatten = np.vstack([sub_image[:, :, i].ravel() for i in range(3)]).T
+                rgb_flatten = torch.cat([sub_image[:, :, i].view(-1, 1) for i in range(3)], dim=1)
+
                 # Calculate the 3D histogram
-                joint_histogram, _ = np.histogramdd(rgb_flatten, bins=256, range=[[0, 256], [0, 256], [0, 256]])
+                bins = 256
+                joint_histogram = torch.zeros((bins, bins, bins))
+                for i in range(bins):
+                    for j in range(bins):
+                        for k in range(bins):
+                            joint_histogram[i, j, k] = torch.sum(
+                                (rgb_flatten[:, 0] == i) & (rgb_flatten[:, 1] == j) & (rgb_flatten[:, 2] == k))
+
                 # Calculate joint probabilities
                 joint_probabilities = joint_histogram / joint_histogram.sum()
                 processed_row.append(joint_probabilities)
@@ -208,9 +213,9 @@ class Processor:
             texture_row = []
             for sub_image in partition_row:
                 # Convert the image to grayscale if it's a color image
-                if sub_image.ndim == 3 and sub_image.shape[-1] == 3:
-                    gray_image = rgb2gray(sub_image)
-                elif sub_image.ndim == 2 or (sub_image.ndim == 3 and sub_image.shape[-1] == 1):
+                if sub_image.ndim == 3 and sub_image.shape[0] == 3:
+                    gray_image = torch.einsum('kij,k->ij', sub_image, torch.tensor([0.2989, 0.5870, 0.1140]).to(sub_image.device))
+                elif sub_image.ndim == 2 or (sub_image.ndim == 3 and sub_image.shape[0] == 1):
                     gray_image = sub_image.squeeze()
                 else:
                     raise ValueError("Input image should be either grayscale or RGB.")
@@ -222,15 +227,18 @@ class Processor:
                 # Apply Local Binary Pattern (LBP) to extract texture features
                 radius = 1
                 n_points = 8 * radius
-                lbp_image = local_binary_pattern(gray_image, n_points, radius, method='uniform')
+                lbp_image = local_binary_pattern(gray_image.cpu().numpy(), n_points, radius, method='uniform')
+
+                # Convert to PyTorch tensor and move to GPU
+                lbp_image = torch.tensor(lbp_image, dtype=torch.float32).to('cuda')
 
                 # Calculate histogram of LBP values
                 n_bins = int(n_points * (n_points - 1) / 2) + 2
-                hist, _ = np.histogram(lbp_image, bins=n_bins, range=(0, n_bins))
+                hist = torch.histc(lbp_image, bins=n_bins, min=0, max=n_bins)
 
                 # Normalize histogram
-                hist = hist.astype("float")
-                hist /= (hist.sum() + np.finfo(float).eps)
+                hist = hist.float()
+                hist /= (hist.sum() + torch.finfo(torch.float32).eps)
                 texture_row.append(hist)
             texture_matrix.append(texture_row)
         return texture_matrix
@@ -356,14 +364,10 @@ class Processor:
             CM_matrix.append(CM_row)
         return CM_matrix
 
-
     def partition_image(self, image, partition):
-        """
-        Returns:
-            list: A 2D list (matrix) where each element is a sub-image.
-        """
         # Get the shape of the image
-        height, width, _ = image.shape
+        height = image.shape[1]
+        width = image.shape[2]
         # Calculate the size of each partition
         partition_height = height // partition
         partition_width = width // partition
@@ -377,28 +381,29 @@ class Processor:
             row = []
             for j in range(0, width-width_left, partition_width):
                 if j//partition_width==partition - 1:
-                    sub_image = image[i:i + partition_height, j:]
+                    sub_image = image[:, i:i + partition_height, j:]
                 elif i//partition_height==partition-1:
-                    sub_image = image[i:, j:j + partition_width]
+                    sub_image = image[:, i:, j:j + partition_width]
                 else:
                     # Extract the sub-image
-                    sub_image = image[i:i + partition_height, j:j + partition_width]
+                    sub_image = image[:, i:i + partition_height, j:j + partition_width]
                 row.append(sub_image)
             result.append(row)
 
         return result
+
     def apply_ycrcb(self, img):
         kR = 0.299
         kG = 0.587
         kB = 0.114
-        R = img[..., 0]
-        G = img[..., 1]
-        B = img[..., 2]
+        R = img[0, :, :]
+        G = img[1, :, :]
+        B = img[2, :, :]
         y = kR * R + kG * G + kB * B
         cb = (-kR / (2 * (1 - kB))) * R + (-kG / (2 * (1 - kB))) * G + 1 / 2 * B
         cr = 1 / 2 * R + (-kG / (2 * (1 - kR))) * G + (-kB / (2 * (1 - kR))) * B
         # Scale and shift to 8-bit integer values
-        y = np.clip((219 * y + 16), 16, 235).astype(np.uint8)
-        cb = np.clip((224 * cb + 128), 16, 240).astype(np.uint8)
-        cr = np.clip((224 * cr + 128), 16, 240).astype(np.uint8)
-        return np.stack([y, cb, cr], axis=-1)
+        y = torch.clamp((219 * y + 16), 16, 235)
+        cb = torch.clamp((224 * cb + 128), 16, 240)
+        cr = torch.clamp((224 * cr + 128), 16, 240)
+        return torch.stack([y, cb, cr], dim=-1)

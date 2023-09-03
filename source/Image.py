@@ -9,5 +9,5 @@ class Image:
         self.processedData = {}
         self.entropyResults = []
         self.size = os.path.getsize(path)
-        self.pixel_size = rawData.size
+        self.pixel_size = (self.rawData.size(1), self.rawData.size(2))
         self.index = index

@@ -13,3 +13,5 @@ shapely
 torch
 tqdm
 plotnine
+torchvision
+pytorch_wavelets

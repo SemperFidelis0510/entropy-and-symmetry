@@ -3,7 +3,6 @@ import platform
 import os
 import subprocess
 
-
 def print_progress_bar(text, iteration, total, start_time=None, length=50):
     percent = "{0:.1f}".format(100 * (iteration / float(total)))
     filled_length = int(length * iteration // total)
@@ -28,3 +27,4 @@ def open_folder(destination):
         subprocess.run(['open', os.path.join(os.getcwd(), destination)])
     else:
         print(f"Unsupported OS: {platform.system()}")
+

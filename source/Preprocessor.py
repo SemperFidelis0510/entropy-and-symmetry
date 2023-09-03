@@ -8,14 +8,21 @@ class Preprocessor:
         self.channels = channels
     def applyPreprocessing(self, image_object: Image):
         if self.crop_size is None:
-            self.crop_size = min(image_object.rawData.size)
-        cropped = image_object.rawData.crop((0, 0, self.crop_size, self.crop_size))
-        img_arr = np.array(cropped)
-        if img_arr.shape[2] == 4:
-            img_arr = img_arr[:, :, :-1]
-        elif img_arr.ndim == 2:
-            img_arr = np.stack([img_arr] * 3, axis=-1)
-        image_object.preprocessedData = img_arr
+            self.crop_size = min(image_object.rawData.size(-2),
+                                 image_object.rawData.size(-1))  # Assuming shape is (C, H, W)
+
+            # Cropping using PyTorch, assuming shape is (C, H, W)
+        cropped = image_object.rawData[:, :self.crop_size, :self.crop_size]
+
+        # If the tensor has 4 channels, remove the last one
+        if cropped.size(0) == 4:
+            cropped = cropped[:3, :, :]
+
+        # If the tensor is grayscale (1 channel), repeat it to make it 3 channels
+        elif cropped.size(0) == 1:
+            cropped = cropped.repeat(3, 1, 1)
+
+        image_object.preprocessedData = cropped
 
     def change_channels(self, img):
         match self.channels:

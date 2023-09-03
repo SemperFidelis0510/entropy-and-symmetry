@@ -1,10 +1,12 @@
 import numpy as np
 from source.Image import Image
 import json
-
+import torch
 
 class EntropyCalculator:
     def __init__(self, color_weight = None, ent_norm_path = None, reset_norm = False):
+        self.color_weight_gpu = torch.tensor(
+            [0.299, 0.587, 0.114]).cuda()  # Assuming you want to use the same weights and move them to GPU
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
         self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
         self.reset_norm = reset_norm
@@ -46,8 +48,9 @@ class EntropyCalculator:
                     for row_index, row in enumerate(matrix):
                         ent_row = []
                         for column_index, sub_image in enumerate(row):
-                            sub_image = sub_image/np.sum(sub_image)
-                            ent_row.append(-np.sum(sub_image * np.log2(sub_image + np.finfo(float).eps)) / self.get_norm(method, level, row_index, column_index))
+                            norm_value = self.get_norm(method, level, row_index, column_index)
+                            ent_value = self.entropy(sub_image, norm_value)
+                            ent_row.append(ent_value)
                         ent_matrix.append(ent_row)
                     temp.append(ent_matrix)
             else:
@@ -57,7 +60,7 @@ class EntropyCalculator:
                     for row_index, row in enumerate(matrix):
                         ent_row = []
                         for column_index, sub_image in enumerate(row):
-                          ent_row.append(self.entropy(sub_image, self.get_norm(method, level, row_index, column_index)))
+                          ent_row.append(self.entropy_gpu(sub_image, self.get_norm(method, level, row_index, column_index)))
                         ent_matrix.append(ent_row)
                     temp.append(ent_matrix)
             image.entropyResults.append(temp)
@@ -70,6 +73,23 @@ class EntropyCalculator:
         else: # dwt
             norm = self.ent_norm[method][level]
         return norm
+
+    def entropy_gpu(self, Data, norm=1):
+        Data = Data.abs()
+        ent = 0
+        if Data.dim() == 3:
+            if Data.size(-1) == 3:  # Check if the last dimension has 3 channels (RGB)
+                Data = torch.matmul(Data, self.color_weight_gpu)
+
+        total_sum = torch.sum(Data)
+        if total_sum == 0:
+            return 0
+
+        normalize_arr = Data / total_sum
+        ent = -torch.sum(normalize_arr * torch.log2(normalize_arr + torch.finfo(torch.float32).eps))
+        ent = ent/norm
+        ent = ent.cpu()
+        return ent.item()
 
     def entropy(self, Data, norm=1):
         arr = np.abs(Data)

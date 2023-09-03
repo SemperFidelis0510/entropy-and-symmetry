@@ -2,6 +2,7 @@ import os
 import json
 import logging
 from source.Logger import Logger
+import torch
 class SystemInitializer(Logger):
     def __init__(self, src_folder, dst_folder, image_format=('png', 'bmp'),
                  head=None, single_batch_size=300, max_queue_size=30, preprocess_channels='rgb',
@@ -20,6 +21,7 @@ class SystemInitializer(Logger):
         self.set_logger()
         self.preprocessed_channels = preprocess_channels
         self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
+        self.run_device = "gpu" if torch.cuda.is_available() else "cpu"
     def initSystemState(self):
         self.get_all_data_paths()
         self.get_already_processed_paths()
@@ -76,7 +78,7 @@ class SystemInitializer(Logger):
         print(f' * Total Batch: {self.total_batch}')
         print(f' * Single Batch Size: {self.single_batch_size}')
         print(f' * Auto Save: for every {self.max_queue_size}')
-        print(f' * Preprocessed Channels: {self.preprocessed_channels}')
+        print(f' * Run on: {self.run_device}')
         print(f' * Entropy norm path: {self.ent_norm_path}')
         print(f' * Output folder: {self.dst_folder}')
 
@@ -89,7 +91,7 @@ class SystemInitializer(Logger):
         self.log_message(f' * Total Batch: {self.total_batch}')
         self.log_message(f' * Single Batch Size: {self.single_batch_size}')
         self.log_message(f' * Auto Save: for every {self.max_queue_size}')
-        self.log_message(f' * Preprocessed Channels: {self.preprocessed_channels}')
+        self.log_message(f' * Run on: {self.run_device}')
         self.log_message(f' * Entropy norm path: {self.ent_norm_path}')
         self.log_message(f' * Output folder: {self.dst_folder}')
 

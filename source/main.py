@@ -1,7 +1,6 @@
 import os.path
 import sys
-sys.path.append('/home/ec2-user/SageMaker/entropy-and-symmetry')
-
+sys.path.append('/home/ubuntu/entropy-and-symmetry')
 
 from source.Preprocessor import Preprocessor
 from source.Processor import Processor
@@ -122,5 +121,9 @@ if __name__ == '__main__':
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
     processed_level = 2      # level, 0, 1, 2
+    all_methods_with_params = {'laplace': None, 'joint_red_green': None,
+                               'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
+                               'dft': None, 'naive': None}
     main(dst_folder=dst_folder, src_folder=src_folder, max_queue_size=max_queue_size, 
-         single_batch_size=single_batch_size, processed_level=processed_level)
+         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={
+            'hist': None})
