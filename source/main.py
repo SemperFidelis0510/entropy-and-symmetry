@@ -117,7 +117,7 @@ if __name__ == '__main__':
     # reset_ent_norm()
     # test_and_analyze()
     src_folder = '../datasets/classified_pictures'
-    dst_folder = '../processed/all_results'
+    dst_folder = '../processed/all_results_gpu'
     max_queue_size = 4      # For every how many results will be saved to disk
     single_batch_size = 100 # How many image in process for each batch
     processed_level = 2      # level, 0, 1, 2
@@ -125,4 +125,4 @@ if __name__ == '__main__':
                            'lbp': None, 'lbp_gabor': None, 'RGBCM': None,
                            'dft': None, 'naive': None}
     main(dst_folder=dst_folder, src_folder=src_folder, max_queue_size=max_queue_size, 
-         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params={'joint_all': None})
+         single_batch_size=single_batch_size, processed_level=processed_level, process_methods_with_params=all_methods_with_params)
