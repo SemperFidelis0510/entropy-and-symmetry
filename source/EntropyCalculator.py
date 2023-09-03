@@ -5,8 +5,9 @@ import torch
 
 class EntropyCalculator:
     def __init__(self, color_weight = None, ent_norm_path = None, reset_norm = False):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.color_weight_gpu = torch.tensor(
-            [0.299, 0.587, 0.114]).cuda()  # Assuming you want to use the same weights and move them to GPU
+            [0.299, 0.587, 0.114]).to(self.device)  # Assuming you want to use the same weights and move them to GPU
         self.color_weight = color_weight or (0.2989, 0.5870, 0.1140)
         self.ent_norm_path = ent_norm_path or '../source/data/entropy_results.json'
         self.reset_norm = reset_norm
