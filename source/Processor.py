@@ -121,7 +121,7 @@ class Processor:
                 # Assuming sub_image is a PyTorch tensor on GPU with shape (C, H, W)
 
                 # Scale the values to 0-15 range for right-shifting
-                scaled_sub_image = (sub_image * 15).to(torch.uint8)
+                scaled_sub_image = (sub_image * 255).to(torch.uint8)
 
                 # Reduce color resolution by right-shifting (in-place operation)
                 reduced_img_tensor = scaled_sub_image >> 4
@@ -456,4 +456,4 @@ class Processor:
         y = torch.clamp((219 * y + 16), 16, 235)
         cb = torch.clamp((224 * cb + 128), 16, 240)
         cr = torch.clamp((224 * cr + 128), 16, 240)
-        return torch.stack([y, cb, cr], dim=-1).to(img.device)
+        return torch.stack([y, cb, cr]).to(img.device)
