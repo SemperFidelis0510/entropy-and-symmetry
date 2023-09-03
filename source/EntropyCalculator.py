@@ -15,7 +15,6 @@ class EntropyCalculator:
 
     def calculateEntropy(self, image: Image):
         for method, processedData in image.processedData.items():
-            temp = 0
             if method == 'adapt':
                 temp = []
                 for level, matrix in enumerate(processedData):
@@ -25,35 +24,26 @@ class EntropyCalculator:
                         for column_index, sub_image in enumerate(row):
                             segment_entropies = []
                             for segment in sub_image:
-                                segment_entropies.append(self.entropy(segment, self.get_norm(method, level, row_index, column_index)))
+                                segment_entropies.append(self.entropy_gpu(segment, self.get_norm(method, level, row_index, column_index)))
                             ent_row.append(np.mean(segment_entropies))
                         ent_matrix.append(ent_row)
                     temp.append(ent_matrix)
             elif method == 'dwt':
                 ent = []
-                for level in range(len(processedData[0])):
-                    norm = self.get_norm(method, level)
+                for level in range(10):
+                    if self.reset_norm:
+                        norm = 1
+                    else:
+                        norm = self.get_norm(method, level)
                     result = 0
                     for color in processedData:
-                        if level == 0:
+                        if level == 0: #approximation coefficient
                             data = color[level].flatten()
                         else:
-                            data = color[1][level].flatten()
-                        result += self.entropy_gpu(data, norm)
+                            data = color[1][::-1][level-1].flatten()
+                        result += self.entropy_each_channel(data, norm)
                     ent.append(result)
                 temp = ent
-            elif method == 'joint_all':
-                temp = []
-                for level, matrix in enumerate(processedData):
-                    ent_matrix = []
-                    for row_index, row in enumerate(matrix):
-                        ent_row = []
-                        for column_index, sub_image in enumerate(row):
-                            norm_value = self.get_norm(method, level, row_index, column_index)
-                            ent_value = self.entropy_gpu(sub_image, norm_value)
-                            ent_row.append(ent_value)
-                        ent_matrix.append(ent_row)
-                    temp.append(ent_matrix)
             else:
                 temp = []
                 for level, matrix in enumerate(processedData):
@@ -68,7 +58,7 @@ class EntropyCalculator:
 
     def get_norm(self, method, level, row=None, column=None):
         if self.reset_norm:
-            return 1
+            return [1]*3
         if row is not None:
             norm = self.ent_norm[method][level][row][column]
         else: # dwt
@@ -76,12 +66,17 @@ class EntropyCalculator:
         return norm
 
     def entropy_gpu(self, Data, norm=1):
-        Data = Data.abs()
+        result = []
         ent = 0
         if Data.dim() == 3:
-            if Data.size(-1) == 3:  # Check if the last dimension has 3 channels (RGB)
-                Data = torch.matmul(Data, self.color_weight_gpu)
+            for i in range(3):
+                ent = self.entropy_each_channel(Data[i,:,:], norm=norm[i])
+                result.append(ent)
+            return result
+        return [self.entropy_each_channel(Data, norm=norm[0])]
 
+    def entropy_each_channel(self, Data, norm=1):
+        Data = Data.abs()
         total_sum = torch.sum(Data)
         if total_sum == 0:
             return 0
@@ -91,19 +86,6 @@ class EntropyCalculator:
         ent = ent/norm
         ent = ent.cpu()
         return ent.item()
-
-    def entropy(self, Data, norm=1):
-        arr = np.abs(Data)
-        ent = 0
-        if arr.ndim == 3:
-            if arr.shape[-1] == 3:  # Check if the last dimension has 3 channels (RGB)
-                arr = np.dot(arr, self.color_weight)
-        total_sum = np.sum(arr)
-        if total_sum == 0:
-            return 0
-        normalize_arr = arr / total_sum
-        ent = -np.sum(normalize_arr * np.log2(normalize_arr + np.finfo(float).eps))
-        return ent / norm
 
     def get_ent_norm(self):
         if self.reset_norm:
