@@ -124,6 +124,7 @@ class ImageViewer:
         self.img_ent_data = None
         self.initialize_all_images()
         self.img_no = 0
+        self.flattened_entropy = None
         self.sorted_indices = None
         self.json_data = None
         self.prob_data = []
@@ -627,8 +628,8 @@ class ImageViewer:
         data = self.json_data
         self.entropy = [item['entropy_results'][0]['result'][0][0][0] for item in data]
     
-        flattened_entropy = [item[0] for item in self.entropy]
-        self.sorted_indices = np.argsort(flattened_entropy)
+        self.flattened_entropy = [np.sum(item) for item in self.entropy]
+        self.sorted_indices = np.argsort(self.flattened_entropy)
 
         # Rearrange the list based on sorted indices
         self.np_array = [self.np_array[i] for i in self.sorted_indices]
@@ -849,7 +850,7 @@ class ImageViewer:
         if self.entropies_calculated == 0:
             info_text = f"Try to calculate the entropy!"
         else:
-            info_text = f"Entropy: {self.entropy[self.sorted_indices[self.img_no]]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+            info_text = f"Entropy: {self.flattened_entropy[self.sorted_indices[self.img_no]]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
         self.status_bar.config(text=info_text)
 
     

@@ -63,7 +63,7 @@ class EntropyCalculator:
             norm = self.ent_norm[method][level][row][column]
         else: # dwt
             norm = self.ent_norm[method][level]
-        return norm
+        return [1]*3#norm
 
     def entropy_gpu(self, Data, norm=1):
         result = []

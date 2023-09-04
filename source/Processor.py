@@ -52,8 +52,8 @@ class Processor:
         processed_matrix = []
         for partition_row in partition_matrix:
             processed_row = []
-            for sub_image in partition_row:
-                img = self.apply_ycrcb(sub_image)
+            for img in partition_row:
+                #img = self.apply_ycrcb(sub_image)
                 processed_row.append(img)
             processed_matrix.append(processed_row)
         return processed_matrix
