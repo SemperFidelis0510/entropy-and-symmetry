@@ -24,10 +24,9 @@ CONFIG_FILE = "settings.json"
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif', '.gif')
 
 ENTROPY_METHODS = [
-    'lbp',
-    'lbp_gabor',
-    'adapt',
-    'RGBCM'
+    'laplace', 'joint_red_green', 'joint_all',
+                           'lbp', 'lbp_gabor', 'RGBCM', 'hist',
+                           'dft', 'naive'
 ]
 
 COLOR_OPTIONS = ['rgb', 'hsb', 'YCbCr', 'greyscale']
