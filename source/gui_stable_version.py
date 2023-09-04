@@ -608,10 +608,13 @@ class ImageViewer:
     def rearrange_nparray(self):
         data = self.json_data
         self.entropy = [item['entropy_results'][0]['result'][0][0][0] for item in data]
-        self.sorted_indices = list(np.argsort(self.entropy))
     
+        flattened_entropy = [item[0] for item in self.entropy]
+        self.sorted_indices = np.argsort(flattened_entropy)
+
         # Rearrange the list based on sorted indices
         self.np_array = [self.np_array[i] for i in self.sorted_indices]
+
 
     
     def refresh_all_images(self, np_arrays):
