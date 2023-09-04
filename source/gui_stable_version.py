@@ -556,19 +556,26 @@ class ImageViewer:
         method = {self.combo.get(): None}
         #selected_color = self.combo_color.get()
         #self.start_entropy_calculation()
-        save_directory = self.default_save_directory
-        if not save_directory or not os.path.exists(save_directory):
+        method_key = self.combo.get()
+        
+        default_directory = self.default_save_directory
+        if not default_directory or not os.path.exists(default_directory):
             # If there's no default directory in the settings or it doesn't exist, ask the user
-            folder_path = filedialog.askdirectory()
+            save_folder_path = filedialog.askdirectory()
         else:
-            folder_path = save_directory
+            save_folder_path = default_directory
+
+        save_directory = os.path.join(save_folder_path, method_key)
+
+        if not os.path.exists(save_directory):
+            os.mkdir(save_directory)
 
         # Check if a valid directory was chosen or retrieved from the settings
-        if not folder_path:
+        if not save_directory:
             return
-        main_gui(folder_path, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress, processed_level = 0)
+        main_gui(save_directory, self.directory, method, None , 50*50, 1000, callback=self.update_preprogress, processed_level = 0)
         self.image_window.after(0, self.preprogress_window.destroy)
-        self.image_window.after(0, self.entropy_calculation_complete, folder_path)
+        self.image_window.after(0, self.entropy_calculation_complete, save_directory)
         #self.image_window.after(0, self.progress_window.destroy)
     
     
