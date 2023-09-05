@@ -334,16 +334,18 @@ class ImageViewer:
 
 
     def create_thumbnail_frame(self):
+        self.thumbnail_buttons = []  # Add this line to initialize the list
+
         if self.os_name == 'Darwin':
             gap = 8
         if self.os_name == 'Linux':
             gap = 6
         if self.os_name == 'Windows':
             gap = 6
-        thumbnail_size = 60  # assume thumbnail size is 60
+        thumbnail_size = 60
         columns = 5
         frame_width = columns * thumbnail_size + (columns) * gap
-    
+
         frame_thumbnails_container = Frame(self.image_window, width=frame_width)
         frame_thumbnails_container.grid(row=0, column=0, rowspan=3, sticky="ns")
         frame_thumbnails_container.grid_propagate(False)
@@ -352,10 +354,9 @@ class ImageViewer:
         self.canvas_thumbnails.pack(side=LEFT, fill=BOTH, expand=True)
         scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
         scrollbar.config(command=self.on_scroll)
-
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
-    
+
         rows_required = (len(self.np_array) + columns - 1) // columns
         self.frame_thumbnails = Frame(self.canvas_thumbnails, width=frame_width, height=rows_required * (thumbnail_size+gap))
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
@@ -365,6 +366,7 @@ class ImageViewer:
             col_idx = idx % columns
             thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT, command=lambda i=idx: self.on_select(i))
             thumbnail_button.grid(row=row_idx, column=col_idx, sticky='nsew', padx=0, pady=0, ipadx=0, ipady=0)
+            self.thumbnail_buttons.append(thumbnail_button)  # Add the button to the list
             self.frame_thumbnails.rowconfigure(row_idx, weight=1)
             self.frame_thumbnails.columnconfigure(col_idx, weight=1)
 
@@ -446,26 +448,44 @@ class ImageViewer:
             return ''
     
     
+    def extract_i_value(self, filepath):
+        # Extract the value after 'i=' and before '_'
+        basename = os.path.basename(filepath)
+        if 'i=' in basename:
+            i_value_str = basename.split('i=')[1].split('_')[0]
+            return int(i_value_str)
+        else:
+            return float('inf')  # or return -1 if you want them at the start
+
     def load_all_images_to_np_arrays(self, directory):
         np_image_list = []
+        image_file_paths = []
 
         for dirpath, dirnames, filenames in os.walk(directory):
             for filename in filenames:
                 if filename.endswith(IMAGE_EXTENSIONS):  # Add or modify extensions as needed
                     full_path = os.path.join(dirpath, filename)
-                
-                    # Load the image
-                    img = Image.open(full_path)
+                    image_file_paths.append(full_path)
 
-                    # Ensure it's in RGB mode
-                    if img.mode != 'RGB':
-                        img = img.convert('RGB')
+        # Sort the file paths based on 'i=' values or place them at the end if 'i=' is not present
+        image_file_paths.sort(key=self.extract_i_value)
 
-                    # Convert to numpy array and append to list
-                    np_img = np.array(img)
-                    np_image_list.append(np_img)
+        for image_file_path in image_file_paths:
+            # Load the image
+            img = Image.open(image_file_path)
+
+            # Ensure it's in RGB mode
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+
+            # Convert to numpy array and append to list
+            np_img = np.array(img)
+            np_image_list.append(np_img)
 
         return np_image_list
+
+
+
 
     
     
@@ -498,28 +518,25 @@ class ImageViewer:
     
     
     def load_visible_thumbnails(self, event=None):
-        # Get the scroll position
         top = self.canvas_thumbnails.canvasy(0)
         height = self.canvas_thumbnails.winfo_height()
-        columns = 5  # Number of columns
+        columns = 5
         thumbnail_height = 60
 
-        # Calculate the index range of thumbnails that should be loaded
         start_row = max(int(top // thumbnail_height) - 2, 0)
-        end_row = min(int((top + height) // thumbnail_height) + 2, -(-len(self.np_array) // columns))  # Ceiling division
-
+        end_row = min(int((top + height) // thumbnail_height) + 2, -(-len(self.np_array) // columns))
+    
         start_idx = start_row * columns
         end_idx = min(end_row * columns, len(self.np_array))
 
-        # Load and update thumbnails for visible index ranges
         for idx in range(start_idx, end_idx):
-
             if idx not in self.loaded_thumbnails:
                 thumbnail = Image.fromarray(self.np_array[idx]).resize((60, 60))
                 thumbnail_img = ImageTk.PhotoImage(thumbnail)
-                # Update button image
-                self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-                self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+            
+                self.thumbnail_buttons[idx].config(image=thumbnail_img)  # Use the button from the list directly
+                self.thumbnail_buttons[idx].image = thumbnail_img
+
                 self.loaded_thumbnails.add(idx)
             if self.List_images[idx] is None:
                 self.load_image_at_index(idx)
@@ -626,13 +643,20 @@ class ImageViewer:
 
     def rearrange_nparray(self):
         data = self.json_data
-        self.entropy = [item['entropy_results'][0]['result'][0][0][0] for item in data]
-    
-        self.flattened_entropy = [np.sum(item) for item in self.entropy]
-        self.sorted_indices = np.argsort(self.flattened_entropy)
 
-        # Rearrange the list based on sorted indices
-        self.np_array = [self.np_array[i] for i in self.sorted_indices]
+        # Step 1: Extract the 'location' values and determine the correct order for each item
+        location_indices = [int(item['location'][0].split('=')[1]) for item in data]
+        sorted_location_indices = np.argsort(location_indices)
+
+        # Step 2: Extract entropy values in the correct order
+        sorted_entropy = [data[i]['entropy_results'][0]['result'][0][0][0] for i in sorted_location_indices]
+        self.flattened_entropy = [np.sum(item) for item in sorted_entropy]
+
+        # Step 3: Sort np_array based on flattened_entropy
+        sorted_entropy_indices = np.argsort(self.flattened_entropy)
+        self.sorted_indices = sorted_entropy_indices
+        self.np_array = [self.np_array[i] for i in sorted_entropy_indices]
+
 
 
     
@@ -850,7 +874,8 @@ class ImageViewer:
         if self.entropies_calculated == 0:
             info_text = f"Try to calculate the entropy!"
         else:
-            info_text = f"Entropy: {self.flattened_entropy[self.sorted_indices[self.img_no]]}"#"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
+            info_text = f"Entropy: {self.flattened_entropy[self.sorted_indices[self.img_no]]}"
+            #"File: {self.image_files[self.img_no]}  |  Resolution: {img.width}x{img.height}  |  Size: {image_size:.2f} MB"
         self.status_bar.config(text=info_text)
 
     

@@ -18,6 +18,13 @@ CONFIG_FILE = "settings.json"
 IMAGE_EXTENSIONS = ('.png', '.jpg', '.jpeg', '.webp', '.bmp', '.tiff', '.jfif', '.gif')
 
 ENTROPY_METHODS = [
+    'hist',
+    'naive',
+    'dft',
+    'dwt',
+    'laplace',
+    'joint_red_green',
+    'joint_all',
     'lbp',
     'lbp_gabor',
     'adapt',
@@ -138,7 +145,7 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
-        self.image_window.geometry(self.center_window_coordinates(600, 632))  # The desired initial size
+        self.image_window.geometry(self.center_window_coordinates(1032, 632))  # The desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
@@ -310,13 +317,7 @@ class ImageViewer:
         self.button_forward.grid(row=1, column=3, sticky='ew')
 
     def create_thumbnail_frame(self):
-        frame_thumbnails_container = Frame(self.image_window, width=60)  # Adjust width
-        frame_thumbnails_container.grid(row=0, column=0, rowspan=3, sticky="ns")
-        frame_thumbnails_container.grid_propagate(False)  # Forbid internal components to change size
-        self.canvas_thumbnails = Canvas(frame_thumbnails_container, width=60, height=600)
-        self.canvas_thumbnails.pack(side=LEFT, fill=BOTH, expand=True)
-        scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
-        scrollbar.config(command=self.on_scroll)
+        self.thumbnail_buttons = []  # Add this line to initialize the list
 
         if self.os_name == 'Darwin':
             gap = 8
@@ -324,24 +325,38 @@ class ImageViewer:
             gap = 6
         if self.os_name == 'Windows':
             gap = 6
+        thumbnail_size = 60
+        columns = 5
+        frame_width = columns * thumbnail_size + (columns) * gap
 
+        frame_thumbnails_container = Frame(self.image_window, width=frame_width)
+        frame_thumbnails_container.grid(row=0, column=0, rowspan=3, sticky="ns")
+        frame_thumbnails_container.grid_propagate(False)
+
+        self.canvas_thumbnails = Canvas(frame_thumbnails_container, width=frame_width, height=600)
+        self.canvas_thumbnails.pack(side=LEFT, fill=BOTH, expand=True)
+        scrollbar = Scrollbar(frame_thumbnails_container, orient="vertical")
+        scrollbar.config(command=self.on_scroll)
         scrollbar.pack(side=RIGHT, fill=Y)
         self.canvas_thumbnails.config(yscrollcommand=scrollbar.set)
-        self.frame_thumbnails = Frame(self.canvas_thumbnails, width=60,
-                                      height=len(self.List_thumbnail_images) * (60 + gap))  # Increase height
+
+        rows_required = (len(self.np_array) + columns - 1) // columns
+        self.frame_thumbnails = Frame(self.canvas_thumbnails, width=frame_width, height=rows_required * (thumbnail_size+gap))
         self.canvas_thumbnails.create_window((0, 0), window=self.frame_thumbnails, anchor='nw')
 
         for idx in range(len(self.np_array)):
-            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT,
-                                      command=lambda i=idx: self.on_select(i))
-            thumbnail_button.grid(row=idx, column=0, sticky='nsew', padx=0, pady=0, ipadx=0, ipady=0)
-            self.frame_thumbnails.rowconfigure(idx, weight=1)
+            row_idx = idx // columns
+            col_idx = idx % columns
+            thumbnail_button = Button(self.frame_thumbnails, image=self.thumbnail_placeholder, relief=FLAT, command=lambda i=idx: self.on_select(i))
+            thumbnail_button.grid(row=row_idx, column=col_idx, sticky='nsew', padx=0, pady=0, ipadx=0, ipady=0)
+            self.thumbnail_buttons.append(thumbnail_button)  # Add the button to the list
+            self.frame_thumbnails.rowconfigure(row_idx, weight=1)
+            self.frame_thumbnails.columnconfigure(col_idx, weight=1)
 
         self.canvas_thumbnails.config(
-            scrollregion=(0, 0, 60, len(self.List_thumbnail_images) * (60 + gap)))  # Resize the scrolling area
+            scrollregion=(0, 0, frame_width, rows_required * (thumbnail_size+gap)))
         self.canvas_thumbnails.bind('<Configure>', self.load_visible_thumbnails)
         self.canvas_thumbnails.bind('<Enter>', self.load_visible_thumbnails)
-
     def create_zoom_controls(self, frame):
         spacer = Label(frame, text=" " * 20)
         spacer.grid(row=0, column=0, sticky='ew')
@@ -454,23 +469,25 @@ class ImageViewer:
             self.List_thumbnail_images = [None] * len(self.np_array)
 
     def load_visible_thumbnails(self, event=None):
-        # Get the scroll position
         top = self.canvas_thumbnails.canvasy(0)
         height = self.canvas_thumbnails.winfo_height()
+        columns = 5
+        thumbnail_height = 60
 
-        # Calculate the index range of thumbnails that should be loaded
-        start_idx = max(int(top // 60) - 2, 0)
-        end_idx = min(int((top + height) // 60) + 2, len(self.np_array))
+        start_row = max(int(top // thumbnail_height) - 2, 0)
+        end_row = min(int((top + height) // thumbnail_height) + 2, -(-len(self.np_array) // columns))
+    
+        start_idx = start_row * columns
+        end_idx = min(end_row * columns, len(self.np_array))
 
-        # Load and update thumbnails for visible index ranges
         for idx in range(start_idx, end_idx):
-
             if idx not in self.loaded_thumbnails:
                 thumbnail = Image.fromarray(self.np_array[idx]).resize((60, 60))
                 thumbnail_img = ImageTk.PhotoImage(thumbnail)
-                # Update button image
-                self.frame_thumbnails.winfo_children()[idx].config(image=thumbnail_img)
-                self.frame_thumbnails.winfo_children()[idx].image = thumbnail_img  # Keep reference
+            
+                self.thumbnail_buttons[idx].config(image=thumbnail_img)  # Use the button from the list directly
+                self.thumbnail_buttons[idx].image = thumbnail_img
+
                 self.loaded_thumbnails.add(idx)
             if self.List_images[idx] is None:
                 self.load_image_at_index(idx)
