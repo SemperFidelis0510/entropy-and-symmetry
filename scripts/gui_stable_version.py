@@ -145,7 +145,7 @@ class ImageViewer:
         self.image_window = Toplevel()
         self.image_window.title("Image Viewer")
         self.image_window.protocol('WM_DELETE_WINDOW', lambda: self.thread_it(self.clos_window))
-        self.image_window.geometry(self.center_window_coordinates(1032, 632))  # The desired initial size
+        self.image_window.geometry(self.center_window_coordinates(882, 632))  # The desired initial size
         self.create_menu()
         self.create_image_frame()
         self.create_thumbnail_frame()
